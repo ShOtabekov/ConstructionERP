@@ -23,6 +23,9 @@ class ConstructionDirectorSummary(models.TransientModel):
 
     _name = "construction.director.summary"
     _description = "Сводка директора"
+    _rec_name = "name"
+
+    name = fields.Char(default="Сводка директора", readonly=True)
 
     date_from = fields.Date(
         string="С", required=True,
