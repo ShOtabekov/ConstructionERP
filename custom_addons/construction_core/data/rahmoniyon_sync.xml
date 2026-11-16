@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- Квартиры ЖК Rahmoniyon по списку застройщика (блок Д — 8 квартир на этаже) -->
+    <function model="construction.building" name="_sync_rahmoniyon_layouts"/>
+</odoo>

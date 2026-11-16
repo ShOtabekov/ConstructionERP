@@ -1,6 +1,6 @@
 {
     "name": "Construction Core",
-    "version": "19.0.1.8.0",
+    "version": "19.0.1.9.0",
     "category": "Construction",
     "summary": "Construction projects and real estate management",
     "author": "Construction ERP",
@@ -16,6 +16,7 @@
         "views/chessboard_views.xml",
         "views/project_image_views.xml",
         "data/recompute_names.xml",
+        "data/rahmoniyon_sync.xml",
         "data/rahmoniyon_unit_plans.xml",
         "data/rahmoniyon_renders.xml",
     ],

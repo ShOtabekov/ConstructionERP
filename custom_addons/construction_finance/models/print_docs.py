@@ -79,6 +79,12 @@ class ConstructionApartment(models.Model):
         help="Блок-этаж-номер на этаже, как в договорах: Д-05-07",
     )
 
+    @api.model
+    def _recompute_unit_codes(self):
+        apts = self.with_context(active_test=False).search([("unit_code", "=", False)])
+        apts._compute_unit_code()
+        return True
+
     @api.depends("number", "building_id.name", "building_id.code", "floor_id.number")
     def _compute_unit_code(self):
         for apt in self:
