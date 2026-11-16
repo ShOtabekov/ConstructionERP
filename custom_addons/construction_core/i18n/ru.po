@@ -919,3 +919,14 @@ msgstr "Положение на плане по вертикали, 0–100 %."
 #: model:ir.model.fields,field_description:construction_core.field_construction_block_wizard_line__wizard_id
 msgid "Wizard"
 msgstr "Мастер"
+
+#. module: construction_core
+#: model:ir.model.fields,help:construction_core.field_construction_unit_layout__plan_image
+msgid "Plan of this unit only (shown when the unit is selected)."
+msgstr "План только этой квартиры (показывается при выборе)."
+
+#. module: construction_core
+#: model:ir.model.fields,field_description:construction_core.field_construction_block_wizard_line__plan_image
+#: model:ir.model.fields,field_description:construction_core.field_construction_unit_layout__plan_image
+msgid "Unit Plan"
+msgstr "Планировка"

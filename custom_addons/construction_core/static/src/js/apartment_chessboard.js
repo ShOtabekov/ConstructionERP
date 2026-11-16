@@ -44,6 +44,7 @@ export class ApartmentChessboard extends Component {
             search: "",
             selectedId: null,
             card: null,
+            planMode: "unit",
             cardLoading: false,
             busy: false,
         });

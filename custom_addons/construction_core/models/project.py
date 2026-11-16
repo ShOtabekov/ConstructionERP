@@ -74,6 +74,13 @@ class ConstructionProject(models.Model):
                     "USD/TJS exchange rate cannot be negative."
                 )
 
+    @api.model_create_multi
+    def create(self, vals_list):
+        for vals in vals_list:
+            if vals.get("usd_tjs_rate") and not vals.get("rate_date"):
+                vals["rate_date"] = fields.Date.context_today(self)
+        return super().create(vals_list)
+
     def write(self, vals):
         if "usd_tjs_rate" in vals and "rate_date" not in vals:
             vals["rate_date"] = fields.Date.context_today(self)

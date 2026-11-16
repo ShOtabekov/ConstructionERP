@@ -4,7 +4,11 @@ from odoo import _, api, fields, models
 from odoo.exceptions import UserError, ValidationError
 from odoo.tools import file_open
 
-from .rahmoniyon_preset import RAHMONIYON_BLOCKS, RAHMONIYON_DEFAULTS
+from .rahmoniyon_preset import (
+    RAHMONIYON_BLOCKS,
+    RAHMONIYON_DEFAULTS,
+    unit_image_path,
+)
 
 PRESET_SELECTION = [("custom", "Manual")] + [
     (key, "Rahmoniyon — %s" % data["name"])
@@ -97,6 +101,9 @@ class ConstructionBlockWizard(models.TransientModel):
                 "area_total": area,
                 "plan_x": x,
                 "plan_y": y,
+                "plan_image": self._preset_image(
+                    unit_image_path(self.preset, index)
+                ),
             })
             for index, (rooms, area, x, y) in enumerate(data["units"], 1)
         ]
@@ -120,8 +127,12 @@ class ConstructionBlockWizard(models.TransientModel):
                     "code": data["code"],
                     "image": self._preset_image(data["image"]),
                     "units": data["units"],
+                    "unit_images": [
+                        self._preset_image(unit_image_path(key, index))
+                        for index in range(1, len(data["units"]) + 1)
+                    ],
                 }
-                for data in RAHMONIYON_BLOCKS.values()
+                for key, data in RAHMONIYON_BLOCKS.items()
             ]
         if not self.name or not self.code:
             raise ValidationError(_("Enter the block name and code."))
@@ -134,6 +145,9 @@ class ConstructionBlockWizard(models.TransientModel):
             "units": [
                 (line.rooms, line.area_total, line.plan_x, line.plan_y)
                 for line in self.line_ids.sorted("sequence")
+            ],
+            "unit_images": [
+                line.plan_image for line in self.line_ids.sorted("sequence")
             ],
         }]
 
@@ -156,6 +170,7 @@ class ConstructionBlockWizard(models.TransientModel):
             "project_id": self.project_id.id,
             "floor_plan_image": spec["image"] or False,
         })
+        unit_images = spec.get("unit_images") or []
         layouts = self.env["construction.unit.layout"].create([
             {
                 "building_id": building.id,
@@ -164,6 +179,10 @@ class ConstructionBlockWizard(models.TransientModel):
                 "area_total": area,
                 "plan_x": x,
                 "plan_y": y,
+                "plan_image": (
+                    unit_images[index - 1]
+                    if index <= len(unit_images) else False
+                ) or False,
             }
             for index, (rooms, area, x, y) in enumerate(spec["units"], 1)
         ])
@@ -238,3 +257,4 @@ class ConstructionBlockWizardLine(models.TransientModel):
     area_total = fields.Float(string="Total Area (m2)", digits=(12, 2))
     plan_x = fields.Float(string="Plan X (%)", digits=(5, 2))
     plan_y = fields.Float(string="Plan Y (%)", digits=(5, 2))
+    plan_image = fields.Image(string="Unit Plan")

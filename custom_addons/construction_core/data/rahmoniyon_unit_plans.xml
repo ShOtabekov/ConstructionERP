@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- Add per-unit plans to Rahmoniyon blocks created before 19.0.1.6.0 -->
+    <function model="construction.building" name="_fill_rahmoniyon_unit_plans"/>
+</odoo>

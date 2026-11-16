@@ -77,6 +77,14 @@ RAHMONIYON_BLOCKS = {
     },
 }
 
+
+def unit_image_path(block_key, position):
+    return (
+        "construction_core/static/src/img/rahmoniyon/unit_%s_%d.jpg"
+        % (block_key, position)
+    )
+
+
 RAHMONIYON_DEFAULTS = {
     "floors_total": 20,
     "residential_from": 2,

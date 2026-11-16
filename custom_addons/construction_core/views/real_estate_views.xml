@@ -50,6 +50,8 @@
                                     <field name="area_total" sum="Total"/>
                                     <field name="plan_x"/>
                                     <field name="plan_y"/>
+                                    <field name="plan_image" widget="image"
+                                           options="{'size': [0, 48]}"/>
                                     <field name="apartment_count"/>
                                 </list>
                             </field>

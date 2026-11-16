@@ -212,11 +212,16 @@ class ConstructionApartment(models.Model):
                    % building.id,
             "x": layout.plan_x,
             "y": layout.plan_y,
+            "unit_url": (
+                "/web/image/construction.unit.layout/%d/plan_image" % layout.id
+                if layout.plan_image else False
+            ),
         }
 
     @api.depends(
         "layout_id.plan_x",
         "layout_id.plan_y",
+        "layout_id.plan_image",
         "building_id.floor_plan_image",
     )
     def _compute_plan_html(self):
@@ -225,7 +230,16 @@ class ConstructionApartment(models.Model):
             if not plan:
                 record.plan_html = False
                 continue
-            record.plan_html = Markup(
+            unit = Markup("")
+            if plan["unit_url"]:
+                unit = Markup(
+                    '<div style="margin-bottom:16px;">'
+                    '<a href="%(unit_url)s" target="_blank">'
+                    '<img src="%(unit_url)s" style="max-width:100%%;'
+                    'max-height:520px;border:1px solid #dee2e6;'
+                    'border-radius:8px;" alt="unit plan"/></a></div>'
+                ) % plan
+            record.plan_html = unit + Markup(
                 '<div class="o_unit_plan" style="position:relative;'
                 'display:inline-block;max-width:100%%;overflow:hidden;'
                 'border-radius:8px;border:1px solid #dee2e6;">'

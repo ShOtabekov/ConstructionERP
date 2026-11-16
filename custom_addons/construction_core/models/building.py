@@ -1,4 +1,7 @@
-from odoo import fields, models
+import base64
+
+from odoo import api, fields, models
+from odoo.tools import file_open
 
 
 class ConstructionBuilding(models.Model):
@@ -28,3 +31,29 @@ class ConstructionBuilding(models.Model):
         "building_id",
         string="Floor Layout",
     )
+
+    @api.model
+    def _fill_rahmoniyon_unit_plans(self):
+        """Add per-unit plan images to Rahmoniyon blocks created earlier.
+
+        A block matches when its code and its floor layout (rooms and
+        areas, in order) are exactly the preset ones. Existing images
+        are never overwritten.
+        """
+        from ..wizard.rahmoniyon_preset import RAHMONIYON_BLOCKS, unit_image_path
+
+        for key, data in RAHMONIYON_BLOCKS.items():
+            expected = [(rooms, area) for rooms, area, _x, _y in data["units"]]
+            for building in self.with_context(active_test=False).search(
+                [("code", "=", data["code"])]
+            ):
+                layouts = building.layout_ids.sorted("sequence")
+                actual = [(l.rooms, round(l.area_total, 1)) for l in layouts]
+                if actual != expected:
+                    continue
+                for index, layout in enumerate(layouts, 1):
+                    if layout.plan_image:
+                        continue
+                    with file_open(unit_image_path(key, index), "rb") as image:
+                        layout.plan_image = base64.b64encode(image.read())
+        return True

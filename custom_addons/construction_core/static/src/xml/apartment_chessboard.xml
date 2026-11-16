@@ -140,13 +140,29 @@
                         <t t-if="card.entrance"> · <t t-esc="card.entrance"/></t>
                     </div>
 
-                    <div t-if="card.plan" class="o_card_plan">
-                        <a t-att-href="card.plan.url" target="_blank" title="Открыть план">
-                            <img t-att-src="card.plan.url" alt="План этажа"/>
-                        </a>
-                        <span class="o_plan_marker"
-                              t-attf-style="left: {{card.plan.x}}%; top: {{card.plan.y}}%;"/>
-                    </div>
+                    <t t-if="card.plan">
+                        <div t-if="card.plan.unit_url" class="o_plan_switch btn-group btn-group-sm">
+                            <button type="button" class="btn"
+                                    t-att-class="state.planMode !== 'floor' ? 'btn-primary' : 'btn-outline-secondary'"
+                                    t-on-click="() => this.state.planMode = 'unit'">Квартира</button>
+                            <button type="button" class="btn"
+                                    t-att-class="state.planMode === 'floor' ? 'btn-primary' : 'btn-outline-secondary'"
+                                    t-on-click="() => this.state.planMode = 'floor'">Весь этаж</button>
+                        </div>
+                        <div t-if="card.plan.unit_url and state.planMode !== 'floor'"
+                             class="o_card_plan o_card_plan_unit">
+                            <a t-att-href="card.plan.unit_url" target="_blank" title="Открыть планировку">
+                                <img t-att-src="card.plan.unit_url" alt="Планировка квартиры"/>
+                            </a>
+                        </div>
+                        <div t-else="" class="o_card_plan">
+                            <a t-att-href="card.plan.url" target="_blank" title="Открыть план">
+                                <img t-att-src="card.plan.url" alt="План этажа"/>
+                            </a>
+                            <span class="o_plan_marker"
+                                  t-attf-style="left: {{card.plan.x}}%; top: {{card.plan.y}}%;"/>
+                        </div>
+                    </t>
 
                     <div class="o_card_facts">
                         <div t-if="card.unit_type !== 'shop'"><span>Комнат</span><b t-esc="card.rooms"/></div>

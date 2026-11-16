@@ -39,6 +39,12 @@ class ConstructionUnitLayout(models.Model):
         digits=(5, 2),
         help="Vertical position of the unit on the floor plan, 0-100 %.",
     )
+    plan_image = fields.Image(
+        string="Unit Plan",
+        max_width=1600,
+        max_height=1600,
+        help="Plan of this unit only (shown when the unit is selected).",
+    )
     apartment_ids = fields.One2many(
         "construction.apartment", "layout_id", string="Units"
     )
