@@ -14,4 +14,5 @@
     </data>
     <function model="construction.project" name="_fill_print_defaults"/>
     <function model="construction.apartment" name="_recompute_unit_codes"/>
+    <function model="construction.payment.method" name="_ensure_defaults"/>
 </odoo>
