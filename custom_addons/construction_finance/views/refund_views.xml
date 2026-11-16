@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- Terminate wizard -->
+    <record id="view_construction_terminate_wizard_form" model="ir.ui.view">
+        <field name="name">construction.terminate.wizard.form</field>
+        <field name="model">construction.terminate.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Расторжение договора">
+                <sheet>
+                    <group>
+                        <group string="Договор">
+                            <field name="contract_id" options="{'no_create': True}"/>
+                            <field name="partner_id" readonly="1"/>
+                            <field name="apartment_id" readonly="1"/>
+                            <field name="plan_id" invisible="1"/>
+                            <field name="currency_usd_id" invisible="1"/>
+                            <field name="contract_price_usd" readonly="1"/>
+                            <field name="paid_usd" readonly="1"/>
+                            <field name="date"/>
+                        </group>
+                        <group string="Штраф">
+                            <field name="penalty_mode"/>
+                            <label for="penalty_value" invisible="penalty_mode == 'none'"/>
+                            <div class="o_row" invisible="penalty_mode == 'none'">
+                                <field name="penalty_value"/>
+                                <span invisible="penalty_mode == 'fixed'">%</span>
+                                <span invisible="penalty_mode != 'fixed'">USD</span>
+                            </div>
+                            <field name="penalty_usd" readonly="1"/>
+                            <field name="refund_usd" readonly="1"
+                                   class="fw-bold"/>
+                        </group>
+                    </group>
+                    <group string="Возврат денег" invisible="refund_usd &lt;= 0">
+                        <group>
+                            <field name="refund_mode" widget="radio"
+                                   options="{'horizontal': true}"/>
+                            <field name="refund_first_date"/>
+                        </group>
+                        <group invisible="refund_mode != 'schedule'">
+                            <field name="refund_count"/>
+                            <field name="refund_interval"/>
+                        </group>
+                    </group>
+                    <field name="refund_preview" nolabel="1" readonly="1"/>
+                    <field name="reason" placeholder="Причина расторжения"/>
+                    <div class="alert alert-warning mt-2" role="alert">
+                        Договор и план оплаты будут закрыты, квартира снова станет свободной.
+                        Отменить расторжение нельзя.
+                    </div>
+                </sheet>
+                <footer>
+                    <button name="action_terminate" type="object" string="Расторгнуть договор"
+                            class="btn-danger"/>
+                    <button string="Отмена" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Refund -->
+    <record id="view_construction_refund_form" model="ir.ui.view">
+        <field name="name">construction.refund.form</field>
+        <field name="model">construction.refund</field>
+        <field name="arch" type="xml">
+            <form string="Расторжение и возврат" create="0" delete="0">
+                <header>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="contract_id"/>
+                            <field name="partner_id"/>
+                            <field name="partner_phone" widget="phone"/>
+                            <field name="apartment_id"/>
+                            <field name="date"/>
+                            <field name="user_id"/>
+                        </group>
+                        <group>
+                            <field name="currency_usd_id" invisible="1"/>
+                            <field name="contract_price_usd"/>
+                            <field name="paid_usd"/>
+                            <field name="penalty_mode"/>
+                            <field name="penalty_value" invisible="penalty_mode == 'none'"/>
+                            <field name="penalty_usd"/>
+                            <field name="refund_usd" class="fw-bold"/>
+                            <field name="refunded_usd"/>
+                            <field name="remaining_usd" decoration-danger="remaining_usd &gt; 0"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Выплаты клиенту" name="lines">
+                            <field name="line_ids">
+                                <list editable="bottom" create="0" delete="0"
+                                      decoration-success="paid"
+                                      decoration-danger="not paid and due_date &lt; current_date">
+                                    <field name="due_date" readonly="1"/>
+                                    <field name="currency_usd_id" column_invisible="1"/>
+                                    <field name="amount_usd" readonly="1" sum="Итого"/>
+                                    <field name="method_id" readonly="paid"/>
+                                    <field name="reference" readonly="paid"/>
+                                    <field name="paid_date" readonly="paid"/>
+                                    <field name="paid"/>
+                                    <button name="action_mark_paid" type="object"
+                                            string="Выдать" icon="fa-check" class="btn-link"
+                                            invisible="paid"/>
+                                    <button name="action_unmark_paid" type="object"
+                                            string="Отменить выдачу" icon="fa-undo"
+                                            class="btn-link text-muted" invisible="not paid"
+                                            confirm="Отметить выплату как не выданную?"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Причина" name="reason">
+                            <field name="reason"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_construction_refund_list" model="ir.ui.view">
+        <field name="name">construction.refund.list</field>
+        <field name="model">construction.refund</field>
+        <field name="arch" type="xml">
+            <list create="0" decoration-muted="state == 'done'">
+                <field name="name"/>
+                <field name="date"/>
+                <field name="partner_id"/>
+                <field name="apartment_id"/>
+                <field name="contract_id"/>
+                <field name="currency_usd_id" column_invisible="1"/>
+                <field name="paid_usd" sum="Итого"/>
+                <field name="penalty_usd" sum="Итого"/>
+                <field name="refund_usd" sum="Итого"/>
+                <field name="remaining_usd" sum="Итого"/>
+                <field name="state" widget="badge"
+                       decoration-warning="state == 'open'"
+                       decoration-success="state == 'done'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_construction_refunds" model="ir.actions.act_window">
+        <field name="name">Расторжения и возвраты</field>
+        <field name="res_model">construction.refund</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_construction_refunds" name="Расторжения и возвраты"
+              parent="menu_construction_cash_root" sequence="4"
+              action="action_construction_refunds"/>
+
+    <!-- Contract: terminate button + refund link -->
+    <record id="view_construction_contract_form_terminate" model="ir.ui.view">
+        <field name="name">construction.contract.form.terminate</field>
+        <field name="model">construction.contract</field>
+        <field name="inherit_id" ref="construction_sales.view_construction_contract_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header/field[@name='state']" position="before">
+                <button name="action_open_termination" type="object" string="Расторгнуть"
+                        class="btn-danger" invisible="state != 'confirmed'"
+                        groups="base.group_system,construction_finance.group_finance_manager"/>
+            </xpath>
+            <xpath expr="//sheet" position="inside">
+                <group string="Расторжение" invisible="not refund_ids">
+                    <field name="refund_ids" nolabel="1" colspan="2" readonly="1">
+                        <list>
+                            <field name="name"/>
+                            <field name="date"/>
+                            <field name="currency_usd_id" column_invisible="1"/>
+                            <field name="penalty_usd"/>
+                            <field name="refund_usd"/>
+                            <field name="remaining_usd"/>
+                            <field name="state"/>
+                        </list>
+                    </field>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Project: termination settings -->
+    <record id="view_construction_project_form_termination" model="ir.ui.view">
+        <field name="name">construction.project.form.termination</field>
+        <field name="model">construction.project</field>
+        <field name="inherit_id" ref="construction_core.view_construction_project_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="Расторжение" name="termination">
+                    <group>
+                        <field name="termination_penalty_mode"/>
+                        <field name="termination_penalty_value"
+                               invisible="termination_penalty_mode == 'none'"/>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

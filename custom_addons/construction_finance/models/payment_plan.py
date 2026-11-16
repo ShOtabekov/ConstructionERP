@@ -221,6 +221,13 @@ class ConstructionPaymentPlan(models.Model):
             plan.next_due_date = upcoming[:1].due_date or False
             plan.next_due_usd = upcoming[:1].balance_usd or 0.0
 
+    def _terminate(self):
+        """Close the plan when its contract is terminated (internal)."""
+        for plan in self:
+            if plan.state in ("confirmed", "closed", "draft"):
+                super(ConstructionPaymentPlan, plan).write({"state": "cancelled"})
+        return True
+
     def action_open_cash_wizard(self):
         self.ensure_one()
         return {

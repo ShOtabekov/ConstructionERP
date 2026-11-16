@@ -1,73 +1,57 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
     <record id="action_report_payment_receipt" model="ir.actions.report">
-        <field name="name">Payment Receipt</field>
+        <field name="name">Квитанция</field>
         <field name="model">construction.payment</field>
         <field name="report_type">qweb-pdf</field>
         <field name="report_name">construction_finance.report_payment_receipt</field>
         <field name="report_file">construction_finance.report_payment_receipt</field>
-        <field name="print_report_name">'Receipt - %s' % (object.name)</field>
+        <field name="print_report_name">'Квитанция %s' % (object.name)</field>
+        <field name="binding_model_id" ref="model_construction_payment"/>
+        <field name="binding_type">report</field>
     </record>
 
     <template id="report_payment_receipt">
         <t t-call="web.html_container">
             <t t-foreach="docs" t-as="o">
+                <t t-set="fmt" t-value="lambda v: '{:,.2f}'.format(v or 0).replace(',', ' ')"/>
+                <t t-set="is_usd" t-value="o.currency_id.name == 'USD'"/>
                 <t t-call="web.external_layout">
-                    <div class="page">
-                        <h2>PAYMENT RECEIPT</h2>
-                        <h3><span t-field="o.name"/></h3>
-
-                        <table class="table table-sm">
-                            <tr>
-                                <td><strong>Payment Date</strong></td>
-                                <td><span t-field="o.payment_date"/></td>
-                            </tr>
-                            <tr>
-                                <td><strong>Buyer</strong></td>
-                                <td><span t-field="o.partner_id.name"/></td>
-                            </tr>
-                            <tr>
-                                <td><strong>Contract</strong></td>
-                                <td><span t-field="o.contract_id.name"/></td>
-                            </tr>
-                            <tr>
-                                <td><strong>Apartment</strong></td>
-                                <td><span t-field="o.contract_id.apartment_id.name"/></td>
-                            </tr>
-                            <tr>
-                                <td><strong>Payment Schedule</strong></td>
-                                <td><span t-field="o.schedule_id.name"/></td>
-                            </tr>
-                            <tr>
-                                <td><strong>Payment Method</strong></td>
-                                <td><span t-field="o.method_id.name"/></td>
-                            </tr>
-                            <tr>
-                                <td><strong>Reference</strong></td>
-                                <td><span t-field="o.reference"/></td>
-                            </tr>
+                    <div class="page" style="font-size: 14px;">
+                        <h3 class="text-center">КВИТАНЦИЯ № <span t-field="o.name"/></h3>
+                        <p class="text-center">о приёме денежных средств</p>
+                        <table class="table table-sm table-bordered mt-4">
+                            <tr><td style="width: 35%;">Дата</td>
+                                <td t-esc="o.payment_date.strftime('%d.%m.%Y')"/></tr>
+                            <tr><td>Принято от</td><td><span t-field="o.partner_id.name"/></td></tr>
+                            <tr><td>Договор</td>
+                                <td><span t-field="o.contract_id.name"/> от
+                                    <t t-esc="o.contract_id.contract_date.strftime('%d.%m.%Y')"/></td></tr>
+                            <tr><td>Помещение</td>
+                                <td><span t-field="o.contract_id.apartment_id.name"/>,
+                                    <span t-field="o.contract_id.building_id.name"/>,
+                                    <span t-field="o.project_id.name"/></td></tr>
+                            <tr><td>Назначение</td><td><span t-field="o.schedule_id.name"/></td></tr>
+                            <tr><td>Способ оплаты</td><td><span t-field="o.method_id.name"/></td></tr>
+                            <tr t-if="o.reference"><td>№ документа</td><td><span t-field="o.reference"/></td></tr>
+                            <tr t-if="not is_usd"><td>Курс USD/TJS</td><td t-esc="o.exchange_rate"/></tr>
                         </table>
-
-                        <div class="mt-4 mb-4">
-                            <h3>
-                                Amount:
-                                <span t-field="o.amount"
-                                      t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
-                            </h3>
-                        </div>
-
-                        <p>
-                            <strong>Payment Status:</strong>
-                            <span t-field="o.state"/>
+                        <h4 class="mt-4">
+                            Сумма: <t t-esc="fmt(o.amount)"/> <t t-esc="'USD' if is_usd else 'сомони'"/>
+                            <small t-if="not is_usd" class="text-muted">(= <t t-esc="fmt(o.amount_usd)"/> USD)</small>
+                        </h4>
+                        <p><i>Сумма прописью:
+                            <t t-esc="o.contract_id._amount_words(o.amount, 'USD' if is_usd else 'TJS')"/></i></p>
+                        <t t-set="plan" t-value="o.plan_id"/>
+                        <p t-if="plan" class="mt-3">
+                            Оплачено по договору всего: <b><t t-esc="fmt(plan.paid_usd)"/> USD</b>.
+                            Остаток: <b><t t-esc="fmt(plan.balance_usd)"/> USD</b>.
                         </p>
-
-                        <div class="row mt-5">
-                            <div class="col-6">
-                                Cashier: ____________________
-                            </div>
-                            <div class="col-6">
-                                Buyer: ____________________
-                            </div>
+                        <div class="row" style="margin-top: 70px;">
+                            <div class="col-6">Кассир: ____________________
+                                <br/><small t-field="o.user_id.name"/></div>
+                            <div class="col-6">Клиент: ____________________
+                                <br/><small t-field="o.partner_id.name"/></div>
                         </div>
                     </div>
                 </t>

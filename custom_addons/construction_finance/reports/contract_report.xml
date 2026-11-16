@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="action_report_sales_contract" model="ir.actions.report">
+        <field name="name">Договор купли-продажи</field>
+        <field name="model">construction.contract</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">construction_finance.report_sales_contract</field>
+        <field name="report_file">construction_finance.report_sales_contract</field>
+        <field name="print_report_name">'Договор %s' % (object.name)</field>
+        <field name="binding_model_id" ref="construction_sales.model_construction_contract"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <template id="report_sales_contract">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-set="fmt" t-value="lambda v: '{:,.2f}'.format(v or 0).replace(',', ' ')"/>
+                <t t-set="company" t-value="o.project_id.company_id or res_company"/>
+                <t t-set="apt" t-value="o.apartment_id"/>
+                <t t-set="plan" t-value="o.payment_plan_id"/>
+                <t t-set="project" t-value="o.project_id"/>
+                <t t-call="web.external_layout">
+                    <div class="page" style="font-size: 13px; text-align: justify;">
+                        <h4 class="text-center">ДОГОВОР КУПЛИ-ПРОДАЖИ № <span t-field="o.name"/></h4>
+                        <div class="row mb-3">
+                            <div class="col-6">г. Худжанд</div>
+                            <div class="col-6 text-end" t-esc="o.contract_date.strftime('%d.%m.%Y') + ' г.'"/>
+                        </div>
+
+                        <p><b t-esc="company.name"/>, именуемое в дальнейшем «Продавец», в лице
+                            директора ______________________, действующего на основании Устава, с одной стороны,
+                            и гражданин(ка) <b t-esc="o.partner_id.name"/>, паспорт серии ______ № __________,
+                            выдан ____________________________, именуемый(ая) в дальнейшем «Покупатель»,
+                            с другой стороны, заключили настоящий договор о нижеследующем.</p>
+
+                        <h6 class="mt-3">1. ПРЕДМЕТ ДОГОВОРА</h6>
+                        <p>1.1. Продавец обязуется передать в собственность Покупателя, а Покупатель обязуется
+                            принять и оплатить
+                            <t t-if="apt.unit_type == 'shop'">нежилое помещение (магазин)</t>
+                            <t t-else="">квартиру</t>
+                            № <b t-esc="apt.number"/>, расположенную на <b t-esc="apt.floor_id.number"/> этаже,
+                            <b t-esc="apt.building_id.name"/>, <b t-esc="project.name"/><t t-if="project.location">,
+                            по адресу: <t t-esc="project.location"/></t> (далее — «Объект»).</p>
+                        <p>1.2. Характеристики Объекта:
+                            <t t-if="apt.unit_type != 'shop'">количество комнат — <b t-esc="apt.rooms"/>, </t>
+                            общая площадь — <b t-esc="fmt(apt.area_total)"/> м²<t t-if="apt.area_living">,
+                            жилая площадь — <t t-esc="fmt(apt.area_living)"/> м²</t>.</p>
+
+                        <h6 class="mt-3">2. ЦЕНА ДОГОВОРА</h6>
+                        <p>2.1. Цена Объекта составляет <b><t t-esc="fmt(o.price_usd)"/> USD</b>
+                            (<t t-esc="o._amount_words(o.price_usd, 'USD')"/>),
+                            что по курсу <t t-esc="o.exchange_rate"/> сомони за 1 USD на дату подписания
+                            составляет <b><t t-esc="fmt(o.price_tjs)"/> сомони</b>.</p>
+                        <p>2.2. Цена Объекта фиксирована в долларах США и изменению не подлежит.
+                            Оплата может производиться в сомони по курсу на дату платежа.</p>
+
+                        <h6 class="mt-3">3. ПОРЯДОК ОПЛАТЫ</h6>
+                        <t t-if="plan and len(plan.schedule_ids) == 1">
+                            <p>3.1. Покупатель оплачивает полную стоимость Объекта в срок до
+                                <t t-esc="plan.schedule_ids[0].due_date.strftime('%d.%m.%Y')"/>.</p>
+                        </t>
+                        <t t-elif="plan">
+                            <p>3.1. Оплата производится в рассрочку: первоначальный взнос
+                                <b><t t-esc="fmt(plan.deposit_usd)"/> USD</b> и
+                                <t t-esc="plan.installment_count"/>
+                                <t t-esc="'ежемесячных' if plan.schedule_interval == 'monthly' else 'ежеквартальных'"/>
+                                платежей согласно графику:</p>
+                            <table class="table table-sm table-bordered" style="font-size: 12px;">
+                                <thead><tr><th>№</th><th>Платёж</th><th>Срок оплаты</th><th class="text-end">Сумма, USD</th></tr></thead>
+                                <tbody>
+                                    <tr t-foreach="plan.schedule_ids.sorted('due_date')" t-as="line">
+                                        <td t-esc="line_index + 1"/>
+                                        <td t-esc="line.name"/>
+                                        <td t-esc="line.due_date.strftime('%d.%m.%Y')"/>
+                                        <td class="text-end" t-esc="fmt(line.amount_usd)"/>
+                                    </tr>
+                                </tbody>
+                                <tfoot><tr><th colspan="3">Итого</th>
+                                    <th class="text-end" t-esc="fmt(sum(plan.schedule_ids.mapped('amount_usd')))"/></tr></tfoot>
+                            </table>
+                        </t>
+                        <t t-else="">
+                            <p>3.1. Порядок оплаты определяется графиком платежей, являющимся неотъемлемой
+                                частью настоящего договора.</p>
+                        </t>
+                        <p>3.2. Платёж считается совершённым с момента поступления денежных средств в кассу
+                            или на расчётный счёт Продавца. Продавец выдаёт Покупателю квитанцию на каждый платёж.</p>
+
+                        <h6 class="mt-3">4. ПРАВА И ОБЯЗАННОСТИ СТОРОН</h6>
+                        <p>4.1. Продавец обязуется передать Объект Покупателю по акту приёма-передачи после
+                            ввода дома в эксплуатацию и полной оплаты цены договора.</p>
+                        <p>4.2. Покупатель обязуется своевременно вносить платежи согласно разделу 3.</p>
+                        <p>4.3. Право собственности на Объект переходит к Покупателю после полной оплаты
+                            и государственной регистрации.</p>
+
+                        <h6 class="mt-3">5. РАСТОРЖЕНИЕ ДОГОВОРА</h6>
+                        <p>5.1. Договор может быть расторгнут по соглашению сторон или по требованию одной
+                            из сторон в случаях, предусмотренных законодательством Республики Таджикистан.</p>
+                        <p>5.2. При расторжении договора по инициативе Покупателя Продавец возвращает
+                            внесённые денежные средства за вычетом штрафа:
+                            <t t-if="project.termination_penalty_mode == 'paid_percent'"><t t-esc="fmt(project.termination_penalty_value)"/>% от внесённой суммы</t>
+                            <t t-elif="project.termination_penalty_mode == 'price_percent'"><t t-esc="fmt(project.termination_penalty_value)"/>% от цены договора</t>
+                            <t t-elif="project.termination_penalty_mode == 'fixed'"><t t-esc="fmt(project.termination_penalty_value)"/> USD</t>
+                            <t t-else="">без удержания штрафа</t>.
+                            Срок и порядок возврата определяются соглашением о расторжении.</p>
+
+                        <h6 class="mt-3">6. ЗАКЛЮЧИТЕЛЬНЫЕ ПОЛОЖЕНИЯ</h6>
+                        <p>6.1. Договор вступает в силу с момента подписания и действует до полного
+                            исполнения сторонами своих обязательств.</p>
+                        <p>6.2. Договор составлен в двух экземплярах, имеющих равную юридическую силу,
+                            по одному для каждой из сторон.</p>
+
+                        <h6 class="mt-4">7. ПОДПИСИ СТОРОН</h6>
+                        <div class="row mt-2">
+                            <div class="col-6">
+                                <b>Продавец:</b><br/>
+                                <t t-esc="company.name"/><br/>
+                                <t t-if="company.street"><t t-esc="company.street"/><br/></t>
+                                <t t-if="company.phone">Тел.: <t t-esc="company.phone"/><br/></t>
+                                <br/>____________________ / ____________
+                            </div>
+                            <div class="col-6">
+                                <b>Покупатель:</b><br/>
+                                <t t-esc="o.partner_id.name"/><br/>
+                                <t t-if="o.partner_id.phone">Тел.: <t t-esc="o.partner_id.phone"/><br/></t>
+                                Паспорт: ____________________<br/>
+                                <br/>____________________ / ____________
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

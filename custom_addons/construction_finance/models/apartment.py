@@ -55,6 +55,13 @@ class ConstructionApartment(models.Model):
                 "style": "success",
                 "sequence": 10,
             })
+            if self.env.user.has_group("construction_finance.group_finance_manager"):
+                card["actions"].append({
+                    "method": "action_chessboard_terminate",
+                    "label": _("Расторгнуть"),
+                    "style": "secondary",
+                    "sequence": 70,
+                })
             card["actions"].append({
                 "method": "action_chessboard_payment_plan",
                 "label": _("План оплаты"),
@@ -101,3 +108,10 @@ class ConstructionApartment(models.Model):
                 "default_contract_id": contract.id,
             },
         }
+
+    def action_chessboard_terminate(self):
+        self.ensure_one()
+        contract = self._chessboard_confirmed_contract()
+        if not contract:
+            raise UserError(_("Подтверждённый договор не найден."))
+        return contract.action_open_termination()

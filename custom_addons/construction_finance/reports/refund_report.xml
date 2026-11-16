@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="action_report_refund_agreement" model="ir.actions.report">
+        <field name="name">Соглашение о расторжении</field>
+        <field name="model">construction.refund</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">construction_finance.report_refund_agreement</field>
+        <field name="report_file">construction_finance.report_refund_agreement</field>
+        <field name="print_report_name">'Соглашение %s' % (object.name)</field>
+        <field name="binding_model_id" ref="model_construction_refund"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <template id="report_refund_agreement">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-set="fmt" t-value="lambda v: '{:,.2f}'.format(v or 0).replace(',', ' ')"/>
+                <t t-set="c" t-value="o.contract_id"/>
+                <t t-set="company" t-value="o.project_id.company_id or res_company"/>
+                <t t-call="web.external_layout">
+                    <div class="page" style="font-size: 13px; text-align: justify;">
+                        <h4 class="text-center">СОГЛАШЕНИЕ № <span t-field="o.name"/></h4>
+                        <p class="text-center">о расторжении договора купли-продажи
+                            № <t t-esc="c.name"/> от <t t-esc="c.contract_date.strftime('%d.%m.%Y')"/></p>
+                        <div class="row mb-3">
+                            <div class="col-6">г. Худжанд</div>
+                            <div class="col-6 text-end" t-esc="o.date.strftime('%d.%m.%Y') + ' г.'"/>
+                        </div>
+                        <p><b t-esc="company.name"/> («Продавец») и <b t-esc="o.partner_id.name"/>
+                            («Покупатель») договорились о следующем:</p>
+                        <p>1. Расторгнуть договор купли-продажи № <t t-esc="c.name"/> в отношении объекта:
+                            <t t-esc="o.apartment_id.name"/>, <t t-esc="o.apartment_id.building_id.name"/>,
+                            <t t-esc="o.project_id.name"/>, площадь <t t-esc="fmt(o.apartment_id.area_total)"/> м²,
+                            с <t t-esc="o.date.strftime('%d.%m.%Y')"/>.</p>
+                        <p>2. На дату расторжения Покупатель внёс <b><t t-esc="fmt(o.paid_usd)"/> USD</b>.</p>
+                        <p>3. Удерживаемый Продавцом штраф составляет <b><t t-esc="fmt(o.penalty_usd)"/> USD</b>.</p>
+                        <p>4. Продавец возвращает Покупателю <b><t t-esc="fmt(o.refund_usd)"/> USD</b>
+                            (<t t-esc="c._amount_words(o.refund_usd, 'USD')"/>)
+                            <t t-if="o.refund_mode == 'lump'">одной суммой в срок до
+                                <t t-esc="o.line_ids[:1].due_date.strftime('%d.%m.%Y') if o.line_ids else ''"/>.</t>
+                            <t t-else="">по следующему графику:</t></p>
+                        <table t-if="o.refund_mode == 'schedule'" class="table table-sm table-bordered" style="font-size: 12px;">
+                            <thead><tr><th>№</th><th>Срок</th><th class="text-end">Сумма, USD</th></tr></thead>
+                            <tbody>
+                                <tr t-foreach="o.line_ids" t-as="line">
+                                    <td t-esc="line_index + 1"/>
+                                    <td t-esc="line.due_date.strftime('%d.%m.%Y')"/>
+                                    <td class="text-end" t-esc="fmt(line.amount_usd)"/>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <p>5. После выплаты указанной суммы стороны не имеют друг к другу претензий
+                            по договору № <t t-esc="c.name"/>.</p>
+                        <p>6. Соглашение составлено в двух экземплярах, по одному для каждой стороны.</p>
+                        <div class="row" style="margin-top: 50px;">
+                            <div class="col-6"><b>Продавец:</b><br/><t t-esc="company.name"/>
+                                <br/><br/>____________________</div>
+                            <div class="col-6"><b>Покупатель:</b><br/><t t-esc="o.partner_id.name"/>
+                                <br/><br/>____________________</div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>
