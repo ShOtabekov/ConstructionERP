@@ -15,7 +15,7 @@ class ConstructionProjectImage(models.Model):
     project_id = fields.Many2one("construction.project", required=True, ondelete="cascade", index=True)
     sequence = fields.Integer(default=10)
     image_1920 = fields.Image(string="Изображение", max_width=1920, max_height=1920, required=True)
-    image_512 = fields.Image(related="image_1920", max_width=512, max_height=512, store=True)
+    image_512 = fields.Image(string="Миниатюра", related="image_1920", max_width=512, max_height=512, store=True)
 
 
 class ConstructionProject(models.Model):
