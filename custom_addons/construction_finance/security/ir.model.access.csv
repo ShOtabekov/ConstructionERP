@@ -1,0 +1,15 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_payment_method_user,payment.method.user,model_construction_payment_method,group_finance_user,1,0,0,0
+access_payment_method_manager,payment.method.manager,model_construction_payment_method,group_finance_manager,1,1,1,1
+access_payment_plan_user,payment.plan.user,model_construction_payment_plan,group_finance_user,1,1,1,0
+access_payment_plan_manager,payment.plan.manager,model_construction_payment_plan,group_finance_manager,1,1,1,0
+access_payment_schedule_user,payment.schedule.user,model_construction_payment_schedule,group_finance_user,1,1,1,0
+access_payment_schedule_manager,payment.schedule.manager,model_construction_payment_schedule,group_finance_manager,1,1,1,0
+access_payment_user,payment.user,model_construction_payment,group_finance_user,1,1,1,0
+access_payment_manager,payment.manager,model_construction_payment,group_finance_manager,1,1,1,0
+access_payment_method_system,payment.method.system,model_construction_payment_method,base.group_system,1,1,1,1
+access_payment_plan_system,payment.plan.system,model_construction_payment_plan,base.group_system,1,1,1,1
+access_payment_schedule_system,payment.schedule.system,model_construction_payment_schedule,base.group_system,1,1,1,1
+access_payment_system,payment.system,model_construction_payment,base.group_system,1,1,1,1
+access_finance_dashboard_user,finance.dashboard.user,model_construction_finance_dashboard,group_finance_user,1,1,1,1
+access_finance_dashboard_system,finance.dashboard.system,model_construction_finance_dashboard,base.group_system,1,1,1,1

@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <record id="view_construction_reservation_list" model="ir.ui.view">
+            <field name="name">construction.reservation.list</field>
+            <field name="model">construction.reservation</field>
+            <field name="arch" type="xml">
+                <list string="Apartment Reservations"
+                      decoration-success="state == 'reserved'"
+                      decoration-muted="state in ('cancelled', 'expired')"
+                      decoration-info="state == 'converted'">
+                    <field name="name"/>
+                    <field name="partner_id"/>
+                    <field name="apartment_id"/>
+                    <field name="project_id" optional="show"/>
+                    <field name="date_start"/>
+                    <field name="date_end"/>
+                    <field name="price_usd"/>
+                    <field name="exchange_rate"/>
+                    <field name="price_tjs"/>
+                    <field name="user_id"/>
+                    <field name="state" widget="badge"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="view_construction_reservation_form" model="ir.ui.view">
+            <field name="name">construction.reservation.form</field>
+            <field name="model">construction.reservation</field>
+            <field name="arch" type="xml">
+                <form string="Apartment Reservation">
+                    <header>
+                        <button name="action_confirm"
+                                type="object"
+                                string="Confirm Reservation"
+                                class="btn-primary"
+                                invisible="state != 'draft'"
+                                groups="base.group_system,construction_sales.group_sales_user"/>
+
+                        <button name="action_create_contract"
+                                type="object"
+                                string="Create Contract"
+                                class="btn-primary"
+                                invisible="state != 'reserved'"
+                                groups="base.group_system,construction_sales.group_sales_user"/>
+
+                        <button name="action_cancel"
+                                type="object"
+                                string="Cancel"
+                                invisible="state not in ('draft', 'reserved')"
+                                groups="base.group_system,construction_sales.group_sales_user"/>
+
+                        <field name="state"
+                               widget="statusbar"
+                               statusbar_visible="draft,reserved,converted,expired,cancelled"/>
+                    </header>
+
+                    <sheet>
+                        <div class="oe_title">
+                            <label for="name"/>
+                            <h1>
+                                <field name="name"/>
+                            </h1>
+                        </div>
+
+                        <group>
+                            <group string="Reservation Details">
+                                <field name="partner_id"
+                                       readonly="state != 'draft'"/>
+                                <field name="apartment_id"
+                                       readonly="state != 'draft'"/>
+                                <field name="project_id"/>
+                                <field name="building_id"/>
+                                <field name="user_id"
+                                       readonly="state != 'draft'"/>
+                            </group>
+
+                            <group string="Reservation Period">
+                                <field name="date_start"
+                                       readonly="state != 'draft'"/>
+                                <field name="date_end"
+                                       readonly="state != 'draft'"/>
+                                <field name="contract_id"
+                                       invisible="not contract_id"/>
+                            </group>
+                        </group>
+
+                        <group string="Price Snapshot">
+                            <group>
+                                <field name="currency_usd_id" invisible="1"/>
+                                <field name="currency_tjs_id" invisible="1"/>
+                                <field name="price_usd"/>
+                                <field name="exchange_rate"/>
+                                <field name="price_tjs"/>
+                            </group>
+                        </group>
+
+                        <notebook>
+                            <page string="Notes">
+                                <field name="notes"
+                                       placeholder="Additional information..."/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <chatter/>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_construction_reservation_search" model="ir.ui.view">
+            <field name="name">construction.reservation.search</field>
+            <field name="model">construction.reservation</field>
+            <field name="arch" type="xml">
+                <search string="Search Reservations">
+                    <field name="name"/>
+                    <field name="partner_id"/>
+                    <field name="apartment_id"/>
+                    <field name="project_id"/>
+                    <field name="user_id"/>
+
+                    <filter name="draft"
+                            string="Draft"
+                            domain="[('state', '=', 'draft')]"/>
+                    <filter name="reserved"
+                            string="Reserved"
+                            domain="[('state', '=', 'reserved')]"/>
+                    <filter name="converted"
+                            string="Converted"
+                            domain="[('state', '=', 'converted')]"/>
+                    <filter name="expired"
+                            string="Expired"
+                            domain="[('state', '=', 'expired')]"/>
+                    <filter name="cancelled"
+                            string="Cancelled"
+                            domain="[('state', '=', 'cancelled')]"/>
+
+                    <group>
+                        <filter name="group_project"
+                                string="Project"
+                                context="{'group_by': 'project_id'}"/>
+                        <filter name="group_user"
+                                string="Responsible Manager"
+                                context="{'group_by': 'user_id'}"/>
+                        <filter name="group_state"
+                                string="Status"
+                                context="{'group_by': 'state'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_construction_reservations" model="ir.actions.act_window">
+            <field name="name">Reservations</field>
+            <field name="res_model">construction.reservation</field>
+            <field name="view_mode">list,form</field>
+            <field name="search_view_id" ref="view_construction_reservation_search"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create your first apartment reservation.
+                </p>
+            </field>
+        </record>
+
+    </data>
+</odoo>

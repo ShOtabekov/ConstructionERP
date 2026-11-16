@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_construction_project_user,construction.project user,model_construction_project,base.group_user,1,1,1,0
+access_construction_building_user,construction.building user,model_construction_building,base.group_user,1,1,1,0
+access_construction_entrance_user,construction.entrance user,model_construction_entrance,base.group_user,1,1,1,0
+access_construction_floor_user,construction.floor user,model_construction_floor,base.group_user,1,1,1,0
+access_construction_apartment_user,construction.apartment user,model_construction_apartment,base.group_user,1,1,1,0

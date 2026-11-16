@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="construction_core.ApartmentChessboard" owl="1">
+        <div class="o_apartment_chessboard p-3">
+            <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+                <div>
+                    <h2>Шахматка квартир</h2>
+                    <span class="text-muted">
+                        Управление недвижимостью
+                    </span>
+                </div>
+                <div class="btn-group">
+                    <button class="btn"
+                            t-att-class="state.mode === 'chessboard' ? 'btn-primary' : 'btn-outline-secondary'"
+                            t-on-click="() => this.setMode('chessboard')">
+                        <i class="fa fa-th-large me-1"/> Шахматка
+                    </button>
+                    <button class="btn"
+                            t-att-class="state.mode === 'plan' ? 'btn-primary' : 'btn-outline-secondary'"
+                            t-on-click="() => this.setMode('plan')">
+                        <i class="fa fa-building me-1"/> План корпуса
+                    </button>
+                </div>
+            </div>
+
+            <div class="card mb-3">
+                <div class="card-body">
+                    <div class="row g-3 align-items-end">
+                        <div class="col-12 col-md-3">
+                            <label class="form-label">Проект</label>
+                            <select class="form-select"
+                                    t-on-change="onProjectChange"
+                                    t-att-value="state.project">
+                                <option value="">Все проекты</option>
+                                <t t-foreach="projects" t-as="item" t-key="item.id">
+                                    <option t-att-value="item.id">
+                                        <t t-esc="item.name"/>
+                                    </option>
+                                </t>
+                            </select>
+                        </div>
+                        <div class="col-12 col-md-3">
+                            <label class="form-label">Корпус</label>
+                            <select class="form-select"
+                                    t-on-change="onBuildingChange"
+                                    t-att-value="state.building">
+                                <option value="">Все корпуса</option>
+                                <t t-foreach="buildings" t-as="item" t-key="item.id">
+                                    <option t-att-value="item.id">
+                                        <t t-esc="item.name"/>
+                                    </option>
+                                </t>
+                            </select>
+                        </div>
+                        <div class="col-12 col-md-3">
+                            <label class="form-label">Подъезд</label>
+                            <select class="form-select"
+                                    t-on-change="onEntranceChange"
+                                    t-att-value="state.entrance">
+                                <option value="">Все подъезды</option>
+                                <t t-foreach="entrances" t-as="item" t-key="item.id">
+                                    <option t-att-value="item.id">
+                                        <t t-esc="item.name"/>
+                                    </option>
+                                </t>
+                            </select>
+                        </div>
+                        <div class="col-12 col-md-3">
+                            <button class="btn btn-outline-secondary w-100"
+                                    t-on-click="clearFilters">
+                                <i class="fa fa-refresh me-1"/> Сбросить фильтры
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="o_chess_legend d-flex flex-wrap gap-3 mb-3">
+                <span><i class="o_status_dot o_free"/> Свободна</span>
+                <span><i class="o_status_dot o_reserved"/> Бронь</span>
+                <span><i class="o_status_dot o_sold"/> Продана</span>
+                <span><i class="o_status_dot o_blocked"/> Заблокирована</span>
+            </div>
+
+            <t t-if="state.loading">
+                <div class="text-center p-5">
+                    <i class="fa fa-spinner fa-spin fa-2x"/>
+                    <p class="mt-2">Загрузка квартир...</p>
+                </div>
+            </t>
+            <t t-elif="state.error">
+                <div class="alert alert-danger">
+                    <t t-esc="state.error"/>
+                    <button class="btn btn-sm btn-outline-danger ms-2"
+                            t-on-click="loadApartments">
+                        Повторить
+                    </button>
+                </div>
+            </t>
+            <t t-else="">
+                <div class="mb-3 text-muted">
+                    Найдено квартир:
+                    <strong><t t-esc="filteredApartments.length"/></strong>
+                </div>
+
+                <t t-if="filteredApartments.length === 0">
+                    <div class="alert alert-info">
+                        По выбранным фильтрам квартиры не найдены.
+                    </div>
+                </t>
+
+                <t t-elif="state.mode === 'chessboard'">
+                    <div class="o_chess_floors">
+                        <t t-foreach="floors" t-as="floor" t-key="floor.id">
+                            <section class="o_chess_floor mb-3">
+                                <div class="o_chess_floor_title">
+                                    <strong><t t-esc="floor.name"/></strong>
+                                    <span class="text-muted">
+                                        <t t-esc="floor.entrance"/>
+                                    </span>
+                                </div>
+                                <div class="o_chess_apartments">
+                                    <t t-foreach="floor.apartments"
+                                       t-as="apartment"
+                                       t-key="apartment.id">
+                                        <button type="button"
+                                                t-attf-class="o_chess_apartment o_state_#{apartment.state}"
+                                                t-on-click="() => this.openApartment(apartment.id)">
+                                            <strong class="o_apartment_number">
+                                                <t t-esc="apartment.number"/>
+                                            </strong>
+                                            <span><t t-esc="apartment.rooms"/> комн.</span>
+                                            <span><t t-esc="apartment.area_total"/> м²</span>
+                                            <strong>
+                                                $<t t-esc="(apartment.total_price_usd || 0).toLocaleString('en-US')"/>
+                                            </strong>
+                                            <small><t t-esc="statusLabel(apartment.state)"/></small>
+                                        </button>
+                                    </t>
+                                </div>
+                            </section>
+                        </t>
+                    </div>
+                </t>
+
+                <t t-else="">
+                    <div class="o_building_plan">
+                        <t t-foreach="entrancesGroups" t-as="entrance" t-key="entrance.name">
+                            <section class="card mb-4">
+                                <div class="card-header">
+                                    <strong><t t-esc="entrance.name"/></strong>
+                                </div>
+                                <div class="card-body">
+                                    <t t-foreach="entrance.floors" t-as="floor" t-key="floor.id">
+                                        <div class="o_plan_floor mb-3">
+                                            <div class="o_plan_floor_label">
+                                                <strong><t t-esc="floor.name"/></strong>
+                                            </div>
+                                            <div class="o_plan_units">
+                                                <t t-foreach="floor.apartments"
+                                                   t-as="apartment"
+                                                   t-key="apartment.id">
+                                                    <button type="button"
+                                                            t-attf-class="o_plan_unit o_state_#{apartment.state}"
+                                                            t-on-click="() => this.openApartment(apartment.id)">
+                                                        <strong><t t-esc="apartment.number"/></strong>
+                                                        <span><t t-esc="apartment.rooms"/> комн.</span>
+                                                        <span><t t-esc="apartment.area_total"/> м²</span>
+                                                        <strong>
+                                                            $<t t-esc="(apartment.total_price_usd || 0).toLocaleString('en-US')"/>
+                                                        </strong>
+                                                        <small><t t-esc="statusLabel(apartment.state)"/></small>
+                                                    </button>
+                                                </t>
+                                            </div>
+                                        </div>
+                                    </t>
+                                </div>
+                            </section>
+                        </t>
+                    </div>
+                </t>
+            </t>
+        </div>
+    </t>
+</templates>

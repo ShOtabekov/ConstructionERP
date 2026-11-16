@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <!-- Sales security category -->
+        <record id="module_category_construction_sales" model="ir.module.category">
+            <field name="name">Construction Sales</field>
+            <field name="sequence">35</field>
+        </record>
+
+        <!-- Odoo 19 privilege -->
+        <record id="res_groups_privilege_sales" model="res.groups.privilege">
+            <field name="name">Sales</field>
+            <field name="category_id" ref="module_category_construction_sales"/>
+        </record>
+
+        <!-- Sales user -->
+        <record id="group_sales_user" model="res.groups">
+            <field name="name">Sales User</field>
+            <field name="privilege_id" ref="res_groups_privilege_sales"/>
+        </record>
+
+        <!-- Sales supervisor -->
+        <record id="group_sales_manager" model="res.groups">
+            <field name="name">Sales Supervisor</field>
+            <field name="privilege_id" ref="res_groups_privilege_sales"/>
+            <field name="implied_ids" eval="[(4, ref('group_sales_user'))]"/>
+        </record>
+
+        <!-- Reservation: sales user sees own records -->
+        <record id="rule_reservation_user" model="ir.rule">
+            <field name="name">Sales User: Own Reservations</field>
+            <field name="model_id" ref="model_construction_reservation"/>
+            <field name="groups" eval="[(4, ref('group_sales_user'))]"/>
+            <field name="domain_force">[('user_id', '=', user.id)]</field>
+        </record>
+
+        <!-- Reservation: supervisor sees all records -->
+        <record id="rule_reservation_supervisor" model="ir.rule">
+            <field name="name">Sales Supervisor: All Reservations</field>
+            <field name="model_id" ref="model_construction_reservation"/>
+            <field name="groups" eval="[(4, ref('group_sales_manager'))]"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+        </record>
+
+        <!-- Contract: sales user sees own records -->
+        <record id="rule_contract_user" model="ir.rule">
+            <field name="name">Sales User: Own Contracts</field>
+            <field name="model_id" ref="model_construction_contract"/>
+            <field name="groups" eval="[(4, ref('group_sales_user'))]"/>
+            <field name="domain_force">[('user_id', '=', user.id)]</field>
+        </record>
+
+        <!-- Contract: supervisor sees all records -->
+        <record id="rule_contract_supervisor" model="ir.rule">
+            <field name="name">Sales Supervisor: All Contracts</field>
+            <field name="model_id" ref="model_construction_contract"/>
+            <field name="groups" eval="[(4, ref('group_sales_manager'))]"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+        </record>
+
+    </data>
+</odoo>

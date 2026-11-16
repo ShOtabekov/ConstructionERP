@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_payment_plan_list" model="ir.ui.view">
+        <field name="name">construction.payment.plan.list</field>
+        <field name="model">construction.payment.plan</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="contract_id"/>
+                <field name="partner_id"/>
+                <field name="contract_amount_usd"/>
+                <field name="scheduled_usd"/>
+                <field name="paid_usd"/>
+                <field name="balance_usd"/>
+                <field name="state"/>
+                <field name="user_id"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_payment_plan_form" model="ir.ui.view">
+        <field name="name">construction.payment.plan.form</field>
+        <field name="model">construction.payment.plan</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_generate_schedule"
+                            type="object"
+                            string="Generate Schedule"
+                            class="btn-secondary"
+                            invisible="state != 'draft'"
+                            groups="construction_finance.group_finance_manager,base.group_system"/>
+                    <button name="action_confirm" type="object" string="Confirm Plan"
+                            class="btn-primary" invisible="state != 'draft'"
+                            groups="construction_finance.group_finance_manager,base.group_system"/>
+                    <button name="action_cancel" type="object" string="Cancel"
+                            invisible="state != 'draft'"
+                            groups="construction_finance.group_finance_manager,base.group_system"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,confirmed,closed,cancelled"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="contract_id"/>
+                            <field name="partner_id"/>
+                            <field name="apartment_id"/>
+                            <field name="project_id"/>
+                            <field name="date"/>
+                            <field name="user_id"/>
+                        </group>
+                        <group>
+                            <field name="currency_usd_id" invisible="1"/>
+                            <field name="contract_amount_usd"/>
+                            <field name="deposit_mode"/>
+                            <field name="deposit_value"/>
+                            <field name="deposit_usd"/>
+                            <separator string="Schedule Generator"/>
+                            <field name="installment_count"/>
+                            <field name="schedule_interval"/>
+                            <field name="first_payment_date"/>
+                            <field name="schedule_currency_id"/>
+                            <field name="schedule_exchange_rate"
+                                   invisible="schedule_currency_id == currency_usd_id"/>
+                        </group>
+                    </group>
+                    <group string="Financial Summary">
+                        <group>
+                            <field name="scheduled_usd"/>
+                            <field name="paid_usd"/>
+                            <field name="balance_usd"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Payment Schedule">
+                            <field name="schedule_ids" readonly="state != 'draft'">
+                                <list editable="bottom">
+                                    <field name="name"/>
+                                    <field name="due_date"/>
+                                    <field name="amount"/>
+                                    <field name="currency_id"/>
+                                    <field name="exchange_rate"/>
+                                    <field name="amount_usd" readonly="1"/>
+                                    <field name="currency_usd_id" column_invisible="True"/>
+                                    <field name="paid_usd" string="Paid (USD)" readonly="1"/>
+                                    <field name="balance_usd" string="Remaining (USD)" readonly="1"/>
+                                    <field name="state" string="Payment Status" readonly="1"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Notes"><field name="notes"/></page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    <record id="action_payment_plans" model="ir.actions.act_window">
+        <field name="name">Payment Plans</field>
+        <field name="res_model">construction.payment.plan</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

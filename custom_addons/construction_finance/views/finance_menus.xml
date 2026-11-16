@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <menuitem id="menu_construction_finance"
+                  name="Finance"
+                  parent="construction_core.menu_construction_root"
+                  sequence="40"
+                  groups="base.group_system,construction_finance.group_finance_user"/>
+        <menuitem id="menu_finance_plans"
+                  name="Payment Plans"
+                  parent="menu_construction_finance"
+                  action="action_payment_plans"
+                  sequence="10"
+                  groups="base.group_system,construction_finance.group_finance_user"/>
+        <menuitem id="menu_finance_payments"
+                  name="Payments"
+                  parent="menu_construction_finance"
+                  action="action_construction_payments"
+                  sequence="20"
+                  groups="base.group_system,construction_finance.group_finance_user"/>
+        <menuitem id="menu_finance_schedules"
+                  name="Payment Schedule"
+                  parent="menu_construction_finance"
+                  action="action_payment_schedules"
+                  sequence="30"
+                  groups="base.group_system,construction_finance.group_finance_user"/>
+        <menuitem id="menu_finance_methods"
+                  name="Payment Methods"
+                  parent="menu_construction_finance"
+                  action="action_payment_methods"
+                  sequence="40"
+                  groups="base.group_system,construction_finance.group_finance_manager"/>
+    
+        <menuitem id="menu_finance_payment_analysis"
+                  name="Payment Analysis"
+                  parent="menu_construction_finance"
+                  action="action_finance_payment_analysis"
+                  sequence="50"
+                  groups="base.group_system,construction_finance.group_finance_user"/>
+
+        <menuitem id="menu_finance_customer_debts"
+                  name="Customer Debts"
+                  parent="menu_construction_finance"
+                  action="action_finance_customer_debts"
+                  sequence="60"
+                  groups="base.group_system,construction_finance.group_finance_user"/>
+
+        <menuitem id="menu_finance_overdue"
+                  name="Overdue Payments"
+                  parent="menu_construction_finance"
+                  action="action_finance_overdue_payments"
+                  sequence="70"
+                  groups="base.group_system,construction_finance.group_finance_user"/>
+
+        <menuitem id="menu_finance_project_analysis"
+                  name="Project Finance"
+                  parent="menu_construction_finance"
+                  action="action_finance_project_analysis"
+                  sequence="80"
+                  groups="base.group_system,construction_finance.group_finance_user"/>
+
+    
+        <menuitem id="menu_finance_dashboard"
+                  name="Finance Dashboard"
+                  parent="menu_construction_finance"
+                  action="action_open_construction_finance_dashboard_server"
+                  sequence="1"
+                  groups="base.group_system,construction_finance.group_finance_user"/>
+
+    </data>
+</odoo>

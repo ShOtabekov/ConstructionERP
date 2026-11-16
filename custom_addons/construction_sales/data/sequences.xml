@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <record id="seq_construction_reservation" model="ir.sequence">
+            <field name="name">Apartment Reservation</field>
+            <field name="code">construction.reservation</field>
+            <field name="prefix">RES/%(year)s/</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_construction_contract" model="ir.sequence">
+            <field name="name">Construction Sales Contract</field>
+            <field name="code">construction.contract</field>
+            <field name="prefix">CON/%(year)s/</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+    </data>
+</odoo>

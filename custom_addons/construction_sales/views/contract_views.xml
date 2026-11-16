@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <record id="view_construction_contract_list" model="ir.ui.view">
+            <field name="name">construction.contract.list</field>
+            <field name="model">construction.contract</field>
+            <field name="arch" type="xml">
+                <list string="Sales Contracts"
+                      decoration-success="state == 'confirmed'"
+                      decoration-muted="state == 'cancelled'">
+                    <field name="name"/>
+                    <field name="contract_date"/>
+                    <field name="partner_id"/>
+                    <field name="apartment_id"/>
+                    <field name="project_id" optional="show"/>
+                    <field name="price_usd"/>
+                    <field name="exchange_rate"/>
+                    <field name="price_tjs"/>
+                    <field name="user_id"/>
+                    <field name="state" widget="badge"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="view_construction_contract_form" model="ir.ui.view">
+            <field name="name">construction.contract.form</field>
+            <field name="model">construction.contract</field>
+            <field name="arch" type="xml">
+                <form string="Sales Contract">
+                    <header>
+                        <button name="action_confirm"
+                                type="object"
+                                string="Confirm Contract"
+                                class="btn-primary"
+                                invisible="state != 'draft'"
+                                groups="base.group_system,construction_sales.group_sales_user"/>
+
+                        <button name="action_cancel"
+                                type="object"
+                                string="Cancel Contract"
+                                invisible="state != 'confirmed'"
+                                groups="construction_sales.group_sales_manager"/>
+
+                        <field name="state"
+                               widget="statusbar"
+                               statusbar_visible="draft,confirmed,cancelled"/>
+                    </header>
+
+                    <sheet>
+                        <div class="oe_title">
+                            <label for="name"/>
+                            <h1>
+                                <field name="name"/>
+                            </h1>
+                        </div>
+
+                        <group>
+                            <group>
+                                <field name="reservation_id"
+                                       readonly="1"/>
+                                <field name="contract_date"
+                                       readonly="state != 'draft'"/>
+                                <field name="partner_id"
+                                       readonly="state != 'draft'"/>
+                                <field name="user_id"
+                                       readonly="state != 'draft'"/>
+                            </group>
+
+                            <group>
+                                <field name="apartment_id"
+                                       readonly="state != 'draft'"/>
+                                <field name="project_id"/>
+                                <field name="building_id"/>
+                            </group>
+                        </group>
+
+                        <group>
+                            <group>
+                                <field name="currency_usd_id" invisible="1"/>
+                                <field name="currency_tjs_id" invisible="1"/>
+                                <field name="price_usd"/>
+                                <field name="exchange_rate"/>
+                                <field name="price_tjs"/>
+                            </group>
+                        </group>
+
+                        <notebook>
+                            <page string="Signed Document">
+                                <group>
+                                    <field name="contract_filename"
+                                           invisible="not contract_filename"/>
+                                    <field name="contract_file"
+                                           filename="contract_filename"/>
+                                </group>
+                            </page>
+
+                            <page string="Notes">
+                                <field name="notes"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <chatter/>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_construction_contract_search" model="ir.ui.view">
+            <field name="name">construction.contract.search</field>
+            <field name="model">construction.contract</field>
+            <field name="arch" type="xml">
+                <search string="Search Contracts">
+                    <field name="name"/>
+                    <field name="partner_id"/>
+                    <field name="apartment_id"/>
+                    <field name="project_id"/>
+                    <field name="user_id"/>
+
+                    <filter name="draft"
+                            string="Draft"
+                            domain="[('state', '=', 'draft')]"/>
+                    <filter name="confirmed"
+                            string="Confirmed"
+                            domain="[('state', '=', 'confirmed')]"/>
+                    <filter name="cancelled"
+                            string="Cancelled"
+                            domain="[('state', '=', 'cancelled')]"/>
+
+                    <group>
+                        <filter name="group_project"
+                                string="Project"
+                                context="{'group_by': 'project_id'}"/>
+                        <filter name="group_user"
+                                string="Responsible Manager"
+                                context="{'group_by': 'user_id'}"/>
+                        <filter name="group_state"
+                                string="Status"
+                                context="{'group_by': 'state'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_construction_contracts" model="ir.actions.act_window">
+            <field name="name">Contracts</field>
+            <field name="res_model">construction.contract</field>
+            <field name="view_mode">list,form</field>
+            <field name="search_view_id" ref="view_construction_contract_search"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create your first sales contract.
+                </p>
+            </field>
+        </record>
+
+    </data>
+</odoo>

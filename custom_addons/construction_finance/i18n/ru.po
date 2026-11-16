@@ -1,0 +1,1183 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* construction_finance
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Construction ERP 19.0\n"
+"Language: ru\n"
+"Language-Team: Russian\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+
+#. module: construction_finance
+#: model:ir.actions.report,print_report_name:construction_finance.action_report_payment_receipt
+msgid "'Receipt - %s' % (object.name)"
+msgstr "'Квитанция — %s' % (object.name)"
+
+#. module: construction_finance
+#: model_terms:ir.ui.view,arch_db:construction_finance.report_payment_receipt
+msgid "<strong>Apartment</strong>"
+msgstr "<strong>Квартира</strong>"
+
+#. module: construction_finance
+#: model_terms:ir.ui.view,arch_db:construction_finance.report_payment_receipt
+msgid "<strong>Buyer</strong>"
+msgstr "<strong>Покупатель</strong>"
+
+#. module: construction_finance
+#: model_terms:ir.ui.view,arch_db:construction_finance.report_payment_receipt
+msgid "<strong>Contract</strong>"
+msgstr "<strong>Договор</strong>"
+
+#. module: construction_finance
+#: model_terms:ir.ui.view,arch_db:construction_finance.report_payment_receipt
+msgid "<strong>Payment Date</strong>"
+msgstr "<strong>Дата платежа</strong>"
+
+#. module: construction_finance
+#: model_terms:ir.ui.view,arch_db:construction_finance.report_payment_receipt
+msgid "<strong>Payment Method</strong>"
+msgstr "<strong>Способ оплаты</strong>"
+
+#. module: construction_finance
+#: model_terms:ir.ui.view,arch_db:construction_finance.report_payment_receipt
+msgid "<strong>Payment Schedule</strong>"
+msgstr "<strong>График платежей</strong>"
+
+#. module: construction_finance
+#: model_terms:ir.ui.view,arch_db:construction_finance.report_payment_receipt
+msgid "<strong>Payment Status:</strong>"
+msgstr "<strong>Статус платежа:</strong>"
+
+#. module: construction_finance
+#: model_terms:ir.ui.view,arch_db:construction_finance.report_payment_receipt
+msgid "<strong>Reference</strong>"
+msgstr "<strong>Референс</strong>"
+
+#. module: construction_finance
+#. odoo-python
+#: code:addons/construction_finance/models/contract.py:0
+#: code:addons/construction_finance/models/payment_plan.py:0
+msgid "A payment plan can only be created for a confirmed contract."
+msgstr "Платёжный план можно создать только для подтверждённого договора."
+
+#. module: construction_finance
+#. odoo-python
+#: code:addons/construction_finance/models/payment_plan.py:0
+msgid "A payment plan with payments cannot be deleted."
+msgstr "Нельзя удалить платёжный план, по которому уже есть платежи."
+
+#. module: construction_finance
+#. odoo-python
+#: code:addons/construction_finance/models/payment_plan.py:0
+msgid "A plan with posted payments cannot be cancelled."
+msgstr "Нельзя отменить план с проведёнными платежами."
+
+#. module: construction_finance
+#. odoo-python
+#: code:addons/construction_finance/models/payment_plan.py:0
+msgid "A positive USD/TJS exchange rate is required."
+msgstr "Необходимо указать положительный курс USD/TJS."
+
+#. module: construction_finance
+#. odoo-python
+#: code:addons/construction_finance/models/payment.py:0
+#: code:addons/construction_finance/models/payment_schedule.py:0
+msgid "A positive USD/TJS rate is required."
+msgstr "Курс USD/TJS должен быть положительным."
+
+#. module: construction_finance
+#. odoo-python
+#: code:addons/construction_finance/models/payment_plan.py:0
+msgid ""
+"A schedule already exists. Delete its lines manually before generating a new"
+" one."
+msgstr "График уже существует. Удалите его строки вручную перед созданием нового графика."
+
+#. module: construction_finance
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment__message_needaction
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment_plan__message_needaction
+msgid "Action Needed"
+msgstr "Требуется действие"
+
+#. module: construction_finance
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment_method__active
+msgid "Active"
+msgstr "Активно"
+
+#. module: construction_finance
+#: model:ir.model.fields,field_description:construction_finance.field_construction_finance_dashboard__contract_count
+#: model_terms:ir.ui.view,arch_db:construction_finance.view_construction_finance_dashboard_form
+msgid "Active Contracts"
+msgstr "Активные договоры"
+
+#. module: construction_finance
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment__activity_ids
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment_plan__activity_ids
+msgid "Activities"
+msgstr "Действия"
+
+#. module: construction_finance
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment__activity_exception_decoration
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment_plan__activity_exception_decoration
+msgid "Activity Exception Decoration"
+msgstr "Индикатор исключения действия"
+
+#. module: construction_finance
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment__activity_state
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment_plan__activity_state
+msgid "Activity State"
+msgstr "Состояние действия"
+
+#. module: construction_finance
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment__activity_type_icon
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment_plan__activity_type_icon
+msgid "Activity Type Icon"
+msgstr "Значок типа действия"
+
+#. module: construction_finance
+#. odoo-python
+#: code:addons/construction_finance/models/payment_plan.py:0
+msgid "All schedule amounts must be positive."
+msgstr "Все суммы графика должны быть положительными."
+
+#. module: construction_finance
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment__amount
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment_schedule__amount
+msgid "Amount"
+msgstr "Сумма"
+
+#. module: construction_finance
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment__amount_usd
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment_schedule__amount_usd
+msgid "Amount Usd"
+msgstr "Сумма (USD)"
+
+#. module: construction_finance
+#: model_terms:ir.ui.view,arch_db:construction_finance.report_payment_receipt
+msgid "Amount:"
+msgstr "Сумма:"
+
+#. module: construction_finance
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment_plan__apartment_id
+msgid "Apartment"
+msgstr "Квартира"
+
+#. module: construction_finance
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment__message_attachment_count
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment_plan__message_attachment_count
+msgid "Attachment Count"
+msgstr "Количество вложений"
+
+#. module: construction_finance
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment_plan__balance_usd
+msgid "Balance (USD)"
+msgstr "Остаток (USD)"
+
+#. module: construction_finance
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment_schedule__balance_usd
+msgid "Balance Usd"
+msgstr "Остаток (USD)"
+
+#. module: construction_finance
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment__partner_id
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment_plan__partner_id
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment_schedule__partner_id
+msgid "Buyer"
+msgstr "Покупатель"
+
+#. module: construction_finance
+#: model_terms:ir.ui.view,arch_db:construction_finance.report_payment_receipt
+msgid "Buyer: ____________________"
+msgstr "Покупатель: ____________________"
+
+#. module: construction_finance
+#: model_terms:ir.ui.view,arch_db:construction_finance.view_construction_payment_form
+#: model_terms:ir.ui.view,arch_db:construction_finance.view_payment_plan_form
+msgid "Cancel"
+msgstr "Отменить"
+
+#. module: construction_finance
+#: model:ir.model.fields.selection,name:construction_finance.selection__construction_payment__state__cancelled
+#: model:ir.model.fields.selection,name:construction_finance.selection__construction_payment_plan__state__cancelled
+msgid "Cancelled"
+msgstr "Отменено"
+
+#. module: construction_finance
+#: model_terms:ir.ui.view,arch_db:construction_finance.report_payment_receipt
+msgid "Cashier: ____________________"
+msgstr "Кассир: ____________________"
+
+#. module: construction_finance
+#: model:ir.model.fields.selection,name:construction_finance.selection__construction_payment_plan__state__closed
+msgid "Closed"
+msgstr "Закрыт"
+
+#. module: construction_finance
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment_method__code
+msgid "Code"
+msgstr "Код"
+
+#. module: construction_finance
+#: model_terms:ir.ui.view,arch_db:construction_finance.view_payment_plan_form
+msgid "Confirm Plan"
+msgstr "Подтвердить план"
+
+#. module: construction_finance
+#: model:ir.model.fields.selection,name:construction_finance.selection__construction_payment_plan__state__confirmed
+msgid "Confirmed"
+msgstr "Подтверждено"
+
+#. module: construction_finance
+#. odoo-python
+#: code:addons/construction_finance/models/payment_schedule.py:0
+msgid "Confirmed schedules cannot be modified."
+msgstr "Подтверждённые графики платежей нельзя изменять."
+
+#. module: construction_finance
+#: model:ir.module.category,name:construction_finance.module_category_construction_finance
+msgid "Construction Finance"
+msgstr "Финансы строительства"
+
+#. module: construction_finance
+#: model:ir.model,name:construction_finance.model_construction_finance_dashboard
+msgid "Construction Finance Dashboard"
+msgstr "Панель финансов строительства"
+
+#. module: construction_finance
+#: model:ir.model,name:construction_finance.model_construction_payment
+msgid "Construction Payment"
+msgstr "Платёж"
+
+#. module: construction_finance
+#: model:ir.model,name:construction_finance.model_construction_payment_method
+msgid "Construction Payment Method"
+msgstr "Способ оплаты"
+
+#. module: construction_finance
+#: model:ir.model,name:construction_finance.model_construction_payment_plan
+msgid "Construction Payment Plan"
+msgstr "План платежей"
+
+#. module: construction_finance
+#: model:ir.model,name:construction_finance.model_construction_payment_schedule
+msgid "Construction Payment Schedule"
+msgstr "График платежей"
+
+#. module: construction_finance
+#: model:ir.model,name:construction_finance.model_construction_contract
+msgid "Construction Sales Contract"
+msgstr "Договор купли-продажи"
+
+#. module: construction_finance
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment__contract_id
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment_plan__contract_id
+msgid "Contract"
+msgstr "Договор"
+
+#. module: construction_finance
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment_plan__contract_amount_usd
+msgid "Contract Amount (USD)"
+msgstr "Сумма договора (USD)"
+
+#. module: construction_finance
+#. odoo-python
+#: code:addons/construction_finance/models/payment_plan.py:0
+msgid "Contract amount must be greater than zero."
+msgstr "Сумма договора должна быть больше нуля."
+
+#. module: construction_finance
+#: model:ir.model.fields,field_description:construction_finance.field_construction_finance_dashboard__create_uid
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment__create_uid
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment_method__create_uid
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment_plan__create_uid
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment_schedule__create_uid
+msgid "Created by"
+msgstr "Создал"
+
+#. module: construction_finance
+#: model:ir.model.fields,field_description:construction_finance.field_construction_finance_dashboard__create_date
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment__create_date
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment_method__create_date
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment_plan__create_date
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment_schedule__create_date
+msgid "Created on"
+msgstr "Дата создания"
+
+#. module: construction_finance
+#: model:ir.model.fields,field_description:construction_finance.field_construction_finance_dashboard__currency_id
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment__currency_id
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment_schedule__currency_id
+msgid "Currency"
+msgstr "Валюта"
+
+#. module: construction_finance
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment__currency_usd_id
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment_schedule__currency_usd_id
+msgid "Currency Usd"
+msgstr "Валюта (USD)"
+
+#. module: construction_finance
+#. odoo-python
+#: code:addons/construction_finance/models/finance_dashboard.py:0
+#: model:ir.actions.act_window,name:construction_finance.action_finance_customer_debts
+#: model:ir.ui.menu,name:construction_finance.menu_finance_customer_debts
+#: model_terms:ir.ui.view,arch_db:construction_finance.view_finance_debt_pivot
+msgid "Customer Debts"
+msgstr "Задолженности клиентов"
+
+#. module: construction_finance
+#. odoo-python
+#: code:addons/construction_finance/models/finance_dashboard.py:0
+msgid "Debt by Project"
+msgstr "Задолженность по проектам"
+
+#. module: construction_finance
+#: model_terms:ir.ui.view,arch_db:construction_finance.view_construction_finance_dashboard_form
+msgid "Debt by Project Chart"
+msgstr "Диаграмма задолженности по проектам"
+
+#. module: construction_finance
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment_plan__deposit_mode
+msgid "Deposit Type"
+msgstr "Тип первоначального взноса"
+
+#. module: construction_finance
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment_plan__deposit_value
+msgid "Deposit Value"
+msgstr "Размер первоначального взноса"
+
+#. module: construction_finance
+#. odoo-python
+#: code:addons/construction_finance/models/payment_plan.py:0
+msgid "Deposit value cannot be negative."
+msgstr "Размер первоначального взноса не может быть отрицательным."
+
+#. module: construction_finance
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment_method__description
+msgid "Description"
+msgstr "Описание"
+
+#. module: construction_finance
+#: model:ir.model.fields,field_description:construction_finance.field_construction_contract__display_name
+#: model:ir.model.fields,field_description:construction_finance.field_construction_finance_dashboard__display_name
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment__display_name
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment_method__display_name
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment_plan__display_name
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment_schedule__display_name
+msgid "Display Name"
+msgstr "Отображаемое название"
+
+#. module: construction_finance
+#: model:ir.model.fields.selection,name:construction_finance.selection__construction_payment__state__draft
+#: model:ir.model.fields.selection,name:construction_finance.selection__construction_payment_plan__state__draft
+msgid "Draft"
+msgstr "Черновик"
+
+#. module: construction_finance
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment_schedule__due_date
+msgid "Due Date"
+msgstr "Срок оплаты"
+
+#. module: construction_finance
+#: model_terms:ir.ui.view,arch_db:construction_finance.view_construction_finance_dashboard_form
+msgid "Filters"
+msgstr "Фильтры"
+
+#. module: construction_finance
+#: model:ir.ui.menu,name:construction_finance.menu_construction_finance
+#: model:res.groups.privilege,name:construction_finance.res_groups_privilege_finance
+msgid "Finance"
+msgstr "Финансы"
+
+#. module: construction_finance
+#. odoo-python
+#: code:addons/construction_finance/models/finance_dashboard.py:0
+#: model:ir.actions.act_window,name:construction_finance.action_construction_finance_dashboard
+#: model:ir.ui.menu,name:construction_finance.menu_finance_dashboard
+#: model_terms:ir.ui.view,arch_db:construction_finance.view_construction_finance_dashboard_form
+msgid "Finance Dashboard"
+msgstr "Финансовая панель"
+
+#. module: construction_finance
+#: model:res.groups,name:construction_finance.group_finance_manager
+msgid "Finance Manager"
+msgstr "Финансовый менеджер"
+
+#. module: construction_finance
+#: model:res.groups,name:construction_finance.group_finance_user
+msgid "Finance User"
+msgstr "Пользователь финансового раздела"
+
+#. module: construction_finance
+#: model_terms:ir.ui.view,arch_db:construction_finance.view_construction_finance_dashboard_form
+msgid "Financial Analytics"
+msgstr "Финансовая аналитика"
+
+#. module: construction_finance
+#: model_terms:ir.ui.view,arch_db:construction_finance.view_payment_plan_form
+msgid "Financial Summary"
+msgstr "Финансовая сводка"
+
+#. module: construction_finance
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment_plan__first_payment_date
+msgid "First Installment Date"
+msgstr "Дата первого платежа"
+
+#. module: construction_finance
+#: model:ir.model.fields.selection,name:construction_finance.selection__construction_payment_plan__deposit_mode__fixed
+msgid "Fixed Amount (USD)"
+msgstr "Фиксированная сумма (USD)"
+
+#. module: construction_finance
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment__message_follower_ids
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment_plan__message_follower_ids
+msgid "Followers"
+msgstr "Подписчики"
+
+#. module: construction_finance
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment__message_partner_ids
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment_plan__message_partner_ids
+msgid "Followers (Partners)"
+msgstr "Подписчики (контакты)"
+
+#. module: construction_finance
+#: model:ir.model.fields,help:construction_finance.field_construction_payment__activity_type_icon
+#: model:ir.model.fields,help:construction_finance.field_construction_payment_plan__activity_type_icon
+msgid "Font awesome icon e.g. fa-tasks"
+msgstr "Значок Font Awesome, например fa-tasks"
+
+#. module: construction_finance
+#: model:ir.model.fields,help:construction_finance.field_construction_payment_schedule__exchange_rate
+msgid "For TJS schedules, enter TJS for one USD. USD schedules use 1."
+msgstr "Для графика в сомони укажите количество сомони за 1 USD. Для графика в USD используйте значение 1."
+
+#. module: construction_finance
+#: model:ir.model.fields,field_description:construction_finance.field_construction_finance_dashboard__date_from
+msgid "From"
+msgstr "С"
+
+#. module: construction_finance
+#: model_terms:ir.ui.view,arch_db:construction_finance.view_payment_plan_form
+msgid "Generate Schedule"
+msgstr "Сформировать график"
+
+#. module: construction_finance
+#. odoo-python
+#: code:addons/construction_finance/models/payment_plan.py:0
+msgid "Generate or add payment schedule lines before confirmation."
+msgstr "Перед подтверждением сформируйте график платежей или добавьте его строки вручную."
+
+#. module: construction_finance
+#. odoo-python
+#: code:addons/construction_finance/models/payment_plan.py:0
+msgid "Generated installment amount must be positive."
+msgstr "Сумма сформированного платежа должна быть положительной."
+
+#. module: construction_finance
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment__has_message
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment_plan__has_message
+msgid "Has Message"
+msgstr "Есть сообщение"
+
+#. module: construction_finance
+#: model:ir.model.fields,field_description:construction_finance.field_construction_contract__id
+#: model:ir.model.fields,field_description:construction_finance.field_construction_finance_dashboard__id
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment__id
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment_method__id
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment_plan__id
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment_schedule__id
+msgid "ID"
+msgstr "Идентификатор"
+
+#. module: construction_finance
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment__activity_exception_icon
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment_plan__activity_exception_icon
+msgid "Icon"
+msgstr "Значок"
+
+#. module: construction_finance
+#: model:ir.model.fields,help:construction_finance.field_construction_payment__activity_exception_icon
+#: model:ir.model.fields,help:construction_finance.field_construction_payment_plan__activity_exception_icon
+msgid "Icon to indicate an exception activity."
+msgstr "Значок, обозначающий действие с исключением."
+
+#. module: construction_finance
+#: model:ir.model.fields,help:construction_finance.field_construction_payment__message_needaction
+#: model:ir.model.fields,help:construction_finance.field_construction_payment_plan__message_needaction
+msgid "If checked, new messages require your attention."
+msgstr "Если отмечено, новые сообщения требуют вашего внимания."
+
+#. module: construction_finance
+#: model:ir.model.fields,help:construction_finance.field_construction_payment__message_has_error
+#: model:ir.model.fields,help:construction_finance.field_construction_payment__message_has_sms_error
+#: model:ir.model.fields,help:construction_finance.field_construction_payment_plan__message_has_error
+#: model:ir.model.fields,help:construction_finance.field_construction_payment_plan__message_has_sms_error
+msgid "If checked, some messages have a delivery error."
+msgstr "Если отмечено, у некоторых сообщений возникла ошибка доставки."
+
+#. module: construction_finance
+#. odoo-python
+#: code:addons/construction_finance/models/payment_plan.py:0
+msgid "Initial Deposit"
+msgstr "Первоначальный взнос"
+
+#. module: construction_finance
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment_plan__deposit_usd
+msgid "Initial Deposit (USD)"
+msgstr "Первоначальный взнос (USD)"
+
+#. module: construction_finance
+#. odoo-python
+#: code:addons/construction_finance/models/payment_plan.py:0
+msgid "Initial deposit cannot exceed the contract amount."
+msgstr "Первоначальный взнос не может превышать сумму договора."
+
+#. module: construction_finance
+#. odoo-python
+#: code:addons/construction_finance/models/payment_plan.py:0
+msgid "Installment %s"
+msgstr "Платёж № %s"
+
+#. module: construction_finance
+#. odoo-python
+#: code:addons/construction_finance/models/payment_plan.py:0
+msgid "Invalid initial deposit amount."
+msgstr "Некорректная сумма первоначального взноса."
+
+#. module: construction_finance
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment__message_is_follower
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment_plan__message_is_follower
+msgid "Is Follower"
+msgstr "Подписан"
+
+#. module: construction_finance
+#: model:ir.model.fields,field_description:construction_finance.field_construction_finance_dashboard__write_uid
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment__write_uid
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment_method__write_uid
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment_plan__write_uid
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment_schedule__write_uid
+msgid "Last Updated by"
+msgstr "Последний раз изменил"
+
+#. module: construction_finance
+#: model:ir.model.fields,field_description:construction_finance.field_construction_finance_dashboard__write_date
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment__write_date
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment_method__write_date
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment_plan__write_date
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment_schedule__write_date
+msgid "Last Updated on"
+msgstr "Дата последнего изменения"
+
+#. module: construction_finance
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment__message_has_error
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment_plan__message_has_error
+msgid "Message Delivery error"
+msgstr "Ошибка доставки сообщения"
+
+#. module: construction_finance
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment__message_ids
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment_plan__message_ids
+msgid "Messages"
+msgstr "Сообщения"
+
+#. module: construction_finance
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment__method_id
+msgid "Method"
+msgstr "Способ оплаты"
+
+#. module: construction_finance
+#: model:ir.model.fields.selection,name:construction_finance.selection__construction_payment_plan__schedule_interval__monthly
+msgid "Monthly"
+msgstr "Ежемесячно"
+
+#. module: construction_finance
+#. odoo-python
+#: code:addons/construction_finance/models/finance_dashboard.py:0
+msgid "Monthly Payment Analysis"
+msgstr "Анализ ежемесячных платежей"
+
+#. module: construction_finance
+#: model_terms:ir.ui.view,arch_db:construction_finance.view_construction_finance_dashboard_form
+msgid "Monthly Payment Chart"
+msgstr "Диаграмма ежемесячных платежей"
+
+#. module: construction_finance
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment__my_activity_date_deadline
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment_plan__my_activity_date_deadline
+msgid "My Activity Deadline"
+msgstr "Срок моего действия"
+
+#. module: construction_finance
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment__name
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment_method__name
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment_schedule__name
+msgid "Name"
+msgstr "Название"
+
+#. module: construction_finance
+#. odoo-python
+#: code:addons/construction_finance/models/payment.py:0
+#: code:addons/construction_finance/models/payment_plan.py:0
+msgid "New"
+msgstr "Создать"
+
+#. module: construction_finance
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment__activity_date_deadline
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment_plan__activity_date_deadline
+msgid "Next Activity Deadline"
+msgstr "Срок следующего действия"
+
+#. module: construction_finance
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment__activity_summary
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment_plan__activity_summary
+msgid "Next Activity Summary"
+msgstr "Описание следующего действия"
+
+#. module: construction_finance
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment__activity_type_id
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment_plan__activity_type_id
+msgid "Next Activity Type"
+msgstr "Тип следующего действия"
+
+#. module: construction_finance
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment__notes
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment_plan__notes
+#: model_terms:ir.ui.view,arch_db:construction_finance.view_payment_plan_form
+msgid "Notes"
+msgstr "Примечания"
+
+#. module: construction_finance
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment__message_needaction_counter
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment_plan__message_needaction_counter
+msgid "Number of Actions"
+msgstr "Количество действий"
+
+#. module: construction_finance
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment_plan__installment_count
+msgid "Number of Installments"
+msgstr "Количество платежей"
+
+#. module: construction_finance
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment__message_has_error_counter
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment_plan__message_has_error_counter
+msgid "Number of errors"
+msgstr "Количество ошибок"
+
+#. module: construction_finance
+#. odoo-python
+#: code:addons/construction_finance/models/payment_plan.py:0
+msgid "Number of installments must be at least 1."
+msgstr "Количество платежей должно быть не менее 1."
+
+#. module: construction_finance
+#: model:ir.model.fields,help:construction_finance.field_construction_payment__message_needaction_counter
+#: model:ir.model.fields,help:construction_finance.field_construction_payment_plan__message_needaction_counter
+msgid "Number of messages requiring action"
+msgstr "Количество сообщений, требующих внимания"
+
+#. module: construction_finance
+#: model:ir.model.fields,help:construction_finance.field_construction_payment__message_has_error_counter
+#: model:ir.model.fields,help:construction_finance.field_construction_payment_plan__message_has_error_counter
+msgid "Number of messages with delivery error"
+msgstr "Количество сообщений с ошибкой доставки"
+
+#. module: construction_finance
+#. odoo-python
+#: code:addons/construction_finance/models/payment_plan.py:0
+msgid "Only draft payment plans can be cancelled."
+msgstr "Отменить можно только черновые платёжные планы."
+
+#. module: construction_finance
+#. odoo-python
+#: code:addons/construction_finance/models/payment_plan.py:0
+msgid "Only draft payment plans can be confirmed."
+msgstr "Подтвердить можно только черновые платёжные планы."
+
+#. module: construction_finance
+#. odoo-python
+#: code:addons/construction_finance/models/payment_plan.py:0
+msgid "Only draft payment plans can be deleted."
+msgstr "Удалить можно только черновые платёжные планы."
+
+#. module: construction_finance
+#. odoo-python
+#: code:addons/construction_finance/models/payment_plan.py:0
+msgid "Only draft payment plans can be modified."
+msgstr "Изменять можно только черновые платёжные планы."
+
+#. module: construction_finance
+#. odoo-python
+#: code:addons/construction_finance/models/payment.py:0
+msgid "Only draft payments can be cancelled."
+msgstr "Отменить можно только черновые платежи."
+
+#. module: construction_finance
+#. odoo-python
+#: code:addons/construction_finance/models/payment.py:0
+msgid "Only draft payments can be deleted."
+msgstr "Удалить можно только черновые платежи."
+
+#. module: construction_finance
+#. odoo-python
+#: code:addons/construction_finance/models/payment.py:0
+msgid "Only draft payments can be posted."
+msgstr "Провести можно только черновые платежи."
+
+#. module: construction_finance
+#: model:ir.actions.server,name:construction_finance.action_open_construction_finance_dashboard_server
+msgid "Open Finance Dashboard"
+msgstr "Открыть финансовую панель"
+
+#. module: construction_finance
+#: model:ir.model.fields,field_description:construction_finance.field_construction_finance_dashboard__total_debt
+#: model_terms:ir.ui.view,arch_db:construction_finance.view_construction_finance_dashboard_form
+msgid "Outstanding Debt"
+msgstr "Текущая задолженность"
+
+#. module: construction_finance
+#: model:ir.model.fields.selection,name:construction_finance.selection__construction_payment_schedule__state__overdue
+msgid "Overdue"
+msgstr "Просрочено"
+
+#. module: construction_finance
+#: model:ir.model.fields,field_description:construction_finance.field_construction_finance_dashboard__overdue_total
+#: model_terms:ir.ui.view,arch_db:construction_finance.view_construction_finance_dashboard_form
+msgid "Overdue Balance"
+msgstr "Сумма просроченной задолженности"
+
+#. module: construction_finance
+#: model:ir.model.fields,field_description:construction_finance.field_construction_finance_dashboard__overdue_count
+msgid "Overdue Installments"
+msgstr "Просроченные платежи"
+
+#. module: construction_finance
+#. odoo-python
+#: code:addons/construction_finance/models/finance_dashboard.py:0
+#: model:ir.actions.act_window,name:construction_finance.action_finance_overdue_payments
+#: model:ir.ui.menu,name:construction_finance.menu_finance_overdue
+#: model_terms:ir.ui.view,arch_db:construction_finance.view_finance_overdue_list
+msgid "Overdue Payments"
+msgstr "Просроченные платежи"
+
+#. module: construction_finance
+#: model_terms:ir.ui.view,arch_db:construction_finance.view_construction_finance_dashboard_form
+msgid "Overdue installments:"
+msgstr "Просроченные платежи:"
+
+#. module: construction_finance
+#: model_terms:ir.ui.view,arch_db:construction_finance.report_payment_receipt
+msgid "PAYMENT RECEIPT"
+msgstr "КВИТАНЦИЯ ОБ ОПЛАТЕ"
+
+#. module: construction_finance
+#: model:ir.model.fields.selection,name:construction_finance.selection__construction_payment_schedule__state__paid
+msgid "Paid"
+msgstr "Оплачено"
+
+#. module: construction_finance
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment_plan__paid_usd
+#: model_terms:ir.ui.view,arch_db:construction_finance.view_payment_plan_form
+msgid "Paid (USD)"
+msgstr "Оплачено (USD)"
+
+#. module: construction_finance
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment_schedule__paid_usd
+msgid "Paid Usd"
+msgstr "Оплачено (USD)"
+
+#. module: construction_finance
+#: model:ir.model.fields.selection,name:construction_finance.selection__construction_payment_schedule__state__partial
+msgid "Partially Paid"
+msgstr "Частично оплачено"
+
+#. module: construction_finance
+#: model:ir.actions.act_window,name:construction_finance.action_finance_payment_analysis
+#: model:ir.ui.menu,name:construction_finance.menu_finance_payment_analysis
+#: model_terms:ir.ui.view,arch_db:construction_finance.view_finance_payment_graph
+#: model_terms:ir.ui.view,arch_db:construction_finance.view_finance_payment_pivot
+msgid "Payment Analysis"
+msgstr "Анализ платежей"
+
+#. module: construction_finance
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment__payment_date
+msgid "Payment Date"
+msgstr "Дата платежа"
+
+#. module: construction_finance
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment_plan__schedule_interval
+msgid "Payment Frequency"
+msgstr "Периодичность платежей"
+
+#. module: construction_finance
+#: model:ir.actions.act_window,name:construction_finance.action_payment_methods
+#: model:ir.ui.menu,name:construction_finance.menu_finance_methods
+msgid "Payment Methods"
+msgstr "Способы оплаты"
+
+#. module: construction_finance
+#. odoo-python
+#: code:addons/construction_finance/models/contract.py:0
+#: model_terms:ir.ui.view,arch_db:construction_finance.view_contract_form_payment_plan
+msgid "Payment Plan"
+msgstr "Платёжный план"
+
+#. module: construction_finance
+#: model:ir.actions.act_window,name:construction_finance.action_payment_plans
+#: model:ir.ui.menu,name:construction_finance.menu_finance_plans
+msgid "Payment Plans"
+msgstr "Платёжные планы"
+
+#. module: construction_finance
+#: model:ir.actions.report,name:construction_finance.action_report_payment_receipt
+msgid "Payment Receipt"
+msgstr "Квитанция об оплате"
+
+#. module: construction_finance
+#: model:ir.actions.act_window,name:construction_finance.action_payment_schedules
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment_plan__schedule_ids
+#: model:ir.ui.menu,name:construction_finance.menu_finance_schedules
+#: model_terms:ir.ui.view,arch_db:construction_finance.view_payment_plan_form
+msgid "Payment Schedule"
+msgstr "График платежей"
+
+#. module: construction_finance
+#: model_terms:ir.ui.view,arch_db:construction_finance.view_payment_plan_form
+msgid "Payment Status"
+msgstr "Статус платежа"
+
+#. module: construction_finance
+#. odoo-python
+#: code:addons/construction_finance/models/payment.py:0
+msgid "Payment amount must be positive."
+msgstr "Сумма платежа должна быть положительной."
+
+#. module: construction_finance
+#. odoo-python
+#: code:addons/construction_finance/models/payment.py:0
+msgid "Payment exceeds the remaining scheduled amount."
+msgstr "Сумма платежа превышает оставшуюся сумму по графику."
+
+#. module: construction_finance
+#: model:ir.actions.act_window,name:construction_finance.action_construction_payments
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment_schedule__payment_ids
+#: model:ir.ui.menu,name:construction_finance.menu_finance_payments
+msgid "Payments"
+msgstr "Платежи"
+
+#. module: construction_finance
+#. odoo-python
+#: code:addons/construction_finance/models/payment.py:0
+msgid "Payments can only be created for confirmed plans."
+msgstr "Платежи можно создавать только для подтверждённых планов."
+
+#. module: construction_finance
+#. odoo-python
+#: code:addons/construction_finance/models/payment.py:0
+msgid "Payments must be created in Draft state."
+msgstr "Платежи должны создаваться в статусе «Черновик»."
+
+#. module: construction_finance
+#: model:ir.model.fields.selection,name:construction_finance.selection__construction_payment_schedule__state__pending
+msgid "Pending"
+msgstr "Ожидает оплаты"
+
+#. module: construction_finance
+#: model:ir.model.fields.selection,name:construction_finance.selection__construction_payment_plan__deposit_mode__percent
+msgid "Percentage"
+msgstr "Процент"
+
+#. module: construction_finance
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment__plan_id
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment_schedule__plan_id
+msgid "Plan"
+msgstr "План"
+
+#. module: construction_finance
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment_plan__date
+msgid "Plan Date"
+msgstr "Дата плана"
+
+#. module: construction_finance
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment_plan__name
+msgid "Plan Number"
+msgstr "Номер плана"
+
+#. module: construction_finance
+#. odoo-python
+#: code:addons/construction_finance/models/payment_plan.py:0
+msgid "Please select a schedule currency."
+msgstr "Выберите валюту графика платежей."
+
+#. module: construction_finance
+#. odoo-python
+#: code:addons/construction_finance/models/payment_plan.py:0
+msgid "Please specify the first installment date."
+msgstr "Укажите дату первого платежа."
+
+#. module: construction_finance
+#: model_terms:ir.ui.view,arch_db:construction_finance.view_construction_payment_form
+msgid "Post Payment"
+msgstr "Провести платёж"
+
+#. module: construction_finance
+#: model:ir.model.fields.selection,name:construction_finance.selection__construction_payment__state__posted
+msgid "Posted"
+msgstr "Проведён"
+
+#. module: construction_finance
+#. odoo-python
+#: code:addons/construction_finance/models/finance_dashboard.py:0
+#: model:ir.model.fields,field_description:construction_finance.field_construction_finance_dashboard__payment_count
+#: model_terms:ir.ui.view,arch_db:construction_finance.view_construction_finance_dashboard_form
+msgid "Posted Payments"
+msgstr "Проведённые платежи"
+
+#. module: construction_finance
+#. odoo-python
+#: code:addons/construction_finance/models/payment.py:0
+msgid "Posted or cancelled payments cannot be edited."
+msgstr "Проведённые или отменённые платежи нельзя редактировать."
+
+#. module: construction_finance
+#: model:ir.model.fields,field_description:construction_finance.field_construction_finance_dashboard__project_id
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment__project_id
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment_plan__project_id
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment_schedule__project_id
+msgid "Project"
+msgstr "Проект"
+
+#. module: construction_finance
+#: model:ir.actions.act_window,name:construction_finance.action_finance_project_analysis
+#: model:ir.ui.menu,name:construction_finance.menu_finance_project_analysis
+#: model_terms:ir.ui.view,arch_db:construction_finance.view_finance_project_pivot
+msgid "Project Finance"
+msgstr "Финансы проекта"
+
+#. module: construction_finance
+#: model:ir.model.fields.selection,name:construction_finance.selection__construction_payment_plan__schedule_interval__quarterly
+msgid "Quarterly"
+msgstr "Ежеквартально"
+
+#. module: construction_finance
+#: model:ir.model.fields,help:construction_finance.field_construction_payment__exchange_rate
+msgid "Rate on the payment date. For USD payments use 1."
+msgstr "Курс на дату платежа. Для платежей в USD используйте значение 1."
+
+#. module: construction_finance
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment__reference
+msgid "Receipt / Bank Reference"
+msgstr "Номер квитанции / банковский референс"
+
+#. module: construction_finance
+#: model_terms:ir.ui.view,arch_db:construction_finance.view_construction_finance_dashboard_form
+msgid ""
+"Received amount is calculated for the selected date period.\n"
+"                        Outstanding debt and overdue balance reflect current records.\n"
+"                        All figures are shown in USD."
+msgstr ""
+"Полученная сумма рассчитывается за выбранный период.\n"
+"Текущая задолженность и просроченный остаток отражают актуальные данные.\n"
+"Все суммы указаны в USD."
+
+#. module: construction_finance
+#: model:ir.model.fields,field_description:construction_finance.field_construction_finance_dashboard__total_received
+#: model_terms:ir.ui.view,arch_db:construction_finance.view_construction_finance_dashboard_form
+msgid "Received in Period"
+msgstr "Поступило за период"
+
+#. module: construction_finance
+#: model_terms:ir.ui.view,arch_db:construction_finance.view_construction_finance_dashboard_form
+msgid "Refresh"
+msgstr "Обновить"
+
+#. module: construction_finance
+#: model_terms:ir.ui.view,arch_db:construction_finance.view_payment_plan_form
+msgid "Remaining (USD)"
+msgstr "Остаток (USD)"
+
+#. module: construction_finance
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment_plan__user_id
+msgid "Responsible Manager"
+msgstr "Ответственный менеджер"
+
+#. module: construction_finance
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment__activity_user_id
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment_plan__activity_user_id
+msgid "Responsible User"
+msgstr "Ответственный пользователь"
+
+#. module: construction_finance
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment__message_has_sms_error
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment_plan__message_has_sms_error
+msgid "SMS Delivery error"
+msgstr "Ошибка доставки SMS"
+
+#. module: construction_finance
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment__schedule_id
+msgid "Schedule"
+msgstr "График"
+
+#. module: construction_finance
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment_plan__schedule_currency_id
+msgid "Schedule Currency"
+msgstr "Валюта графика"
+
+#. module: construction_finance
+#: model_terms:ir.ui.view,arch_db:construction_finance.view_payment_plan_form
+msgid "Schedule Generator"
+msgstr "Формирование графика"
+
+#. module: construction_finance
+#. odoo-python
+#: code:addons/construction_finance/models/payment_plan.py:0
+msgid "Schedule can only be generated for draft plans."
+msgstr "График можно сформировать только для чернового плана."
+
+#. module: construction_finance
+#. odoo-python
+#: code:addons/construction_finance/models/payment_schedule.py:0
+msgid "Schedule lines can only be added to draft plans."
+msgstr "Строки графика можно добавлять только в черновые планы."
+
+#. module: construction_finance
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment_plan__scheduled_usd
+msgid "Scheduled (USD)"
+msgstr "По графику (USD)"
+
+#. module: construction_finance
+#. odoo-python
+#: code:addons/construction_finance/models/payment_schedule.py:0
+msgid "Scheduled amount must be positive."
+msgstr "Сумма по графику должна быть положительной."
+
+#. module: construction_finance
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment_method__sequence
+msgid "Sequence"
+msgstr "Последовательность"
+
+#. module: construction_finance
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment__state
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment_schedule__state
+msgid "State"
+msgstr "Состояние"
+
+#. module: construction_finance
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment_plan__state
+msgid "Status"
+msgstr "Статус"
+
+#. module: construction_finance
+#: model:ir.model.fields,help:construction_finance.field_construction_payment__activity_state
+#: model:ir.model.fields,help:construction_finance.field_construction_payment_plan__activity_state
+msgid ""
+"Status based on activities\n"
+"Overdue: Due date is already passed\n"
+"Today: Activity date is today\n"
+"Planned: Future activities."
+msgstr ""
+"?????? ?? ?????? ????????\n"
+"??????????: ???? ??? ??????\n"
+"???????: ???? ???????? ? ???????\n"
+"?????????????: ??????? ????????."
+
+#. module: construction_finance
+#: model:ir.model.fields,help:construction_finance.field_construction_payment_plan__schedule_exchange_rate
+msgid "TJS for one USD. USD schedules use 1."
+msgstr "Количество сомони за 1 USD. Для графиков в USD используйте значение 1."
+
+#. module: construction_finance
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment__exchange_rate
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment_plan__schedule_exchange_rate
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment_schedule__exchange_rate
+msgid "TJS per USD"
+msgstr "TJS за 1 USD"
+
+#. module: construction_finance
+#. odoo-python
+#: code:addons/construction_finance/models/payment_plan.py:0
+msgid "The contract must have a balance for installments."
+msgstr "По договору должен оставаться остаток для оплаты частями."
+
+#. module: construction_finance
+#. odoo-python
+#: code:addons/construction_finance/models/payment.py:0
+msgid "The financial plan must be confirmed first."
+msgstr "Сначала необходимо подтвердить финансовый план."
+
+#. module: construction_finance
+#. odoo-python
+#: code:addons/construction_finance/models/payment_plan.py:0
+msgid ""
+"The payment schedule total (%s USD) must equal the contract amount (%s USD)."
+msgstr "Общая сумма графика платежей (%s USD) должна совпадать с суммой договора (%s USD)."
+
+#. module: construction_finance
+#. odoo-python
+#: code:addons/construction_finance/models/payment_schedule.py:0
+msgid "This schedule line cannot be deleted."
+msgstr "Эту строку графика нельзя удалить."
+
+#. module: construction_finance
+#: model:ir.model.fields,field_description:construction_finance.field_construction_finance_dashboard__date_to
+msgid "To"
+msgstr "По"
+
+#. module: construction_finance
+#: model:ir.model.fields,help:construction_finance.field_construction_payment__activity_exception_decoration
+#: model:ir.model.fields,help:construction_finance.field_construction_payment_plan__activity_exception_decoration
+msgid "Type of the exception activity on record."
+msgstr "Тип действия с исключением для записи."
+
+#. module: construction_finance
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment_plan__currency_usd_id
+msgid "USD Currency"
+msgstr "Валюта USD"
+
+#. module: construction_finance
+#. odoo-python
+#: code:addons/construction_finance/models/payment.py:0
+msgid "Use payment action buttons to change status."
+msgstr "Для изменения статуса используйте кнопки действий с платежом."
+
+#. module: construction_finance
+#. odoo-python
+#: code:addons/construction_finance/models/payment_plan.py:0
+msgid "Use the payment plan action buttons to change status."
+msgstr "Для изменения статуса используйте кнопки действий с платёжным планом."
+
+#. module: construction_finance
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment__user_id
+msgid "User"
+msgstr "Пользователь"
+
+#. module: construction_finance
+#: model_terms:ir.ui.view,arch_db:construction_finance.view_construction_finance_dashboard_form
+msgid "View Debts"
+msgstr "Просмотреть задолженности"
+
+#. module: construction_finance
+#: model_terms:ir.ui.view,arch_db:construction_finance.view_construction_finance_dashboard_form
+msgid "View Overdue"
+msgstr "Просмотреть просрочки"
+
+#. module: construction_finance
+#: model_terms:ir.ui.view,arch_db:construction_finance.view_construction_finance_dashboard_form
+msgid "View Payments"
+msgstr "Просмотреть платежи"
+
+#. module: construction_finance
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment__website_message_ids
+#: model:ir.model.fields,field_description:construction_finance.field_construction_payment_plan__website_message_ids
+msgid "Website Messages"
+msgstr "Сообщения сайта"
+
+#. module: construction_finance
+#: model:ir.model.fields,help:construction_finance.field_construction_payment__website_message_ids
+#: model:ir.model.fields,help:construction_finance.field_construction_payment_plan__website_message_ids
+msgid "Website communication history"
+msgstr "История переписки на сайте"

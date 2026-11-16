@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="module_category_construction_finance" model="ir.module.category">
+            <field name="name">Construction Finance</field>
+            <field name="sequence">36</field>
+        </record>
+
+        <record id="res_groups_privilege_finance" model="res.groups.privilege">
+            <field name="name">Finance</field>
+            <field name="category_id" ref="module_category_construction_finance"/>
+        </record>
+
+        <record id="group_finance_user" model="res.groups">
+            <field name="name">Finance User</field>
+            <field name="privilege_id" ref="res_groups_privilege_finance"/>
+        </record>
+
+        <record id="group_finance_manager" model="res.groups">
+            <field name="name">Finance Manager</field>
+            <field name="privilege_id" ref="res_groups_privilege_finance"/>
+            <field name="implied_ids" eval="[(4, ref('group_finance_user'))]"/>
+        </record>
+
+        <record id="rule_finance_plan_user" model="ir.rule">
+            <field name="name">Finance User: Own Plans</field>
+            <field name="model_id" ref="model_construction_payment_plan"/>
+            <field name="groups" eval="[(4, ref('group_finance_user'))]"/>
+            <field name="domain_force">[('user_id', '=', user.id)]</field>
+        </record>
+        <record id="rule_finance_plan_manager" model="ir.rule">
+            <field name="name">Finance Manager: All Plans</field>
+            <field name="model_id" ref="model_construction_payment_plan"/>
+            <field name="groups" eval="[(4, ref('group_finance_manager'))]"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+        </record>
+
+        <record id="rule_finance_payment_user" model="ir.rule">
+            <field name="name">Finance User: Own Payments</field>
+            <field name="model_id" ref="model_construction_payment"/>
+            <field name="groups" eval="[(4, ref('group_finance_user'))]"/>
+            <field name="domain_force">[('user_id', '=', user.id)]</field>
+        </record>
+        <record id="rule_finance_payment_manager" model="ir.rule">
+            <field name="name">Finance Manager: All Payments</field>
+            <field name="model_id" ref="model_construction_payment"/>
+            <field name="groups" eval="[(4, ref('group_finance_manager'))]"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+        </record>
+    
+        <record id="rule_finance_schedule_user" model="ir.rule">
+            <field name="name">Finance User: Own Payment Schedules</field>
+            <field name="model_id" ref="model_construction_payment_schedule"/>
+            <field name="groups" eval="[(4, ref('group_finance_user'))]"/>
+            <field name="domain_force">[('plan_id.user_id', '=', user.id)]</field>
+        </record>
+
+        <record id="rule_finance_schedule_manager" model="ir.rule">
+            <field name="name">Finance Manager: All Payment Schedules</field>
+            <field name="model_id" ref="model_construction_payment_schedule"/>
+            <field name="groups" eval="[(4, ref('group_finance_manager'))]"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+        </record>
+
+    </data>
+</odoo>

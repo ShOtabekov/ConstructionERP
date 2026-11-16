@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <menuitem
+            id="menu_construction_sales"
+            name="Sales"
+            parent="construction_core.menu_construction_root"
+            sequence="30"
+            groups="base.group_system,construction_sales.group_sales_user"/>
+
+        <menuitem
+            id="menu_construction_reservations"
+            name="Reservations"
+            parent="menu_construction_sales"
+            action="action_construction_reservations"
+            sequence="10"
+            groups="base.group_system,construction_sales.group_sales_user"/>
+
+        <menuitem
+            id="menu_construction_contracts"
+            name="Contracts"
+            parent="menu_construction_sales"
+            action="action_construction_contracts"
+            sequence="20"
+            groups="base.group_system,construction_sales.group_sales_user"/>
+
+    </data>
+</odoo>

@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <!-- Payments by month and project -->
+    <record id="view_finance_payment_graph" model="ir.ui.view">
+        <field name="name">construction.payment.finance.graph</field>
+        <field name="model">construction.payment</field>
+        <field name="arch" type="xml">
+            <graph string="Payment Analysis" type="bar">
+                <field name="payment_date" interval="month"/>
+                <field name="amount_usd" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="view_finance_payment_pivot" model="ir.ui.view">
+        <field name="name">construction.payment.finance.pivot</field>
+        <field name="model">construction.payment</field>
+        <field name="arch" type="xml">
+            <pivot string="Payment Analysis">
+                <field name="payment_date" interval="month" type="row"/>
+                <field name="project_id" type="col"/>
+                <field name="amount_usd" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="action_finance_payment_analysis" model="ir.actions.act_window">
+        <field name="name">Payment Analysis</field>
+        <field name="res_model">construction.payment</field>
+        <field name="view_mode">graph,pivot,list</field>
+        <field name="domain">[('state', '=', 'posted')]</field>
+    </record>
+
+    <!-- Customer debts -->
+    <record id="view_finance_debt_pivot" model="ir.ui.view">
+        <field name="name">construction.payment.plan.debt.pivot</field>
+        <field name="model">construction.payment.plan</field>
+        <field name="arch" type="xml">
+            <pivot string="Customer Debts">
+                <field name="partner_id" type="row"/>
+                <field name="project_id" type="col"/>
+                <field name="contract_amount_usd" type="measure"/>
+                <field name="paid_usd" type="measure"/>
+                <field name="balance_usd" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="action_finance_customer_debts" model="ir.actions.act_window">
+        <field name="name">Customer Debts</field>
+        <field name="res_model">construction.payment.plan</field>
+        <field name="view_mode">pivot,list</field>
+        <field name="domain">[('state', 'in', ['confirmed', 'closed'])]</field>
+    </record>
+
+    <!-- Overdue schedule lines -->
+    <record id="view_finance_overdue_list" model="ir.ui.view">
+        <field name="name">construction.payment.schedule.overdue.list</field>
+        <field name="model">construction.payment.schedule</field>
+        <field name="arch" type="xml">
+            <list string="Overdue Payments">
+                <field name="name"/>
+                <field name="plan_id"/>
+                <field name="partner_id"/>
+                <field name="project_id"/>
+                <field name="due_date"/>
+                <field name="amount_usd"/>
+                <field name="paid_usd"/>
+                <field name="balance_usd"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_finance_overdue_payments" model="ir.actions.act_window">
+        <field name="name">Overdue Payments</field>
+        <field name="res_model">construction.payment.schedule</field>
+        <field name="view_mode">list</field>
+        <field name="view_id" ref="view_finance_overdue_list"/>
+        <field name="domain">[('state', '=', 'overdue')]</field>
+    </record>
+
+    <!-- Project financial summary -->
+    <record id="view_finance_project_pivot" model="ir.ui.view">
+        <field name="name">construction.payment.plan.project.pivot</field>
+        <field name="model">construction.payment.plan</field>
+        <field name="arch" type="xml">
+            <pivot string="Project Finance">
+                <field name="project_id" type="row"/>
+                <field name="contract_amount_usd" type="measure"/>
+                <field name="paid_usd" type="measure"/>
+                <field name="balance_usd" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="action_finance_project_analysis" model="ir.actions.act_window">
+        <field name="name">Project Finance</field>
+        <field name="res_model">construction.payment.plan</field>
+        <field name="view_mode">pivot,list</field>
+        <field name="domain">[('state', 'in', ['confirmed', 'closed'])]</field>
+    </record>
+
+
+    <!-- Debt by project: outstanding balance in USD -->
+    <record id="view_finance_debt_project_graph" model="ir.ui.view">
+        <field name="name">construction.payment.plan.debt.project.graph</field>
+        <field name="model">construction.payment.plan</field>
+        <field name="arch" type="xml">
+            <graph string="?????????????????????????? ???? ????????????????" type="bar">
+                <field name="project_id"/>
+                <field name="balance_usd" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+</odoo>

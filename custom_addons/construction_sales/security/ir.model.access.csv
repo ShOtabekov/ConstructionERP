@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_construction_reservation_user,construction.reservation.user,model_construction_reservation,group_sales_user,1,1,1,0
+access_construction_reservation_manager,construction.reservation.manager,model_construction_reservation,group_sales_manager,1,1,1,0
+access_construction_contract_user,construction.contract.user,model_construction_contract,group_sales_user,1,1,1,0
+access_construction_contract_manager,construction.contract.manager,model_construction_contract,group_sales_manager,1,1,1,0
+access_construction_reservation_system,construction.reservation.system,model_construction_reservation,base.group_system,1,1,1,1
+access_construction_contract_system,construction.contract.system,model_construction_contract,base.group_system,1,1,1,1

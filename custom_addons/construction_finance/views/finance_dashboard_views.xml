@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_construction_finance_dashboard_form" model="ir.ui.view">
+        <field name="name">construction.finance.dashboard.form</field>
+        <field name="model">construction.finance.dashboard</field>
+        <field name="arch" type="xml">
+            <form string="Финансовая панель" create="false" delete="false">
+                <header>
+                    <button name="action_refresh"
+                            type="object"
+                            string="Обновить"
+                            class="btn-primary"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>Финансовая панель</h1>
+                    </div>
+
+                    <group string="Фильтры" col="3">
+                        <field name="date_from" string="Дата с"/>
+                        <field name="date_to" string="Дата по"/>
+                        <field name="project_id" string="Проект"/>
+                    </group>
+
+                    <div class="row">
+                        <div class="col-lg-6 col-xl-3">
+                            <div class="card mb-3">
+                                <div class="card-body">
+                                    <div class="text-muted">Received in Period</div>
+                                    <h2 class="text-success">
+                                        <field name="total_received" widget="monetary"/>
+                                    </h2>
+                                    <field name="payment_count" string="Posted Payments"/>
+                                    <button name="action_open_payments"
+                                            type="object"
+                                            string="View Payments"
+                                            class="btn-link"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-xl-3">
+                            <div class="card mb-3">
+                                <div class="card-body">
+                                    <div class="text-muted">Outstanding Debt</div>
+                                    <h2 class="text-warning">
+                                        <field name="total_debt" widget="monetary"/>
+                                    </h2>
+                                    <field name="contract_count" string="Active Contracts"/>
+                                    <button name="action_open_debts"
+                                            type="object"
+                                            string="View Debts"
+                                            class="btn-link"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-xl-3">
+                            <div class="card mb-3">
+                                <div class="card-body">
+                                    <div class="text-muted">Overdue Balance</div>
+                                    <h2 class="text-danger">
+                                        <field name="overdue_total" widget="monetary"/>
+                                    </h2>
+                                    <div class="mt-2 text-muted">
+                                        Overdue installments:
+                                        <field name="overdue_count" nolabel="1"/>
+                                    </div>
+                                    <button name="action_open_overdue"
+                                            type="object"
+                                            string="View Overdue"
+                                            class="btn-link"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <separator string="Финансовая аналитика"/>
+                    <div class="row mb-3">
+                        <div class="col-lg-6">
+                            <button name="action_open_payments_graph"
+                                    type="object"
+                                    string="Monthly Payment Chart"
+                                    icon="fa-line-chart"
+                                    class="btn-primary"/>
+                        </div>
+                        <div class="col-lg-6">
+                            <button name="action_open_debt_graph"
+                                    type="object"
+                                    string="Debt by Project Chart"
+                                    icon="fa-bar-chart"
+                                    class="btn-secondary"/>
+                        </div>
+                    </div>
+                    <group>
+                        <field name="currency_id" invisible="1"/>
+                    </group>
+                    <div class="alert alert-info" role="alert">
+                        Received amount is calculated for the selected date period.
+                        Outstanding debt and overdue balance reflect current records.
+                        All figures are shown in USD.
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_construction_finance_dashboard" model="ir.actions.act_window">
+        <field name="name">Finance Dashboard</field>
+        <field name="res_model">construction.finance.dashboard</field>
+        <field name="view_mode">form</field>
+        <field name="target">current</field>
+    </record>
+
+    <record id="action_open_construction_finance_dashboard_server"
+            model="ir.actions.server">
+        <field name="name">Open Finance Dashboard</field>
+        <field name="model_id" ref="base.model_res_users"/>
+        <field name="state">code</field>
+        <field name="code"><![CDATA[
+dashboard = env['construction.finance.dashboard'].create({})
+action = {
+    'type': 'ir.actions.act_window',
+    'name': 'Finance Dashboard',
+    'res_model': 'construction.finance.dashboard',
+    'view_mode': 'form',
+    'view_id': env.ref('construction_finance.view_construction_finance_dashboard_form').id,
+    'res_id': dashboard.id,
+    'target': 'current',
+}
+        ]]></field>
+    </record>
+
+</odoo>

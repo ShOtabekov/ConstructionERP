@@ -1,0 +1,524 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Construction ERP 19.0\n"
+"Language: ru\n"
+"Language-Team: Russian\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+
+#. module: construction_core
+#: model:ir.model.fields,field_description:construction_core.field_construction_apartment__active
+#: model:ir.model.fields,field_description:construction_core.field_construction_building__active
+#: model:ir.model.fields,field_description:construction_core.field_construction_entrance__active
+msgid "Active"
+msgstr "Активно"
+
+#. module: construction_core
+#: model:ir.model.fields,field_description:construction_core.field_construction_building__address
+msgid "Address"
+msgstr "Адрес"
+
+#. module: construction_core
+#: model:ir.model.fields,field_description:construction_core.field_construction_apartment__name
+msgid "Apartment"
+msgstr "Квартира"
+
+#. module: construction_core
+#: model:ir.actions.client,name:construction_core.action_construction_apartment_chessboard
+#: model:ir.ui.menu,name:construction_core.menu_construction_apartment_chessboard
+msgid "Apartment Chessboard"
+msgstr "Шахматка квартир"
+
+#. module: construction_core
+#: model_terms:ir.ui.view,arch_db:construction_core.view_construction_apartment_form
+msgid "Apartment Details"
+msgstr "Информация о квартире"
+
+#. module: construction_core
+#: model:ir.model.fields,field_description:construction_core.field_construction_apartment__number
+msgid "Apartment Number"
+msgstr "Номер квартиры"
+
+#. module: construction_core
+#: model:ir.model.constraint,message:construction_core.constraint_construction_apartment_apartment_number_unique
+msgid "Apartment number must be unique within the same floor."
+msgstr "Номер квартиры должен быть уникальным в пределах одного этажа."
+
+#. module: construction_core
+#: model:ir.actions.act_window,name:construction_core.action_construction_apartment
+#: model:ir.ui.menu,name:construction_core.menu_construction_apartments
+msgid "Apartments"
+msgstr "Квартиры"
+
+#. module: construction_core
+#: model:ir.model.fields.selection,name:construction_core.selection__construction_apartment__state__blocked
+msgid "Blocked"
+msgstr "Заблокирована"
+
+#. module: construction_core
+#: model:ir.model.fields,field_description:construction_core.field_construction_apartment__building_id
+#: model:ir.model.fields,field_description:construction_core.field_construction_entrance__building_id
+#: model:ir.model.fields,field_description:construction_core.field_construction_floor__building_id
+msgid "Building"
+msgstr "Корпус"
+
+#. module: construction_core
+#: model:ir.model.fields,field_description:construction_core.field_construction_building__code
+msgid "Building Code"
+msgstr "Код корпуса"
+
+#. module: construction_core
+#: model:ir.model.fields,field_description:construction_core.field_construction_building__name
+msgid "Building Name"
+msgstr "Название корпуса"
+
+#. module: construction_core
+#: model:ir.actions.act_window,name:construction_core.action_construction_building
+#: model:ir.ui.menu,name:construction_core.menu_construction_buildings
+msgid "Buildings"
+msgstr "Корпуса"
+
+#. module: construction_core
+#: model:ir.model.fields.selection,name:construction_core.selection__construction_project__state__cancelled
+msgid "Cancelled"
+msgstr "Отменён"
+
+#. module: construction_core
+#: model:ir.model.fields,field_description:construction_core.field_construction_project__company_id
+msgid "Company"
+msgstr "Компания"
+
+#. module: construction_core
+#: model:ir.model.fields.selection,name:construction_core.selection__construction_project__state__completed
+msgid "Completed"
+msgstr "Завершён"
+
+#. module: construction_core
+#: model:ir.model,name:construction_core.model_construction_apartment
+msgid "Construction Apartment"
+msgstr "Квартира"
+
+#. module: construction_core
+#: model:ir.model,name:construction_core.model_construction_building
+msgid "Construction Building"
+msgstr "Корпус"
+
+#. module: construction_core
+#: model:ir.ui.menu,name:construction_core.menu_construction_root
+msgid "Construction ERP"
+msgstr "Строительная ERP"
+
+#. module: construction_core
+#: model:ir.model,name:construction_core.model_construction_entrance
+msgid "Construction Entrance"
+msgstr "Подъезд"
+
+#. module: construction_core
+#: model:ir.model,name:construction_core.model_construction_floor
+msgid "Construction Floor"
+msgstr "Этаж"
+
+#. module: construction_core
+#: model:ir.model,name:construction_core.model_construction_project
+#: model_terms:ir.ui.view,arch_db:construction_core.view_construction_project_form
+msgid "Construction Project"
+msgstr "Строительный проект"
+
+#. module: construction_core
+#: model:ir.actions.act_window,name:construction_core.action_construction_project
+#: model_terms:ir.ui.view,arch_db:construction_core.view_construction_project_list
+msgid "Construction Projects"
+msgstr "Строительные проекты"
+
+#. module: construction_core
+#: model:ir.model.fields,field_description:construction_core.field_construction_apartment__create_uid
+#: model:ir.model.fields,field_description:construction_core.field_construction_building__create_uid
+#: model:ir.model.fields,field_description:construction_core.field_construction_entrance__create_uid
+#: model:ir.model.fields,field_description:construction_core.field_construction_floor__create_uid
+#: model:ir.model.fields,field_description:construction_core.field_construction_project__create_uid
+msgid "Created by"
+msgstr "Создал"
+
+#. module: construction_core
+#: model:ir.model.fields,field_description:construction_core.field_construction_apartment__create_date
+#: model:ir.model.fields,field_description:construction_core.field_construction_building__create_date
+#: model:ir.model.fields,field_description:construction_core.field_construction_entrance__create_date
+#: model:ir.model.fields,field_description:construction_core.field_construction_floor__create_date
+#: model:ir.model.fields,field_description:construction_core.field_construction_project__create_date
+msgid "Created on"
+msgstr "Дата создания"
+
+#. module: construction_core
+#: model:ir.model.fields,field_description:construction_core.field_construction_apartment__currency_id
+msgid "Currency"
+msgstr "Валюта"
+
+#. module: construction_core
+#: model:ir.model.fields,field_description:construction_core.field_construction_apartment__description
+#: model:ir.model.fields,field_description:construction_core.field_construction_building__description
+#: model:ir.model.fields,field_description:construction_core.field_construction_project__description
+#: model_terms:ir.ui.view,arch_db:construction_core.view_construction_project_form
+msgid "Description"
+msgstr "Описание"
+
+#. module: construction_core
+#: model:ir.model.fields,field_description:construction_core.field_construction_apartment__display_name
+#: model:ir.model.fields,field_description:construction_core.field_construction_building__display_name
+#: model:ir.model.fields,field_description:construction_core.field_construction_entrance__display_name
+#: model:ir.model.fields,field_description:construction_core.field_construction_floor__display_name
+#: model:ir.model.fields,field_description:construction_core.field_construction_project__display_name
+msgid "Display Name"
+msgstr "Отображаемое название"
+
+#. module: construction_core
+#: model:ir.model.fields.selection,name:construction_core.selection__construction_project__state__draft
+msgid "Draft"
+msgstr "Черновик"
+
+#. module: construction_core
+#: model:ir.model.fields,field_description:construction_core.field_construction_project__end_date
+msgid "End Date"
+msgstr "Дата окончания"
+
+#. module: construction_core
+#: model:ir.model.fields,field_description:construction_core.field_construction_apartment__entrance_id
+#: model:ir.model.fields,field_description:construction_core.field_construction_floor__entrance_id
+msgid "Entrance"
+msgstr "Подъезд"
+
+#. module: construction_core
+#: model:ir.model.fields,field_description:construction_core.field_construction_entrance__code
+msgid "Entrance Code"
+msgstr "Код подъезда"
+
+#. module: construction_core
+#: model:ir.model.fields,field_description:construction_core.field_construction_entrance__name
+msgid "Entrance Name"
+msgstr "Название подъезда"
+
+#. module: construction_core
+#: model:ir.actions.act_window,name:construction_core.action_construction_entrance
+#: model:ir.ui.menu,name:construction_core.menu_construction_entrances
+msgid "Entrances"
+msgstr "Подъезды"
+
+#. module: construction_core
+#: model:ir.model.fields,field_description:construction_core.field_construction_apartment__floor_id
+msgid "Floor"
+msgstr "Этаж"
+
+#. module: construction_core
+#: model:ir.model.fields,field_description:construction_core.field_construction_floor__name
+msgid "Floor Name"
+msgstr "Название этажа"
+
+#. module: construction_core
+#: model:ir.model.fields,field_description:construction_core.field_construction_floor__number
+msgid "Floor Number"
+msgstr "Номер этажа"
+
+#. module: construction_core
+#: model:ir.actions.act_window,name:construction_core.action_construction_floor
+#: model:ir.ui.menu,name:construction_core.menu_construction_floors
+msgid "Floors"
+msgstr "Этажи"
+
+#. module: construction_core
+#: model:ir.model.fields.selection,name:construction_core.selection__construction_apartment__state__free
+msgid "Free"
+msgstr "Свободна"
+
+#. module: construction_core
+#: model:ir.model.fields,field_description:construction_core.field_construction_apartment__id
+#: model:ir.model.fields,field_description:construction_core.field_construction_building__id
+#: model:ir.model.fields,field_description:construction_core.field_construction_entrance__id
+#: model:ir.model.fields,field_description:construction_core.field_construction_floor__id
+#: model:ir.model.fields,field_description:construction_core.field_construction_project__id
+msgid "ID"
+msgstr "Идентификатор"
+
+#. module: construction_core
+#: model:ir.model.fields.selection,name:construction_core.selection__construction_project__state__in_progress
+msgid "In Progress"
+msgstr "В процессе"
+
+#. module: construction_core
+#: model:ir.model.fields,field_description:construction_core.field_construction_apartment__write_uid
+#: model:ir.model.fields,field_description:construction_core.field_construction_building__write_uid
+#: model:ir.model.fields,field_description:construction_core.field_construction_entrance__write_uid
+#: model:ir.model.fields,field_description:construction_core.field_construction_floor__write_uid
+#: model:ir.model.fields,field_description:construction_core.field_construction_project__write_uid
+msgid "Last Updated by"
+msgstr "Последний раз изменил"
+
+#. module: construction_core
+#: model:ir.model.fields,field_description:construction_core.field_construction_apartment__write_date
+#: model:ir.model.fields,field_description:construction_core.field_construction_building__write_date
+#: model:ir.model.fields,field_description:construction_core.field_construction_entrance__write_date
+#: model:ir.model.fields,field_description:construction_core.field_construction_floor__write_date
+#: model:ir.model.fields,field_description:construction_core.field_construction_project__write_date
+msgid "Last Updated on"
+msgstr "Дата последнего изменения"
+
+#. module: construction_core
+#: model_terms:ir.ui.view,arch_db:construction_core.view_construction_apartment_form
+msgid "Legacy Pricing (TJS)"
+msgstr "Прежняя цена (сомони)"
+
+#. module: construction_core
+#: model:ir.model.fields,field_description:construction_core.field_construction_apartment__area_living
+msgid "Living Area (m2)"
+msgstr "Жилая площадь (м²)"
+
+#. module: construction_core
+#: model:ir.model.fields,field_description:construction_core.field_construction_project__location
+#: model_terms:ir.ui.view,arch_db:construction_core.view_construction_apartment_form
+msgid "Location"
+msgstr "Местоположение"
+
+#. module: construction_core
+#: model:ir.model.fields,field_description:construction_core.field_construction_apartment__price_per_sqm
+msgid "Price per m2 (TJS)"
+msgstr "Цена за м² (сомони)"
+
+#. module: construction_core
+#: model:ir.model.fields,field_description:construction_core.field_construction_apartment__price_per_sqm_tjs
+msgid "Price per m2 (TJS, calculated)"
+msgstr "Цена за м² (сомони, расчётная)"
+
+#. module: construction_core
+#: model:ir.model.fields,field_description:construction_core.field_construction_apartment__price_per_sqm_usd
+msgid "Price per m2 (USD)"
+msgstr "Цена за м² (USD)"
+
+#. module: construction_core
+#: model:ir.model.fields,field_description:construction_core.field_construction_apartment__project_id
+#: model:ir.model.fields,field_description:construction_core.field_construction_building__project_id
+#: model:ir.model.fields,field_description:construction_core.field_construction_floor__project_id
+msgid "Project"
+msgstr "Проект"
+
+#. module: construction_core
+#: model:ir.model.fields,field_description:construction_core.field_construction_project__code
+msgid "Project Code"
+msgstr "Код проекта"
+
+#. module: construction_core
+#: model:ir.model.fields,field_description:construction_core.field_construction_project__name
+msgid "Project Name"
+msgstr "Название проекта"
+
+#. module: construction_core
+#: model:ir.model.constraint,message:construction_core.constraint_construction_project_code_company_unique
+msgid "Project code must be unique per company!"
+msgstr "Код проекта должен быть уникальным в пределах компании!"
+
+#. module: construction_core
+#: model:ir.ui.menu,name:construction_core.menu_construction_projects
+msgid "Projects"
+msgstr "Проекты"
+
+#. module: construction_core
+#: model:ir.ui.menu,name:construction_core.menu_construction_real_estate
+msgid "Real Estate"
+msgstr "Недвижимость"
+
+#. module: construction_core
+#: model:ir.model.fields.selection,name:construction_core.selection__construction_apartment__state__reserved
+msgid "Reserved"
+msgstr "Забронирована"
+
+#. module: construction_core
+#: model:ir.model.fields,field_description:construction_core.field_construction_apartment__rooms
+msgid "Rooms"
+msgstr "Количество комнат"
+
+#. module: construction_core
+#: model_terms:ir.ui.view,arch_db:construction_core.view_construction_apartment_form
+msgid "Selling Price (USD)"
+msgstr "Цена продажи (USD)"
+
+#. module: construction_core
+#: model:ir.model.fields,field_description:construction_core.field_construction_entrance__sequence
+msgid "Sequence"
+msgstr "Последовательность"
+
+#. module: construction_core
+#: model:ir.model.fields.selection,name:construction_core.selection__construction_apartment__state__sold
+msgid "Sold"
+msgstr "Продана"
+
+#. module: construction_core
+#: model:ir.model.fields,field_description:construction_core.field_construction_project__start_date
+msgid "Start Date"
+msgstr "Дата начала"
+
+#. module: construction_core
+#: model:ir.model.fields,field_description:construction_core.field_construction_apartment__state
+#: model:ir.model.fields,field_description:construction_core.field_construction_project__state
+msgid "Status"
+msgstr "Статус"
+
+#. module: construction_core
+#: model_terms:ir.ui.view,arch_db:construction_core.view_construction_apartment_form
+msgid "TJS Equivalent (Calculated)"
+msgstr "Эквивалент в сомони (расчётный)"
+
+#. module: construction_core
+#: model:ir.model.fields,field_description:construction_core.field_construction_apartment__area_total
+msgid "Total Area (m2)"
+msgstr "Общая площадь (м²)"
+
+#. module: construction_core
+#: model:ir.model.fields,field_description:construction_core.field_construction_apartment__total_price
+msgid "Total Price (TJS)"
+msgstr "Общая стоимость (сомони)"
+
+#. module: construction_core
+#: model:ir.model.fields,field_description:construction_core.field_construction_apartment__total_price_tjs
+msgid "Total Price (TJS, calculated)"
+msgstr "Общая стоимость (сомони, расчётная)"
+
+#. module: construction_core
+#: model:ir.model.fields,field_description:construction_core.field_construction_apartment__total_price_usd
+msgid "Total Price (USD)"
+msgstr "Общая стоимость (USD)"
+
+#. module: construction_core
+#: model:ir.model.fields,field_description:construction_core.field_construction_apartment__currency_usd_id
+msgid "USD Currency"
+msgstr "Валюта USD"
+
+#. module: construction_core
+#: model:ir.model.fields,field_description:construction_core.field_construction_apartment__usd_tjs_rate
+msgid "USD/TJS Exchange Rate"
+msgstr "Курс USD/TJS"
+
+#. module: construction_core
+#. odoo-javascript
+#: code:addons/construction_core/static/src/xml/apartment_chessboard.xml:0
+msgid "Бронь"
+msgstr ""
+
+#. module: construction_core
+#. odoo-javascript
+#: code:addons/construction_core/static/src/xml/apartment_chessboard.xml:0
+msgid "Все корпуса"
+msgstr ""
+
+#. module: construction_core
+#. odoo-javascript
+#: code:addons/construction_core/static/src/xml/apartment_chessboard.xml:0
+msgid "Все подъезды"
+msgstr ""
+
+#. module: construction_core
+#. odoo-javascript
+#: code:addons/construction_core/static/src/xml/apartment_chessboard.xml:0
+msgid "Все проекты"
+msgstr ""
+
+#. module: construction_core
+#. odoo-javascript
+#: code:addons/construction_core/static/src/xml/apartment_chessboard.xml:0
+msgid "Заблокирована"
+msgstr ""
+
+#. module: construction_core
+#. odoo-javascript
+#: code:addons/construction_core/static/src/xml/apartment_chessboard.xml:0
+msgid "Загрузка квартир..."
+msgstr ""
+
+#. module: construction_core
+#. odoo-javascript
+#: code:addons/construction_core/static/src/xml/apartment_chessboard.xml:0
+msgid "Корпус"
+msgstr ""
+
+#. module: construction_core
+#. odoo-javascript
+#: code:addons/construction_core/static/src/xml/apartment_chessboard.xml:0
+msgid "Найдено квартир:"
+msgstr ""
+
+#. module: construction_core
+#. odoo-javascript
+#: code:addons/construction_core/static/src/xml/apartment_chessboard.xml:0
+msgid "План корпуса"
+msgstr ""
+
+#. module: construction_core
+#. odoo-javascript
+#: code:addons/construction_core/static/src/xml/apartment_chessboard.xml:0
+msgid "По выбранным фильтрам квартиры не найдены."
+msgstr ""
+
+#. module: construction_core
+#. odoo-javascript
+#: code:addons/construction_core/static/src/xml/apartment_chessboard.xml:0
+msgid "Повторить"
+msgstr ""
+
+#. module: construction_core
+#. odoo-javascript
+#: code:addons/construction_core/static/src/xml/apartment_chessboard.xml:0
+msgid "Подъезд"
+msgstr ""
+
+#. module: construction_core
+#. odoo-javascript
+#: code:addons/construction_core/static/src/xml/apartment_chessboard.xml:0
+msgid "Продана"
+msgstr ""
+
+#. module: construction_core
+#. odoo-javascript
+#: code:addons/construction_core/static/src/xml/apartment_chessboard.xml:0
+msgid "Проект"
+msgstr ""
+
+#. module: construction_core
+#. odoo-javascript
+#: code:addons/construction_core/static/src/xml/apartment_chessboard.xml:0
+msgid "Сбросить фильтры"
+msgstr ""
+
+#. module: construction_core
+#. odoo-javascript
+#: code:addons/construction_core/static/src/xml/apartment_chessboard.xml:0
+msgid "Свободна"
+msgstr ""
+
+#. module: construction_core
+#. odoo-javascript
+#: code:addons/construction_core/static/src/xml/apartment_chessboard.xml:0
+msgid "Управление недвижимостью"
+msgstr ""
+
+#. module: construction_core
+#. odoo-javascript
+#: code:addons/construction_core/static/src/xml/apartment_chessboard.xml:0
+msgid "Шахматка"
+msgstr ""
+
+#. module: construction_core
+#. odoo-javascript
+#: code:addons/construction_core/static/src/xml/apartment_chessboard.xml:0
+msgid "Шахматка квартир"
+msgstr ""
+
+#. module: construction_core
+#. odoo-javascript
+#: code:addons/construction_core/static/src/xml/apartment_chessboard.xml:0
+msgid "комн."
+msgstr ""
+
+#. module: construction_core
+#. odoo-javascript
+#: code:addons/construction_core/static/src/xml/apartment_chessboard.xml:0
+msgid "м²"
+msgstr ""

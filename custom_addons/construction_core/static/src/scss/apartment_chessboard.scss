@@ -1,0 +1,120 @@
+.o_apartment_chessboard {
+    min-height: 500px;
+    background: #f7f7f9;
+
+    .o_chess_legend {
+        span {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+        }
+    }
+
+    .o_status_dot {
+        width: 11px;
+        height: 11px;
+        display: inline-block;
+        border-radius: 50%;
+    }
+
+    .o_free { background: #22a06b; }
+    .o_reserved { background: #e5a12a; }
+    .o_sold { background: #d9534f; }
+    .o_blocked { background: #858585; }
+
+    .o_chess_floor {
+        display: flex;
+        align-items: stretch;
+        gap: 12px;
+        padding: 12px;
+        background: white;
+        border: 1px solid #dee2e6;
+        border-radius: 8px;
+    }
+
+    .o_chess_floor_title {
+        min-width: 115px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        border-right: 1px solid #dee2e6;
+        padding-right: 10px;
+    }
+
+    .o_chess_apartments,
+    .o_plan_units {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(145px, 1fr));
+        gap: 10px;
+        flex: 1;
+    }
+
+    .o_chess_apartment,
+    .o_plan_unit {
+        border: 1px solid #dee2e6;
+        border-left: 5px solid #858585;
+        border-radius: 7px;
+        background: white;
+        padding: 10px;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 3px;
+        text-align: left;
+        transition: transform .15s, box-shadow .15s;
+
+        &:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 3px 12px rgba(0,0,0,.12);
+        }
+
+        .o_apartment_number {
+            font-size: 18px;
+        }
+
+        small {
+            font-weight: 600;
+        }
+    }
+
+    .o_state_free { border-left-color: #22a06b; }
+    .o_state_reserved { border-left-color: #e5a12a; }
+    .o_state_sold { border-left-color: #d9534f; }
+    .o_state_blocked { border-left-color: #858585; }
+
+    .o_plan_floor {
+        display: flex;
+        gap: 12px;
+        align-items: stretch;
+        padding: 12px 0;
+        border-bottom: 1px solid #eee;
+    }
+
+    .o_plan_floor_label {
+        width: 100px;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+    }
+}
+
+@media (max-width: 768px) {
+    .o_apartment_chessboard {
+        .o_chess_floor,
+        .o_plan_floor {
+            flex-direction: column;
+        }
+
+        .o_chess_floor_title {
+            border-right: 0;
+            border-bottom: 1px solid #dee2e6;
+            padding-bottom: 8px;
+        }
+
+        .o_plan_floor_label {
+            width: auto;
+        }
+    }
+}

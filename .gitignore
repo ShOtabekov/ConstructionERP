@@ -1,0 +1,11 @@
+/*
+!/.gitignore
+!/README.md
+!/custom_addons/
+!/docs/
+!/scripts/
+!/tests/
+__pycache__/
+*.pyc
+*.bak
+*_backup*

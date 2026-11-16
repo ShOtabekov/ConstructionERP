@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <!-- BUILDINGS -->
+    <record id="view_construction_building_list" model="ir.ui.view">
+        <field name="name">construction.building.list</field>
+        <field name="model">construction.building</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="project_id"/>
+                <field name="address"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_construction_building_form" model="ir.ui.view">
+        <field name="name">construction.building.form</field>
+        <field name="model">construction.building</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="code"/>
+                            <field name="project_id"/>
+                        </group>
+                        <group>
+                            <field name="address"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="description"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_construction_building" model="ir.actions.act_window">
+        <field name="name">Buildings</field>
+        <field name="res_model">construction.building</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- ENTRANCES -->
+    <record id="view_construction_entrance_list" model="ir.ui.view">
+        <field name="name">construction.entrance.list</field>
+        <field name="model">construction.entrance</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="building_id"/>
+                <field name="sequence"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_construction_entrance_form" model="ir.ui.view">
+        <field name="name">construction.entrance.form</field>
+        <field name="model">construction.entrance</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="code"/>
+                        <field name="building_id"/>
+                        <field name="sequence"/>
+                        <field name="active"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_construction_entrance" model="ir.actions.act_window">
+        <field name="name">Entrances</field>
+        <field name="res_model">construction.entrance</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- FLOORS -->
+    <record id="view_construction_floor_list" model="ir.ui.view">
+        <field name="name">construction.floor.list</field>
+        <field name="model">construction.floor</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="number"/>
+                <field name="project_id"/>
+                <field name="building_id"/>
+                <field name="entrance_id"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_construction_floor_form" model="ir.ui.view">
+        <field name="name">construction.floor.form</field>
+        <field name="model">construction.floor</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="number"/>
+                        <field name="entrance_id"/>
+                        <field name="building_id" readonly="1"/>
+                        <field name="project_id" readonly="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_construction_floor" model="ir.actions.act_window">
+        <field name="name">Floors</field>
+        <field name="res_model">construction.floor</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- APARTMENTS -->
+    <record id="view_construction_apartment_list" model="ir.ui.view">
+        <field name="name">construction.apartment.list</field>
+        <field name="model">construction.apartment</field>
+        <field name="arch" type="xml">
+                        <list>
+                <field name="number"/>
+                <field name="project_id"/>
+                <field name="building_id"/>
+                <field name="entrance_id"/>
+                <field name="floor_id"/>
+                <field name="rooms"/>
+                <field name="area_total"/>
+
+                <!-- Currency fields -->
+                <field name="currency_usd_id" column_invisible="True"/>
+                <field name="currency_id" column_invisible="True"/>
+
+                <!-- USD Pricing -->
+                <field name="price_per_sqm_usd"/>
+                <field name="total_price_usd"/>
+
+                <!-- Exchange Rate -->
+                <field name="usd_tjs_rate"/>
+
+                <!-- Calculated TJS Pricing -->
+                <field name="price_per_sqm_tjs"/>
+                <field name="total_price_tjs"/>
+
+                <!-- Legacy TJS Pricing: hidden by default -->
+                <field name="price_per_sqm" optional="hide"/>
+                <field name="total_price" optional="hide"/>
+
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_construction_apartment_form" model="ir.ui.view">
+        <field name="name">construction.apartment.form</field>
+        <field name="model">construction.apartment</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Location">
+                            <field name="number"/>
+                            <field name="project_id" readonly="1"/>
+                            <field name="building_id" readonly="1"/>
+                            <field name="entrance_id" readonly="1"/>
+                            <field name="floor_id"/>
+                        </group>
+                        <group string="Apartment Details">
+                            <field name="rooms"/>
+                            <field name="area_total"/>
+                            <field name="area_living"/>
+                            <field name="state"/>
+                        </group>
+                    </group>
+                    <group string="Selling Price (USD)">
+                        <field name="currency_usd_id" invisible="1"/>
+                        <field name="price_per_sqm_usd"/>
+                        <field name="total_price_usd" readonly="1"/>
+                    </group>
+                    <group string="TJS Equivalent (Calculated)">
+                        <field name="currency_id" invisible="1"/>
+                        <field name="usd_tjs_rate"/>
+                        <field name="price_per_sqm_tjs" readonly="1"/>
+                        <field name="total_price_tjs" readonly="1"/>
+                    </group>
+                    <group string="Legacy Pricing (TJS)">
+                        <field name="price_per_sqm"/>
+                        <field name="total_price" readonly="1"/>
+                    </group>
+                    <group>
+                        <field name="description"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_construction_apartment" model="ir.actions.act_window">
+        <field name="name">Apartments</field>
+        <field name="res_model">construction.apartment</field>
+        <field name="view_mode">list,form</field>
+    </record>
+<menuitem id="menu_construction_real_estate"
+              name="Real Estate"
+              parent="menu_construction_root"
+              sequence="20"/>
+
+    <menuitem id="menu_construction_buildings"
+              name="Buildings"
+              parent="menu_construction_real_estate"
+              action="action_construction_building"
+              sequence="10"/>
+
+    <menuitem id="menu_construction_entrances"
+              name="Entrances"
+              parent="menu_construction_real_estate"
+              action="action_construction_entrance"
+              sequence="20"/>
+
+    <menuitem id="menu_construction_floors"
+              name="Floors"
+              parent="menu_construction_real_estate"
+              action="action_construction_floor"
+              sequence="30"/>
+
+    <menuitem id="menu_construction_apartments"
+              name="Apartments"
+              parent="menu_construction_real_estate"
+              action="action_construction_apartment"
+              sequence="40"/>
+
+</odoo>

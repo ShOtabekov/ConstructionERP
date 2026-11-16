@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_contract_form_payment_plan" model="ir.ui.view">
+        <field name="name">construction.contract.form.payment.plan</field>
+        <field name="model">construction.contract</field>
+        <field name="inherit_id" ref="construction_sales.view_construction_contract_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button name="action_open_payment_plan"
+                        type="object"
+                        string="Payment Plan"
+                        class="btn-primary"
+                        invisible="state != 'confirmed'"
+                        groups="construction_finance.group_finance_user,base.group_system"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
