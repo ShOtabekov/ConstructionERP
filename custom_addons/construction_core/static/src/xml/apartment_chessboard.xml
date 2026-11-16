@@ -31,7 +31,7 @@
                                 t-on-click="() => this.setValue('building', '')">Все блоки</button>
                         <t t-foreach="buildings" t-as="item" t-key="item.id">
                             <button class="o_chip" t-att-class="{ active: state.building == item.id }"
-                                    t-on-click="() => this.setFilter('building', String(item.id))"
+                                    t-on-click="() => this.toggleBuilding(item.id)"
                                     t-esc="item.name"/>
                         </t>
                     </div>

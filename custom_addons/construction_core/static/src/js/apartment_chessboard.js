@@ -228,6 +228,10 @@ export class ApartmentChessboard extends Component {
         this.state[name] = this.state[name] === value ? "" : value;
     }
 
+    toggleBuilding(id) {
+        this.setFilter("building", String(id));
+    }
+
     onProjectChange(event) {
         this.state.project = event.target.value;
         this.state.building = "";
