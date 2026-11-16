@@ -297,6 +297,8 @@ class ConstructionSaleWizard(models.TransientModel):
             raise UserError(_("Это помещение уже продано или заблокировано."))
 
         contract.action_confirm()
+        if self.list_price_usd:
+            contract.sudo().write({"list_price_usd": self.list_price_usd})
         if self.list_price_usd and abs(self.list_price_usd - self.price_usd) > 0.009:
             fmt = lambda v: "{:,.2f}".format(v).replace(",", " ")
             contract.message_post(body=_(

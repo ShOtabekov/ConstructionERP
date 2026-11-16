@@ -38,6 +38,36 @@ class ConstructionContract(models.Model):
         }
 
     refund_ids = fields.One2many("construction.refund", "contract_id", string="Расторжение")
+
+    # Report fields
+    unit_type = fields.Selection(related="apartment_id.unit_type", store=True, string="Тип")
+    rooms = fields.Integer(related="apartment_id.rooms", store=True, string="Комнат")
+    area_total = fields.Float(
+        related="apartment_id.area_total", store=True, string="Площадь (м²)",
+    )
+    contract_price_per_sqm = fields.Monetary(
+        string="Цена за м² (сделка)", currency_field="currency_usd_id",
+        compute="_compute_report_prices", store=True, aggregator="avg",
+    )
+    list_price_usd = fields.Monetary(
+        string="Цена по прайсу", currency_field="currency_usd_id", readonly=True,
+        help="Цена по прайс-листу на момент продажи.",
+    )
+    discount_usd = fields.Monetary(
+        string="Скидка от прайса", currency_field="currency_usd_id",
+        compute="_compute_report_prices", store=True,
+    )
+
+    @api.depends("price_usd", "area_total", "list_price_usd")
+    def _compute_report_prices(self):
+        for contract in self:
+            contract.contract_price_per_sqm = (
+                contract.price_usd / contract.area_total if contract.area_total else 0.0
+            )
+            contract.discount_usd = (
+                contract.list_price_usd - contract.price_usd
+                if contract.list_price_usd else 0.0
+            )
     payment_plan_id = fields.Many2one(
         "construction.payment.plan", string="План оплаты",
         compute="_compute_payment_plan",

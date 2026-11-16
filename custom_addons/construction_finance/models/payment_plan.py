@@ -197,6 +197,22 @@ class ConstructionPaymentPlan(models.Model):
     next_due_date = fields.Date(
         string="Следующий платёж", compute="_compute_debt", store=True,
     )
+    overdue_0_30 = fields.Monetary(
+        string="1–30 дн.", currency_field="currency_usd_id",
+        compute="_compute_debt", store=True,
+    )
+    overdue_31_60 = fields.Monetary(
+        string="31–60 дн.", currency_field="currency_usd_id",
+        compute="_compute_debt", store=True,
+    )
+    overdue_61_90 = fields.Monetary(
+        string="61–90 дн.", currency_field="currency_usd_id",
+        compute="_compute_debt", store=True,
+    )
+    overdue_90 = fields.Monetary(
+        string="Более 90 дн.", currency_field="currency_usd_id",
+        compute="_compute_debt", store=True,
+    )
     next_due_usd = fields.Monetary(
         string="Сумма следующего (USD)", currency_field="currency_usd_id",
         compute="_compute_debt", store=True,
@@ -220,6 +236,13 @@ class ConstructionPaymentPlan(models.Model):
             )
             plan.next_due_date = upcoming[:1].due_date or False
             plan.next_due_usd = upcoming[:1].balance_usd or 0.0
+            buckets = [0.0, 0.0, 0.0, 0.0]
+            for line in overdue:
+                days = (today - line.due_date).days
+                index = 0 if days <= 30 else 1 if days <= 60 else 2 if days <= 90 else 3
+                buckets[index] += line.balance_usd
+            (plan.overdue_0_30, plan.overdue_31_60,
+             plan.overdue_61_90, plan.overdue_90) = buckets
 
     def _terminate(self):
         """Close the plan when its contract is terminated (internal)."""

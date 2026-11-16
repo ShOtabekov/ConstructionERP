@@ -1,0 +1,414 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- ============ Director summary ============ -->
+    <record id="view_construction_director_summary_form" model="ir.ui.view">
+        <field name="name">construction.director.summary.form</field>
+        <field name="model">construction.director.summary</field>
+        <field name="arch" type="xml">
+            <form string="Сводка директора">
+                <header>
+                    <button name="action_print" type="object" string="Печать PDF"
+                            class="btn-primary" icon="fa-print"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <label for="date_from" string="Период"/>
+                            <div class="o_row">
+                                <field name="date_from"/> — <field name="date_to"/>
+                            </div>
+                        </group>
+                        <group>
+                            <field name="project_id" placeholder="Все проекты"/>
+                        </group>
+                    </group>
+                    <field name="summary_html" nolabel="1" readonly="1"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_construction_director_summary" model="ir.actions.act_window">
+        <field name="name">Сводка директора</field>
+        <field name="res_model">construction.director.summary</field>
+        <field name="view_mode">form</field>
+        <field name="target">current</field>
+    </record>
+
+    <record id="action_report_director_summary" model="ir.actions.report">
+        <field name="name">Сводка директора</field>
+        <field name="model">construction.director.summary</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">construction_finance.report_director_summary</field>
+        <field name="report_file">construction_finance.report_director_summary</field>
+        <field name="print_report_name">'Сводка %s' % (object.date_to)</field>
+    </record>
+
+    <template id="report_director_summary">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page" style="font-size: 12px;">
+                        <t t-out="o.summary_html"/>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <!-- ============ Stock: units ============ -->
+    <record id="view_report_stock_pivot" model="ir.ui.view">
+        <field name="name">construction.apartment.stock.pivot</field>
+        <field name="model">construction.apartment</field>
+        <field name="arch" type="xml">
+            <pivot string="Остатки" sample="1">
+                <field name="building_id" type="row"/>
+                <field name="state" type="col"/>
+                <field name="area_total" type="measure"/>
+                <field name="total_price_usd" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+    <record id="view_report_stock_graph" model="ir.ui.view">
+        <field name="name">construction.apartment.stock.graph</field>
+        <field name="model">construction.apartment</field>
+        <field name="arch" type="xml">
+            <graph string="Остатки" type="bar" stacked="1">
+                <field name="building_id"/>
+                <field name="state"/>
+            </graph>
+        </field>
+    </record>
+    <record id="action_report_stock" model="ir.actions.act_window">
+        <field name="name">Остатки помещений</field>
+        <field name="res_model">construction.apartment</field>
+        <field name="view_mode">pivot,graph,list</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+            (0, 0, {'view_mode': 'pivot', 'view_id': ref('view_report_stock_pivot')}),
+            (0, 0, {'view_mode': 'graph', 'view_id': ref('view_report_stock_graph')})]"/>
+        <field name="help" type="html"><p>Сколько помещений свободно, в брони и продано — по блокам, комнатности, этажам.</p></field>
+    </record>
+
+    <!-- ============ Sales: contracts ============ -->
+    <record id="view_report_sales_pivot" model="ir.ui.view">
+        <field name="name">construction.contract.sales.pivot</field>
+        <field name="model">construction.contract</field>
+        <field name="arch" type="xml">
+            <pivot string="Продажи" sample="1">
+                <field name="contract_date" interval="month" type="row"/>
+                <field name="building_id" type="col"/>
+                <field name="price_usd" type="measure"/>
+                <field name="area_total" type="measure"/>
+                <field name="discount_usd" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+    <record id="view_report_sales_graph" model="ir.ui.view">
+        <field name="name">construction.contract.sales.graph</field>
+        <field name="model">construction.contract</field>
+        <field name="arch" type="xml">
+            <graph string="Продажи" type="bar">
+                <field name="contract_date" interval="month"/>
+                <field name="price_usd" type="measure"/>
+            </graph>
+        </field>
+    </record>
+    <record id="view_report_sales_list" model="ir.ui.view">
+        <field name="name">construction.contract.sales.list</field>
+        <field name="model">construction.contract</field>
+        <field name="arch" type="xml">
+            <list string="Продажи" create="0">
+                <field name="contract_date"/>
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="building_id"/>
+                <field name="apartment_id"/>
+                <field name="rooms" optional="show"/>
+                <field name="area_total" sum="Итого"/>
+                <field name="currency_usd_id" column_invisible="1"/>
+                <field name="list_price_usd" sum="Итого" optional="show"/>
+                <field name="price_usd" sum="Итого"/>
+                <field name="discount_usd" sum="Итого" optional="show"/>
+                <field name="contract_price_per_sqm"/>
+                <field name="user_id" optional="hide"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_report_sales_search" model="ir.ui.view">
+        <field name="name">construction.contract.sales.search</field>
+        <field name="model">construction.contract</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="partner_id"/>
+                <field name="apartment_id"/>
+                <filter name="this_month" string="Этот месяц"
+                        domain="[('contract_date', '&gt;=', context_today().strftime('%Y-%m-01'))]"/>
+                <filter name="this_year" string="Этот год"
+                        domain="[('contract_date', '&gt;=', context_today().strftime('%Y-01-01'))]"/>
+                <filter name="contract_date" string="Дата договора" date="contract_date"/>
+                <separator/>
+                <filter name="apartments" string="Квартиры" domain="[('unit_type', '=', 'apartment')]"/>
+                <filter name="shops" string="Магазины" domain="[('unit_type', '=', 'shop')]"/>
+                <filter name="with_discount" string="Со скидкой" domain="[('discount_usd', '&gt;', 0)]"/>
+                <group>
+                    <filter name="g_building" string="Блок" context="{'group_by': 'building_id'}"/>
+                    <filter name="g_rooms" string="Комнатность" context="{'group_by': 'rooms'}"/>
+                    <filter name="g_month" string="Месяц" context="{'group_by': 'contract_date:month'}"/>
+                    <filter name="g_user" string="Менеджер" context="{'group_by': 'user_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="action_report_sales" model="ir.actions.act_window">
+        <field name="name">Продажи</field>
+        <field name="res_model">construction.contract</field>
+        <field name="view_mode">pivot,graph,list</field>
+        <field name="domain">[('state', '=', 'confirmed')]</field>
+        <field name="search_view_id" ref="view_report_sales_search"/>
+        <field name="view_ids" eval="[(5, 0, 0),
+            (0, 0, {'view_mode': 'pivot', 'view_id': ref('view_report_sales_pivot')}),
+            (0, 0, {'view_mode': 'graph', 'view_id': ref('view_report_sales_graph')}),
+            (0, 0, {'view_mode': 'list', 'view_id': ref('view_report_sales_list')})]"/>
+    </record>
+
+    <!-- ============ Receipts ============ -->
+    <record id="view_report_receipts_pivot" model="ir.ui.view">
+        <field name="name">construction.payment.receipts.pivot</field>
+        <field name="model">construction.payment</field>
+        <field name="arch" type="xml">
+            <pivot string="Поступления" sample="1">
+                <field name="payment_date" interval="month" type="row"/>
+                <field name="method_id" type="col"/>
+                <field name="amount_usd" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+    <record id="view_report_receipts_graph" model="ir.ui.view">
+        <field name="name">construction.payment.receipts.graph</field>
+        <field name="model">construction.payment</field>
+        <field name="arch" type="xml">
+            <graph string="Поступления" type="bar">
+                <field name="payment_date" interval="month"/>
+                <field name="amount_usd" type="measure"/>
+            </graph>
+        </field>
+    </record>
+    <record id="view_report_receipts_search" model="ir.ui.view">
+        <field name="name">construction.payment.receipts.search</field>
+        <field name="model">construction.payment</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="partner_id"/>
+                <field name="contract_id"/>
+                <filter name="today" string="Сегодня"
+                        domain="[('payment_date', '=', context_today().strftime('%Y-%m-%d'))]"/>
+                <filter name="this_month" string="Этот месяц"
+                        domain="[('payment_date', '&gt;=', context_today().strftime('%Y-%m-01'))]"/>
+                <filter name="payment_date" string="Дата" date="payment_date"/>
+                <group>
+                    <filter name="g_day" string="День" context="{'group_by': 'payment_date:day'}"/>
+                    <filter name="g_month" string="Месяц" context="{'group_by': 'payment_date:month'}"/>
+                    <filter name="g_method" string="Способ" context="{'group_by': 'method_id'}"/>
+                    <filter name="g_currency" string="Валюта" context="{'group_by': 'currency_id'}"/>
+                    <filter name="g_project" string="Проект" context="{'group_by': 'project_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="action_report_receipts" model="ir.actions.act_window">
+        <field name="name">Поступления</field>
+        <field name="res_model">construction.payment</field>
+        <field name="view_mode">pivot,graph,list</field>
+        <field name="domain">[('state', '=', 'posted')]</field>
+        <field name="search_view_id" ref="view_report_receipts_search"/>
+        <field name="view_ids" eval="[(5, 0, 0),
+            (0, 0, {'view_mode': 'pivot', 'view_id': ref('view_report_receipts_pivot')}),
+            (0, 0, {'view_mode': 'graph', 'view_id': ref('view_report_receipts_graph')})]"/>
+    </record>
+
+    <!-- ============ Forecast ============ -->
+    <record id="view_report_forecast_pivot" model="ir.ui.view">
+        <field name="name">construction.payment.schedule.forecast.pivot</field>
+        <field name="model">construction.payment.schedule</field>
+        <field name="arch" type="xml">
+            <pivot string="Прогноз поступлений" sample="1">
+                <field name="due_date" interval="month" type="row"/>
+                <field name="balance_usd" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+    <record id="view_report_forecast_graph" model="ir.ui.view">
+        <field name="name">construction.payment.schedule.forecast.graph</field>
+        <field name="model">construction.payment.schedule</field>
+        <field name="arch" type="xml">
+            <graph string="Прогноз поступлений" type="bar">
+                <field name="due_date" interval="month"/>
+                <field name="balance_usd" type="measure"/>
+            </graph>
+        </field>
+    </record>
+    <record id="view_report_forecast_search" model="ir.ui.view">
+        <field name="name">construction.payment.schedule.forecast.search</field>
+        <field name="model">construction.payment.schedule</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="partner_id"/>
+                <filter name="future" string="Будущие"
+                        domain="[('due_date', '&gt;=', context_today().strftime('%Y-%m-%d'))]"/>
+                <filter name="overdue" string="Просроченные"
+                        domain="[('due_date', '&lt;', context_today().strftime('%Y-%m-%d'))]"/>
+                <group>
+                    <filter name="g_month" string="Месяц" context="{'group_by': 'due_date:month'}"/>
+                    <filter name="g_project" string="Проект" context="{'group_by': 'project_id'}"/>
+                    <filter name="g_partner" string="Клиент" context="{'group_by': 'partner_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="action_report_forecast" model="ir.actions.act_window">
+        <field name="name">Прогноз поступлений</field>
+        <field name="res_model">construction.payment.schedule</field>
+        <field name="view_mode">pivot,graph,list</field>
+        <field name="domain">[('plan_id.state', '=', 'confirmed'), ('balance_usd', '&gt;', 0)]</field>
+        <field name="context">{'search_default_future': 1}</field>
+        <field name="search_view_id" ref="view_report_forecast_search"/>
+        <field name="view_ids" eval="[(5, 0, 0),
+            (0, 0, {'view_mode': 'pivot', 'view_id': ref('view_report_forecast_pivot')}),
+            (0, 0, {'view_mode': 'graph', 'view_id': ref('view_report_forecast_graph')})]"/>
+    </record>
+
+    <!-- ============ Aging ============ -->
+    <record id="view_report_aging_list" model="ir.ui.view">
+        <field name="name">construction.payment.plan.aging.list</field>
+        <field name="model">construction.payment.plan</field>
+        <field name="priority">40</field>
+        <field name="arch" type="xml">
+            <list string="Просрочка по срокам" create="0" default_order="overdue_days desc">
+                <field name="partner_id" string="Клиент"/>
+                <field name="partner_phone" widget="phone"/>
+                <field name="apartment_id" string="Помещение"/>
+                <field name="currency_usd_id" column_invisible="1"/>
+                <field name="overdue_0_30" sum="Итого"/>
+                <field name="overdue_31_60" sum="Итого"/>
+                <field name="overdue_61_90" sum="Итого"/>
+                <field name="overdue_90" sum="Итого" decoration-danger="overdue_90 &gt; 0"/>
+                <field name="overdue_usd" string="Всего просрочено" sum="Итого"/>
+                <field name="overdue_days"/>
+                <field name="balance_usd" string="Весь остаток" sum="Итого"/>
+                <button name="action_open_cash_wizard" type="object"
+                        string="Принять платёж" icon="fa-money" class="btn-link"/>
+            </list>
+        </field>
+    </record>
+    <record id="action_report_aging" model="ir.actions.act_window">
+        <field name="name">Просрочка по срокам</field>
+        <field name="res_model">construction.payment.plan</field>
+        <field name="view_mode">list</field>
+        <field name="domain">[('state', '=', 'confirmed'), ('overdue_usd', '&gt;', 0)]</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+            (0, 0, {'view_mode': 'list', 'view_id': ref('view_report_aging_list')})]"/>
+    </record>
+
+    <!-- ============ Reconciliation act ============ -->
+    <record id="action_report_reconciliation" model="ir.actions.report">
+        <field name="name">Акт сверки</field>
+        <field name="model">construction.contract</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">construction_finance.report_reconciliation</field>
+        <field name="report_file">construction_finance.report_reconciliation</field>
+        <field name="print_report_name">'Акт сверки %s' % (object.name)</field>
+        <field name="binding_model_id" ref="construction_sales.model_construction_contract"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <template id="report_reconciliation">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-set="fmt" t-value="lambda v: '{:,.2f}'.format(v or 0).replace(',', ' ')"/>
+                <t t-set="plan" t-value="o.payment_plan_id"/>
+                <t t-set="company" t-value="o.project_id.company_id or res_company"/>
+                <t t-set="payments" t-value="plan.schedule_ids.payment_ids.filtered(lambda p: p.state == 'posted').sorted('payment_date') if plan else []"/>
+                <t t-call="web.external_layout">
+                    <div class="page" style="font-size: 12px;">
+                        <h4 class="text-center">АКТ СВЕРКИ</h4>
+                        <p class="text-center">взаиморасчётов по договору № <t t-esc="o.name"/>
+                            от <t t-esc="o.contract_date.strftime('%d.%m.%Y')"/>
+                            на <t t-esc="context_timestamp(datetime.datetime.now()).strftime('%d.%m.%Y')"/></p>
+                        <table class="table table-sm table-bordered">
+                            <tr><td style="width: 30%;">Продавец</td><td><t t-esc="company.name"/></td></tr>
+                            <tr><td>Покупатель</td><td><t t-esc="o.partner_id.name"/>
+                                <t t-if="o.partner_id.phone">, тел. <t t-esc="o.partner_id.phone"/></t></td></tr>
+                            <tr><td>Объект</td><td><t t-esc="o.apartment_id.name"/>, <t t-esc="o.building_id.name"/>,
+                                <t t-esc="o.project_id.name"/>, <t t-esc="fmt(o.area_total)"/> м²</td></tr>
+                            <tr><td>Цена договора</td><td><b><t t-esc="fmt(o.price_usd)"/> USD</b></td></tr>
+                        </table>
+
+                        <h6 class="mt-3">График платежей</h6>
+                        <table class="table table-sm table-bordered" t-if="plan">
+                            <thead><tr><th>Платёж</th><th>Срок</th><th class="text-end">По графику</th>
+                                <th class="text-end">Оплачено</th><th class="text-end">Остаток</th><th>Статус</th></tr></thead>
+                            <tbody>
+                                <tr t-foreach="plan.schedule_ids.sorted('due_date')" t-as="l">
+                                    <td t-esc="l.name"/>
+                                    <td t-esc="l.due_date.strftime('%d.%m.%Y')"/>
+                                    <td class="text-end" t-esc="fmt(l.amount_usd)"/>
+                                    <td class="text-end" t-esc="fmt(l.paid_usd)"/>
+                                    <td class="text-end" t-esc="fmt(l.balance_usd)"/>
+                                    <td><t t-esc="dict(l._fields['state']._description_selection(l.env)).get(l.state)"/></td>
+                                </tr>
+                            </tbody>
+                            <tfoot><tr><th colspan="2">Итого</th>
+                                <th class="text-end" t-esc="fmt(sum(plan.schedule_ids.mapped('amount_usd')))"/>
+                                <th class="text-end" t-esc="fmt(plan.paid_usd)"/>
+                                <th class="text-end" t-esc="fmt(plan.balance_usd)"/><th/></tr></tfoot>
+                        </table>
+
+                        <h6 class="mt-3">Поступившие платежи</h6>
+                        <table class="table table-sm table-bordered">
+                            <thead><tr><th>Дата</th><th>№</th><th>Способ</th><th class="text-end">Сумма</th>
+                                <th>Валюта</th><th class="text-end">В USD</th></tr></thead>
+                            <tbody>
+                                <tr t-foreach="payments" t-as="p">
+                                    <td t-esc="p.payment_date.strftime('%d.%m.%Y')"/>
+                                    <td t-esc="p.name"/>
+                                    <td t-esc="p.method_id.name"/>
+                                    <td class="text-end" t-esc="fmt(p.amount)"/>
+                                    <td t-esc="p.currency_id.name"/>
+                                    <td class="text-end" t-esc="fmt(p.amount_usd)"/>
+                                </tr>
+                                <tr t-if="not payments"><td colspan="6" class="text-center text-muted">Платежей нет</td></tr>
+                            </tbody>
+                        </table>
+
+                        <p class="mt-3">
+                            Итого оплачено: <b><t t-esc="fmt(plan.paid_usd if plan else 0)"/> USD</b>.
+                            Задолженность Покупателя: <b><t t-esc="fmt(plan.balance_usd if plan else o.price_usd)"/> USD</b>,
+                            в том числе просрочено: <b><t t-esc="fmt(plan.overdue_usd if plan else 0)"/> USD</b>.
+                        </p>
+                        <div class="row" style="margin-top: 50px;">
+                            <div class="col-6"><b>Продавец:</b><br/><t t-esc="company.name"/><br/><br/>____________________</div>
+                            <div class="col-6"><b>Покупатель:</b><br/><t t-esc="o.partner_id.name"/><br/><br/>____________________</div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <!-- ============ Menu ============ -->
+    <menuitem id="menu_construction_reports" name="Отчёты"
+              parent="construction_core.menu_construction_root" sequence="45"
+              groups="base.group_system,construction_finance.group_finance_user"/>
+    <menuitem id="menu_report_director" name="Сводка директора" parent="menu_construction_reports"
+              action="action_construction_director_summary" sequence="1"/>
+    <menuitem id="menu_report_stock" name="Остатки помещений" parent="menu_construction_reports"
+              action="action_report_stock" sequence="10"/>
+    <menuitem id="menu_report_sales" name="Продажи" parent="menu_construction_reports"
+              action="action_report_sales" sequence="20"/>
+    <menuitem id="menu_report_receipts" name="Поступления" parent="menu_construction_reports"
+              action="action_report_receipts" sequence="30"/>
+    <menuitem id="menu_report_forecast" name="Прогноз поступлений" parent="menu_construction_reports"
+              action="action_report_forecast" sequence="40"/>
+    <menuitem id="menu_report_aging" name="Просрочка по срокам" parent="menu_construction_reports"
+              action="action_report_aging" sequence="50"/>
+</odoo>
