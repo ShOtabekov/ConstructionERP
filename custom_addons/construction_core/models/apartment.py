@@ -50,6 +50,22 @@ class ConstructionApartment(models.Model):
         string="Project",
     )
 
+    floor_number = fields.Integer(
+        related="floor_id.number",
+        string="Floor Number",
+    )
+
+    unit_type = fields.Selection(
+        [
+            ("apartment", "Apartment"),
+            ("shop", "Shop"),
+        ],
+        string="Unit Type",
+        default="apartment",
+        required=True,
+        index=True,
+    )
+
     rooms = fields.Integer(
         string="Rooms",
         default=1,
@@ -110,10 +126,13 @@ class ConstructionApartment(models.Model):
     )
 
     # Manual USD to TJS exchange rate for apartment pricing
+    # One exchange rate per project (residential complex).
     usd_tjs_rate = fields.Float(
+        related="project_id.usd_tjs_rate",
+        store=True,
+        readonly=True,
         string="USD/TJS Exchange Rate",
         digits=(12, 6),
-        default=0.0,
     )
 
     price_per_sqm_tjs = fields.Monetary(
@@ -149,7 +168,7 @@ class ConstructionApartment(models.Model):
 
     active = fields.Boolean(default=True)
 
-    @api.depends("number", "floor_id.number")
+    @api.depends("number", "floor_id.number", "unit_type")
     def _compute_name(self):
         for record in self:
             floor_number = (
@@ -157,8 +176,9 @@ class ConstructionApartment(models.Model):
                 if record.floor_id
                 else ""
             )
+            prefix = "Маг." if record.unit_type == "shop" else "Кв."
             record.name = (
-                f"Apartment {record.number}, Floor {floor_number}"
+                f"{prefix} {record.number}, {floor_number} этаж"
                 if record.number
                 else False
             )
@@ -216,6 +236,7 @@ class ConstructionApartment(models.Model):
                 )
 
     @api.constrains(
+        "unit_type",
         "rooms",
         "area_total",
         "area_living",
@@ -224,7 +245,7 @@ class ConstructionApartment(models.Model):
     )
     def _check_apartment_values(self):
         for record in self:
-            if record.rooms < 1:
+            if record.unit_type == "apartment" and record.rooms < 1:
                 raise ValidationError(
                     "An apartment must have at least one room."
                 )
@@ -317,3 +338,78 @@ class ConstructionApartment(models.Model):
                 )
             record._set_state("free")
         return True
+
+    # ------------------------------------------------------------------
+    # Chessboard (sales screen) API
+    # ------------------------------------------------------------------
+    # The chessboard widget calls chessboard_card() when a unit is
+    # clicked. Each module (sales, finance) extends it with its own info
+    # lines and action buttons. An action button calls the public method
+    # named in "method" on construction.apartment and runs the returned
+    # window action (or reloads the board when it returns True).
+
+    def _chessboard_can_block(self):
+        try:
+            self._check_block_rights()
+        except ValidationError:
+            return False
+        return True
+
+    def chessboard_card(self):
+        self.ensure_one()
+        state_labels = dict(
+            self._fields["state"]._description_selection(self.env)
+        )
+        card = {
+            "id": self.id,
+            "name": self.name,
+            "number": self.number,
+            "floor": self.floor_id.number,
+            "building": self.building_id.name,
+            "entrance": self.entrance_id.name,
+            "project": self.project_id.name,
+            "rooms": self.rooms,
+            "area_total": self.area_total,
+            "area_living": self.area_living,
+            "price_per_sqm_usd": self.price_per_sqm_usd,
+            "total_price_usd": self.total_price_usd,
+            "total_price_tjs": self.total_price_tjs,
+            "usd_tjs_rate": self.usd_tjs_rate,
+            "state": self.state,
+            "state_label": state_labels.get(self.state, self.state),
+            "info": [],
+            "actions": [],
+        }
+        if self.state == "free" and self._chessboard_can_block():
+            card["actions"].append({
+                "method": "action_block",
+                "label": _("Заблокировать"),
+                "style": "secondary",
+                "sequence": 80,
+            })
+        if self.state == "blocked" and self._chessboard_can_block():
+            card["actions"].append({
+                "method": "action_unblock",
+                "label": _("Разблокировать"),
+                "style": "secondary",
+                "sequence": 80,
+            })
+        card["actions"].append({
+            "method": "action_open_apartment_form",
+            "label": _("Открыть карточку"),
+            "style": "link",
+            "sequence": 100,
+        })
+        return card
+
+    def action_open_apartment_form(self):
+        self.ensure_one()
+        return {
+            "type": "ir.actions.act_window",
+            "name": self.name,
+            "res_model": "construction.apartment",
+            "res_id": self.id,
+            "view_mode": "form",
+            "views": [(False, "form")],
+            "target": "current",
+        }

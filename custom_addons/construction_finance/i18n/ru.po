@@ -5,13 +5,12 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Construction ERP 19.0\n"
-"Language: ru\n"
 "Language-Team: Russian\n"
+"Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-
 
 #. module: construction_finance
 #: model:ir.actions.report,print_report_name:construction_finance.action_report_payment_receipt
@@ -96,7 +95,9 @@ msgstr "Курс USD/TJS должен быть положительным."
 msgid ""
 "A schedule already exists. Delete its lines manually before generating a new"
 " one."
-msgstr "График уже существует. Удалите его строки вручную перед созданием нового графика."
+msgstr ""
+"График уже существует. Удалите его строки вручную перед созданием нового "
+"графика."
 
 #. module: construction_finance
 #: model:ir.model.fields,field_description:construction_finance.field_construction_payment__message_needaction
@@ -369,6 +370,7 @@ msgstr "Описание"
 #: model:ir.model.fields,field_description:construction_finance.field_construction_payment_method__display_name
 #: model:ir.model.fields,field_description:construction_finance.field_construction_payment_plan__display_name
 #: model:ir.model.fields,field_description:construction_finance.field_construction_payment_schedule__display_name
+#: model:ir.model.fields,field_description:construction_finance.field_construction_apartment__display_name
 msgid "Display Name"
 msgstr "Отображаемое название"
 
@@ -454,7 +456,9 @@ msgstr "Значок Font Awesome, например fa-tasks"
 #. module: construction_finance
 #: model:ir.model.fields,help:construction_finance.field_construction_payment_schedule__exchange_rate
 msgid "For TJS schedules, enter TJS for one USD. USD schedules use 1."
-msgstr "Для графика в сомони укажите количество сомони за 1 USD. Для графика в USD используйте значение 1."
+msgstr ""
+"Для графика в сомони укажите количество сомони за 1 USD. Для графика в USD "
+"используйте значение 1."
 
 #. module: construction_finance
 #: model:ir.model.fields,field_description:construction_finance.field_construction_finance_dashboard__date_from
@@ -470,7 +474,9 @@ msgstr "Сформировать график"
 #. odoo-python
 #: code:addons/construction_finance/models/payment_plan.py:0
 msgid "Generate or add payment schedule lines before confirmation."
-msgstr "Перед подтверждением сформируйте график платежей или добавьте его строки вручную."
+msgstr ""
+"Перед подтверждением сформируйте график платежей или добавьте его строки "
+"вручную."
 
 #. module: construction_finance
 #. odoo-python
@@ -491,6 +497,7 @@ msgstr "Есть сообщение"
 #: model:ir.model.fields,field_description:construction_finance.field_construction_payment_method__id
 #: model:ir.model.fields,field_description:construction_finance.field_construction_payment_plan__id
 #: model:ir.model.fields,field_description:construction_finance.field_construction_payment_schedule__id
+#: model:ir.model.fields,field_description:construction_finance.field_construction_apartment__id
 msgid "ID"
 msgstr "Идентификатор"
 
@@ -1088,7 +1095,8 @@ msgstr ""
 #. module: construction_finance
 #: model:ir.model.fields,help:construction_finance.field_construction_payment_plan__schedule_exchange_rate
 msgid "TJS for one USD. USD schedules use 1."
-msgstr "Количество сомони за 1 USD. Для графиков в USD используйте значение 1."
+msgstr ""
+"Количество сомони за 1 USD. Для графиков в USD используйте значение 1."
 
 #. module: construction_finance
 #: model:ir.model.fields,field_description:construction_finance.field_construction_payment__exchange_rate
@@ -1114,7 +1122,9 @@ msgstr "Сначала необходимо подтвердить финанс�
 #: code:addons/construction_finance/models/payment_plan.py:0
 msgid ""
 "The payment schedule total (%s USD) must equal the contract amount (%s USD)."
-msgstr "Общая сумма графика платежей (%s USD) должна совпадать с суммой договора (%s USD)."
+msgstr ""
+"Общая сумма графика платежей (%s USD) должна совпадать с суммой договора (%s"
+" USD)."
 
 #. module: construction_finance
 #. odoo-python
@@ -1181,3 +1191,18 @@ msgstr "Сообщения сайта"
 #: model:ir.model.fields,help:construction_finance.field_construction_payment_plan__website_message_ids
 msgid "Website communication history"
 msgstr "История переписки на сайте"
+
+#. module: construction_finance
+#: model:ir.actions.server,name:construction_finance.ir_cron_update_overdue_schedule_ir_actions_server
+msgid "Construction: update overdue installments"
+msgstr "Стройка: обновление просроченных платежей"
+
+#. module: construction_finance
+#: model:res.groups,name:construction_finance.group_construction_director
+msgid "Director"
+msgstr "Руководитель"
+
+#. module: construction_finance
+#: model:res.groups.privilege,name:construction_finance.res_groups_privilege_management
+msgid "Management"
+msgstr "Руководство"

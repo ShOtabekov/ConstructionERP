@@ -27,7 +27,7 @@
                 <header>
                     <button name="%(action_report_payment_receipt)d"
                             type="action"
-                            string="?????? ?????????"
+                            string="Печать квитанции"
                             class="btn-primary"
                             invisible="state != 'posted'"/>
                     <button name="action_post" type="object" string="Post Payment"

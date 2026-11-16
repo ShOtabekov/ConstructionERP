@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-13 06:40+0000\n"
-"PO-Revision-Date: 2026-11-13 06:40+0000\n"
+"POT-Creation-Date: 2026-11-16 08:21+0000\n"
+"PO-Revision-Date: 2026-11-16 08:21+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -201,6 +201,11 @@ msgid "Confirmed reservation details cannot be modified."
 msgstr ""
 
 #. module: construction_sales
+#: model:ir.model,name:construction_sales.model_construction_apartment
+msgid "Construction Apartment"
+msgstr ""
+
+#. module: construction_sales
 #: model:ir.model,name:construction_sales.model_construction_reservation
 msgid "Construction Apartment Reservation"
 msgstr ""
@@ -307,6 +312,7 @@ msgid "Direct contract requires a free apartment."
 msgstr ""
 
 #. module: construction_sales
+#: model:ir.model.fields,field_description:construction_sales.field_construction_apartment__display_name
 #: model:ir.model.fields,field_description:construction_sales.field_construction_contract__display_name
 #: model:ir.model.fields,field_description:construction_sales.field_construction_reservation__display_name
 msgid "Display Name"
@@ -361,6 +367,7 @@ msgid "Has Message"
 msgstr ""
 
 #. module: construction_sales
+#: model:ir.model.fields,field_description:construction_sales.field_construction_apartment__id
 #: model:ir.model.fields,field_description:construction_sales.field_construction_contract__id
 #: model:ir.model.fields,field_description:construction_sales.field_construction_reservation__id
 msgid "ID"
@@ -833,4 +840,125 @@ msgstr ""
 #. odoo-python
 #: code:addons/construction_sales/models/reservation.py:0
 msgid "You do not have permission to manage reservations."
+msgstr ""
+
+#. module: construction_sales
+#. odoo-python
+#: code:addons/construction_sales/models/apartment.py:0
+msgid "Активная бронь не найдена."
+msgstr ""
+
+#. module: construction_sales
+#. odoo-python
+#: code:addons/construction_sales/models/apartment.py:0
+msgid "Бронь"
+msgstr ""
+
+#. module: construction_sales
+#. odoo-python
+#: code:addons/construction_sales/models/apartment.py:0
+msgid "Бронь до"
+msgstr ""
+
+#. module: construction_sales
+#. odoo-python
+#: code:addons/construction_sales/models/apartment.py:0
+msgid "Дата договора"
+msgstr ""
+
+#. module: construction_sales
+#. odoo-python
+#: code:addons/construction_sales/models/apartment.py:0
+msgid "Договор"
+msgstr ""
+
+#. module: construction_sales
+#. odoo-python
+#: code:addons/construction_sales/models/apartment.py:0
+msgid ""
+"Договор можно оформить только на свободную или забронированную квартиру."
+msgstr ""
+
+#. module: construction_sales
+#. odoo-python
+#: code:addons/construction_sales/models/apartment.py:0
+msgid "Забронировать"
+msgstr ""
+
+#. module: construction_sales
+#. odoo-python
+#: code:addons/construction_sales/models/apartment.py:0
+msgid "Забронировать можно только свободную квартиру."
+msgstr ""
+
+#. module: construction_sales
+#. odoo-python
+#: code:addons/construction_sales/models/apartment.py:0
+msgid "Квартира забронирована другим менеджером."
+msgstr ""
+
+#. module: construction_sales
+#. odoo-python
+#: code:addons/construction_sales/models/apartment.py:0
+msgid "Клиент"
+msgstr ""
+
+#. module: construction_sales
+#. odoo-python
+#: code:addons/construction_sales/models/apartment.py:0
+msgid "Менеджер"
+msgstr ""
+
+#. module: construction_sales
+#. odoo-python
+#: code:addons/construction_sales/models/apartment.py:0
+msgid "Новая бронь"
+msgstr ""
+
+#. module: construction_sales
+#. odoo-python
+#: code:addons/construction_sales/models/apartment.py:0
+msgid "Новый договор"
+msgstr ""
+
+#. module: construction_sales
+#. odoo-python
+#: code:addons/construction_sales/models/apartment.py:0
+msgid "Открыть бронь"
+msgstr ""
+
+#. module: construction_sales
+#. odoo-python
+#: code:addons/construction_sales/models/apartment.py:0
+msgid "Открыть договор"
+msgstr ""
+
+#. module: construction_sales
+#. odoo-python
+#: code:addons/construction_sales/models/apartment.py:0
+msgid "Оформить договор"
+msgstr ""
+
+#. module: construction_sales
+#. odoo-python
+#: code:addons/construction_sales/models/apartment.py:0
+msgid "Подтверждённый договор не найден."
+msgstr ""
+
+#. module: construction_sales
+#. odoo-python
+#: code:addons/construction_sales/models/apartment.py:0
+msgid "Цена по договору"
+msgstr ""
+
+#. module: construction_sales
+#. odoo-python
+#: code:addons/construction_sales/models/apartment.py:0
+msgid "оформлен другим менеджером"
+msgstr ""
+
+#. module: construction_sales
+#. odoo-python
+#: code:addons/construction_sales/models/apartment.py:0
+msgid "оформлена другим менеджером"
 msgstr ""

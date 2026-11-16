@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- Refresh stored names ("Кв. 201, 2 этаж") after code changes -->
+    <function model="construction.floor" name="_recompute_unit_names"/>
+</odoo>

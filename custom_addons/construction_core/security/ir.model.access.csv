@@ -1,6 +1,16 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_construction_project_user,construction.project user,model_construction_project,base.group_user,1,1,1,0
-access_construction_building_user,construction.building user,model_construction_building,base.group_user,1,1,1,0
-access_construction_entrance_user,construction.entrance user,model_construction_entrance,base.group_user,1,1,1,0
-access_construction_floor_user,construction.floor user,model_construction_floor,base.group_user,1,1,1,0
-access_construction_apartment_user,construction.apartment user,model_construction_apartment,base.group_user,1,1,1,0
+access_construction_project_user,construction.project user,model_construction_project,base.group_user,1,0,0,0
+access_construction_building_user,construction.building user,model_construction_building,base.group_user,1,0,0,0
+access_construction_entrance_user,construction.entrance user,model_construction_entrance,base.group_user,1,0,0,0
+access_construction_floor_user,construction.floor user,model_construction_floor,base.group_user,1,0,0,0
+access_construction_apartment_user,construction.apartment user,model_construction_apartment,base.group_user,1,0,0,0
+access_construction_project_admin,construction.project admin,model_construction_project,group_construction_admin,1,1,1,0
+access_construction_building_admin,construction.building admin,model_construction_building,group_construction_admin,1,1,1,0
+access_construction_entrance_admin,construction.entrance admin,model_construction_entrance,group_construction_admin,1,1,1,0
+access_construction_floor_admin,construction.floor admin,model_construction_floor,group_construction_admin,1,1,1,0
+access_construction_apartment_admin,construction.apartment admin,model_construction_apartment,group_construction_admin,1,1,1,0
+access_construction_project_system,construction.project system,model_construction_project,base.group_system,1,1,1,1
+access_construction_building_system,construction.building system,model_construction_building,base.group_system,1,1,1,1
+access_construction_entrance_system,construction.entrance system,model_construction_entrance,base.group_system,1,1,1,1
+access_construction_floor_system,construction.floor system,model_construction_floor,base.group_system,1,1,1,1
+access_construction_apartment_system,construction.apartment system,model_construction_apartment,base.group_system,1,1,1,1

@@ -35,4 +35,14 @@ class ConstructionFloor(models.Model):
     @api.depends("number")
     def _compute_name(self):
         for record in self:
-            record.name = f"Floor {record.number}"
+            record.name = f"{record.number} этаж"
+
+    @api.model
+    def _recompute_unit_names(self):
+        """Refresh stored floor / apartment names (run on module update)."""
+        self.search([]).modified(["number"])
+        self.env["construction.apartment"].with_context(
+            active_test=False
+        ).search([]).modified(["number"])
+        self.env.flush_all()
+        return True

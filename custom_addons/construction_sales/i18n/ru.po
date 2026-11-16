@@ -4,27 +4,24 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Construction ERP 19.0\n"
-"Language: ru\n"
 "Language-Team: Russian\n"
+"Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
-
 #. module: construction_sales
 #. odoo-python
 #: code:addons/construction_sales/models/reservation.py:0
 msgid "A contract cannot be linked during reservation creation."
-msgstr ""
-"Нельзя привязать договор во время создания бронирования."
+msgstr "Нельзя привязать договор во время создания бронирования."
 
 #. module: construction_sales
 #. odoo-python
 #: code:addons/construction_sales/models/contract.py:0
 msgid "A contract must have an apartment."
-msgstr ""
-"Для договора необходимо указать квартиру."
+msgstr "Для договора необходимо указать квартиру."
 
 #. module: construction_sales
 #. odoo-python
@@ -33,7 +30,8 @@ msgid ""
 "A direct contract can only be created for a free apartment. For reserved "
 "apartments, create the contract from the active reservation."
 msgstr ""
-"Прямой договор можно создать только для свободной квартиры. Для забронированной квартиры создайте договор из активного бронирования."
+"Прямой договор можно создать только для свободной квартиры. Для "
+"забронированной квартиры создайте договор из активного бронирования."
 
 #. module: construction_sales
 #. odoo-python
@@ -45,139 +43,119 @@ msgstr ""
 #. module: construction_sales
 #: model:ir.model.constraint,message:construction_sales.constraint_construction_contract_reservation_unique
 msgid "A reservation can only be converted into one contract."
-msgstr ""
-"Одно бронирование можно преобразовать только в один договор."
+msgstr "Одно бронирование можно преобразовать только в один договор."
 
 #. module: construction_sales
 #. odoo-python
 #: code:addons/construction_sales/models/contract.py:0
 #: code:addons/construction_sales/models/reservation.py:0
 msgid "A valid USD/TJS exchange rate is required."
-msgstr ""
-"Необходимо указать корректный курс USD/TJS."
+msgstr "Необходимо указать корректный курс USD/TJS."
 
 #. module: construction_sales
 #: model:ir.model.fields,field_description:construction_sales.field_construction_contract__message_needaction
 #: model:ir.model.fields,field_description:construction_sales.field_construction_reservation__message_needaction
 msgid "Action Needed"
-msgstr ""
-"Требуется действие"
+msgstr "Требуется действие"
 
 #. module: construction_sales
 #: model:ir.model.fields,field_description:construction_sales.field_construction_contract__activity_ids
 #: model:ir.model.fields,field_description:construction_sales.field_construction_reservation__activity_ids
 msgid "Activities"
-msgstr ""
-"Действия"
+msgstr "Действия"
 
 #. module: construction_sales
 #: model:ir.model.fields,field_description:construction_sales.field_construction_contract__activity_exception_decoration
 #: model:ir.model.fields,field_description:construction_sales.field_construction_reservation__activity_exception_decoration
 msgid "Activity Exception Decoration"
-msgstr ""
-"Обозначение исключения действия"
+msgstr "Обозначение исключения действия"
 
 #. module: construction_sales
 #: model:ir.model.fields,field_description:construction_sales.field_construction_contract__activity_state
 #: model:ir.model.fields,field_description:construction_sales.field_construction_reservation__activity_state
 msgid "Activity State"
-msgstr ""
-"Состояние действия"
+msgstr "Состояние действия"
 
 #. module: construction_sales
 #: model:ir.model.fields,field_description:construction_sales.field_construction_contract__activity_type_icon
 #: model:ir.model.fields,field_description:construction_sales.field_construction_reservation__activity_type_icon
 msgid "Activity Type Icon"
-msgstr ""
-"Значок типа действия"
+msgstr "Значок типа действия"
 
 #. module: construction_sales
 #: model_terms:ir.ui.view,arch_db:construction_sales.view_construction_reservation_form
 msgid "Additional information..."
-msgstr ""
-"Дополнительная информация..."
+msgstr "Дополнительная информация..."
 
 #. module: construction_sales
 #. odoo-python
 #: code:addons/construction_sales/models/contract.py:0
 msgid "Another confirmed contract exists for this apartment."
-msgstr ""
-"Для этой квартиры уже существует другой подтверждённый договор."
+msgstr "Для этой квартиры уже существует другой подтверждённый договор."
 
 #. module: construction_sales
 #: model:ir.model.fields,field_description:construction_sales.field_construction_contract__apartment_id
 #: model:ir.model.fields,field_description:construction_sales.field_construction_reservation__apartment_id
 msgid "Apartment"
-msgstr ""
-"Квартира"
+msgstr "Квартира"
 
 #. module: construction_sales
 #: model_terms:ir.ui.view,arch_db:construction_sales.view_construction_reservation_form
 msgid "Apartment Reservation"
-msgstr ""
-"Бронирование квартиры"
+msgstr "Бронирование квартиры"
 
 #. module: construction_sales
 #: model_terms:ir.ui.view,arch_db:construction_sales.view_construction_reservation_list
 msgid "Apartment Reservations"
-msgstr ""
-"Бронирования квартир"
+msgstr "Бронирования квартир"
 
 #. module: construction_sales
 #. odoo-python
 #: code:addons/construction_sales/models/contract.py:0
 #: code:addons/construction_sales/models/reservation.py:0
 msgid "Apartment USD price must be greater than zero."
-msgstr ""
-"Цена квартиры в USD должна быть больше нуля."
+msgstr "Цена квартиры в USD должна быть больше нуля."
 
 #. module: construction_sales
 #. odoo-python
 #: code:addons/construction_sales/models/contract.py:0
 #: code:addons/construction_sales/models/reservation.py:0
 msgid "Apartment does not exist."
-msgstr ""
-"Квартира не существует."
+msgstr "Квартира не существует."
 
 #. module: construction_sales
 #. odoo-python
 #: code:addons/construction_sales/models/contract.py:0
 msgid "Apartment reservation status is inconsistent."
-msgstr ""
-"Статус бронирования квартиры не соответствует ожидаемому."
+msgstr "Статус бронирования квартиры не соответствует ожидаемому."
 
 #. module: construction_sales
 #: model:ir.model.fields,field_description:construction_sales.field_construction_contract__message_attachment_count
 #: model:ir.model.fields,field_description:construction_sales.field_construction_reservation__message_attachment_count
 msgid "Attachment Count"
-msgstr ""
-"Количество вложений"
+msgstr "Количество вложений"
 
 #. module: construction_sales
 #: model:ir.model.fields,field_description:construction_sales.field_construction_contract__building_id
 #: model:ir.model.fields,field_description:construction_sales.field_construction_reservation__building_id
 msgid "Building"
-msgstr ""
-"Корпус"
+msgstr "Корпус"
 
 #. module: construction_sales
 #: model:ir.model.fields,field_description:construction_sales.field_construction_contract__partner_id
 #: model:ir.model.fields,field_description:construction_sales.field_construction_reservation__partner_id
 msgid "Buyer"
-msgstr ""
-"Покупатель"
+msgstr "Покупатель"
 
 #. module: construction_sales
 #: model_terms:ir.ui.view,arch_db:construction_sales.view_construction_reservation_form
 msgid "Cancel"
-msgstr ""
-"Отменить"
+msgstr "Отменить"
 
 #. module: construction_sales
 #: model_terms:ir.ui.view,arch_db:construction_sales.view_construction_contract_form
 msgid "Cancel Contract"
-msgstr ""
-"Отменить договор"
+msgstr "Отменить договор"
 
 #. module: construction_sales
 #: model:ir.model.fields.selection,name:construction_sales.selection__construction_contract__state__cancelled
@@ -185,181 +163,154 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:construction_sales.view_construction_contract_search
 #: model_terms:ir.ui.view,arch_db:construction_sales.view_construction_reservation_search
 msgid "Cancelled"
-msgstr ""
-"Отменён"
+msgstr "Отменён"
 
 #. module: construction_sales
 #. odoo-python
 #: code:addons/construction_sales/models/reservation.py:0
 msgid "Cannot cancel a reservation linked to a confirmed contract."
-msgstr ""
-"Нельзя отменить бронирование, связанное с подтверждённым договором."
+msgstr "Нельзя отменить бронирование, связанное с подтверждённым договором."
 
 #. module: construction_sales
 #: model_terms:ir.ui.view,arch_db:construction_sales.view_construction_contract_form
 msgid "Confirm Contract"
-msgstr ""
-"Подтвердить договор"
+msgstr "Подтвердить договор"
 
 #. module: construction_sales
 #: model_terms:ir.ui.view,arch_db:construction_sales.view_construction_reservation_form
 msgid "Confirm Reservation"
-msgstr ""
-"Подтвердить бронирование"
+msgstr "Подтвердить бронирование"
 
 #. module: construction_sales
 #: model:ir.model.fields.selection,name:construction_sales.selection__construction_contract__state__confirmed
 #: model_terms:ir.ui.view,arch_db:construction_sales.view_construction_contract_search
 msgid "Confirmed"
-msgstr ""
-"Подтверждён"
+msgstr "Подтверждён"
 
 #. module: construction_sales
 #. odoo-python
 #: code:addons/construction_sales/models/contract.py:0
 msgid "Confirmed contract terms cannot be modified."
-msgstr ""
-"Условия подтверждённого договора нельзя изменять."
+msgstr "Условия подтверждённого договора нельзя изменять."
 
 #. module: construction_sales
 #. odoo-python
 #: code:addons/construction_sales/models/reservation.py:0
 msgid "Confirmed reservation details cannot be modified."
-msgstr ""
-"Данные подтверждённого бронирования нельзя изменять."
+msgstr "Данные подтверждённого бронирования нельзя изменять."
 
 #. module: construction_sales
 #: model:ir.model,name:construction_sales.model_construction_reservation
 msgid "Construction Apartment Reservation"
-msgstr ""
-"Бронирование квартиры"
+msgstr "Бронирование квартиры"
 
 #. module: construction_sales
 #: model:ir.module.category,name:construction_sales.module_category_construction_sales
 msgid "Construction Sales"
-msgstr ""
-"Продажи недвижимости"
+msgstr "Продажи недвижимости"
 
 #. module: construction_sales
 #: model:ir.model,name:construction_sales.model_construction_contract
 msgid "Construction Sales Contract"
-msgstr ""
-"Договор продажи недвижимости"
+msgstr "Договор продажи недвижимости"
 
 #. module: construction_sales
 #: model:ir.model.fields,field_description:construction_sales.field_construction_contract__contract_date
 msgid "Contract Date"
-msgstr ""
-"Дата договора"
+msgstr "Дата договора"
 
 #. module: construction_sales
 #: model:ir.model.fields,field_description:construction_sales.field_construction_contract__name
 msgid "Contract Number"
-msgstr ""
-"Номер договора"
+msgstr "Номер договора"
 
 #. module: construction_sales
 #: model:ir.model.fields,field_description:construction_sales.field_construction_contract__price_tjs
 msgid "Contract Price (TJS)"
-msgstr ""
-"Стоимость договора (сомони)"
+msgstr "Стоимость договора (сомони)"
 
 #. module: construction_sales
 #: model:ir.model.fields,field_description:construction_sales.field_construction_contract__price_usd
 msgid "Contract Price (USD)"
-msgstr ""
-"Стоимость договора (USD)"
+msgstr "Стоимость договора (USD)"
 
 #. module: construction_sales
 #. odoo-python
 #: code:addons/construction_sales/models/reservation.py:0
 msgid "Contract links are managed by the contract workflow."
-msgstr ""
-"Связи договора управляются процессом оформления договора."
+msgstr "Связи договора управляются процессом оформления договора."
 
 #. module: construction_sales
 #: model:ir.actions.act_window,name:construction_sales.action_construction_contracts
 #: model:ir.ui.menu,name:construction_sales.menu_construction_contracts
 msgid "Contracts"
-msgstr ""
-"Договоры"
+msgstr "Договоры"
 
 #. module: construction_sales
 #. odoo-python
 #: code:addons/construction_sales/models/contract.py:0
 msgid "Contracts must be created in Draft status."
-msgstr ""
-"Договоры должны создаваться в статусе «Черновик»."
+msgstr "Договоры должны создаваться в статусе «Черновик»."
 
 #. module: construction_sales
 #: model_terms:ir.ui.view,arch_db:construction_sales.view_construction_reservation_search
 msgid "Converted"
-msgstr ""
-"Преобразовано"
+msgstr "Преобразовано"
 
 #. module: construction_sales
 #: model:ir.model.fields.selection,name:construction_sales.selection__construction_reservation__state__converted
 msgid "Converted to Contract"
-msgstr ""
-"Преобразовано в договор"
+msgstr "Преобразовано в договор"
 
 #. module: construction_sales
 #: model_terms:ir.ui.view,arch_db:construction_sales.view_construction_reservation_form
 msgid "Create Contract"
-msgstr ""
-"Создать договор"
+msgstr "Создать договор"
 
 #. module: construction_sales
 #: model_terms:ir.actions.act_window,help:construction_sales.action_construction_reservations
 msgid "Create your first apartment reservation."
-msgstr ""
-"Создайте первое бронирование квартиры."
+msgstr "Создайте первое бронирование квартиры."
 
 #. module: construction_sales
 #: model_terms:ir.actions.act_window,help:construction_sales.action_construction_contracts
 msgid "Create your first sales contract."
-msgstr ""
-"Создайте первый договор купли-продажи."
+msgstr "Создайте первый договор купли-продажи."
 
 #. module: construction_sales
 #: model:ir.model.fields,field_description:construction_sales.field_construction_contract__create_uid
 #: model:ir.model.fields,field_description:construction_sales.field_construction_reservation__create_uid
 msgid "Created by"
-msgstr ""
-"Создал"
+msgstr "Создал"
 
 #. module: construction_sales
 #: model:ir.model.fields,field_description:construction_sales.field_construction_contract__create_date
 #: model:ir.model.fields,field_description:construction_sales.field_construction_reservation__create_date
 msgid "Created on"
-msgstr ""
-"Дата создания"
+msgstr "Дата создания"
 
 #. module: construction_sales
 #: model:ir.model.fields,field_description:construction_sales.field_construction_reservation__currency_tjs_id
 msgid "Currency"
-msgstr ""
-"Валюта"
+msgstr "Валюта"
 
 #. module: construction_sales
 #: model:ir.model.fields,field_description:construction_sales.field_construction_reservation__currency_usd_id
 msgid "Currency Usd"
-msgstr ""
-"Валюта USD"
+msgstr "Валюта USD"
 
 #. module: construction_sales
 #. odoo-python
 #: code:addons/construction_sales/models/contract.py:0
 msgid "Direct contract requires a free apartment."
-msgstr ""
-"Для прямого договора требуется свободная квартира."
+msgstr "Для прямого договора требуется свободная квартира."
 
 #. module: construction_sales
 #: model:ir.model.fields,field_description:construction_sales.field_construction_contract__display_name
 #: model:ir.model.fields,field_description:construction_sales.field_construction_reservation__display_name
+#: model:ir.model.fields,field_description:construction_sales.field_construction_apartment__display_name
 msgid "Display Name"
-msgstr ""
-"Отображаемое название"
+msgstr "Отображаемое название"
 
 #. module: construction_sales
 #: model:ir.model.fields.selection,name:construction_sales.selection__construction_contract__state__draft
@@ -367,161 +318,139 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:construction_sales.view_construction_contract_search
 #: model_terms:ir.ui.view,arch_db:construction_sales.view_construction_reservation_search
 msgid "Draft"
-msgstr ""
-"Черновик"
+msgstr "Черновик"
 
 #. module: construction_sales
 #: model:ir.actions.server,name:construction_sales.ir_cron_expire_reservations_ir_actions_server
 msgid "Expire Construction Reservations"
-msgstr ""
-"Автоматическое завершение бронирований"
+msgstr "Автоматическое завершение бронирований"
 
 #. module: construction_sales
 #: model:ir.model.fields.selection,name:construction_sales.selection__construction_reservation__state__expired
 #: model_terms:ir.ui.view,arch_db:construction_sales.view_construction_reservation_search
 msgid "Expired"
-msgstr ""
-"Истёк срок"
+msgstr "Истёк срок"
 
 #. module: construction_sales
 #: model:ir.model.fields,field_description:construction_sales.field_construction_contract__contract_filename
 msgid "File Name"
-msgstr ""
-"Имя файла"
+msgstr "Имя файла"
 
 #. module: construction_sales
 #: model:ir.model.fields,field_description:construction_sales.field_construction_contract__message_follower_ids
 #: model:ir.model.fields,field_description:construction_sales.field_construction_reservation__message_follower_ids
 msgid "Followers"
-msgstr ""
-"Подписчики"
+msgstr "Подписчики"
 
 #. module: construction_sales
 #: model:ir.model.fields,field_description:construction_sales.field_construction_contract__message_partner_ids
 #: model:ir.model.fields,field_description:construction_sales.field_construction_reservation__message_partner_ids
 msgid "Followers (Partners)"
-msgstr ""
-"Подписчики (контакты)"
+msgstr "Подписчики (контакты)"
 
 #. module: construction_sales
 #: model:ir.model.fields,help:construction_sales.field_construction_contract__activity_type_icon
 #: model:ir.model.fields,help:construction_sales.field_construction_reservation__activity_type_icon
 msgid "Font awesome icon e.g. fa-tasks"
-msgstr ""
-"Значок Font Awesome, например fa-tasks"
+msgstr "Значок Font Awesome, например fa-tasks"
 
 #. module: construction_sales
 #: model:ir.model.fields,field_description:construction_sales.field_construction_contract__has_message
 #: model:ir.model.fields,field_description:construction_sales.field_construction_reservation__has_message
 msgid "Has Message"
-msgstr ""
-"Есть сообщение"
+msgstr "Есть сообщение"
 
 #. module: construction_sales
 #: model:ir.model.fields,field_description:construction_sales.field_construction_contract__id
 #: model:ir.model.fields,field_description:construction_sales.field_construction_reservation__id
+#: model:ir.model.fields,field_description:construction_sales.field_construction_apartment__id
 msgid "ID"
-msgstr ""
-"Идентификатор"
+msgstr "Идентификатор"
 
 #. module: construction_sales
 #: model:ir.model.fields,field_description:construction_sales.field_construction_contract__activity_exception_icon
 #: model:ir.model.fields,field_description:construction_sales.field_construction_reservation__activity_exception_icon
 msgid "Icon"
-msgstr ""
-"Значок"
+msgstr "Значок"
 
 #. module: construction_sales
 #: model:ir.model.fields,help:construction_sales.field_construction_contract__activity_exception_icon
 #: model:ir.model.fields,help:construction_sales.field_construction_reservation__activity_exception_icon
 msgid "Icon to indicate an exception activity."
-msgstr ""
-"Значок, обозначающий исключительное действие."
+msgstr "Значок, обозначающий исключительное действие."
 
 #. module: construction_sales
 #: model:ir.model.fields,help:construction_sales.field_construction_contract__message_needaction
 #: model:ir.model.fields,help:construction_sales.field_construction_reservation__message_needaction
 msgid "If checked, new messages require your attention."
-msgstr ""
-"Если отмечено, новые сообщения требуют вашего внимания."
+msgstr "Если отмечено, новые сообщения требуют вашего внимания."
 
 #. module: construction_sales
 #: model:ir.model.fields,help:construction_sales.field_construction_contract__message_has_error
 #: model:ir.model.fields,help:construction_sales.field_construction_reservation__message_has_error
 msgid "If checked, some messages have a delivery error."
-msgstr ""
-"Если отмечено, при доставке некоторых сообщений возникла ошибка."
+msgstr "Если отмечено, при доставке некоторых сообщений возникла ошибка."
 
 #. module: construction_sales
 #: model:ir.model.fields,field_description:construction_sales.field_construction_contract__message_is_follower
 #: model:ir.model.fields,field_description:construction_sales.field_construction_reservation__message_is_follower
 msgid "Is Follower"
-msgstr ""
-"Подписан"
+msgstr "Подписан"
 
 #. module: construction_sales
 #: model:ir.model.fields,field_description:construction_sales.field_construction_contract__write_uid
 #: model:ir.model.fields,field_description:construction_sales.field_construction_reservation__write_uid
 msgid "Last Updated by"
-msgstr ""
-"Последний раз изменил"
+msgstr "Последний раз изменил"
 
 #. module: construction_sales
 #: model:ir.model.fields,field_description:construction_sales.field_construction_contract__write_date
 #: model:ir.model.fields,field_description:construction_sales.field_construction_reservation__write_date
 msgid "Last Updated on"
-msgstr ""
-"Дата последнего изменения"
+msgstr "Дата последнего изменения"
 
 #. module: construction_sales
 #: model:ir.model.fields,field_description:construction_sales.field_construction_contract__message_has_error
 #: model:ir.model.fields,field_description:construction_sales.field_construction_reservation__message_has_error
 msgid "Message Delivery error"
-msgstr ""
-"Ошибка доставки сообщения"
+msgstr "Ошибка доставки сообщения"
 
 #. module: construction_sales
 #: model:ir.model.fields,field_description:construction_sales.field_construction_contract__message_ids
 #: model:ir.model.fields,field_description:construction_sales.field_construction_reservation__message_ids
 msgid "Messages"
-msgstr ""
-"Сообщения"
+msgstr "Сообщения"
 
 #. module: construction_sales
 #: model:ir.model.fields,field_description:construction_sales.field_construction_contract__my_activity_date_deadline
 #: model:ir.model.fields,field_description:construction_sales.field_construction_reservation__my_activity_date_deadline
 msgid "My Activity Deadline"
-msgstr ""
-"Срок моего действия"
+msgstr "Срок моего действия"
 
 #. module: construction_sales
 #. odoo-python
 #: code:addons/construction_sales/models/contract.py:0
 #: code:addons/construction_sales/models/reservation.py:0
 msgid "New"
-msgstr ""
-"Новый"
+msgstr "Новый"
 
 #. module: construction_sales
 #: model:ir.model.fields,field_description:construction_sales.field_construction_contract__activity_date_deadline
 #: model:ir.model.fields,field_description:construction_sales.field_construction_reservation__activity_date_deadline
 msgid "Next Activity Deadline"
-msgstr ""
-"Срок следующего действия"
+msgstr "Срок следующего действия"
 
 #. module: construction_sales
 #: model:ir.model.fields,field_description:construction_sales.field_construction_contract__activity_summary
 #: model:ir.model.fields,field_description:construction_sales.field_construction_reservation__activity_summary
 msgid "Next Activity Summary"
-msgstr ""
-"Описание следующего действия"
+msgstr "Описание следующего действия"
 
 #. module: construction_sales
 #: model:ir.model.fields,field_description:construction_sales.field_construction_contract__activity_type_id
 #: model:ir.model.fields,field_description:construction_sales.field_construction_reservation__activity_type_id
 msgid "Next Activity Type"
-msgstr ""
-"Тип следующего действия"
+msgstr "Тип следующего действия"
 
 #. module: construction_sales
 #: model:ir.model.fields,field_description:construction_sales.field_construction_contract__notes
@@ -529,105 +458,90 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:construction_sales.view_construction_contract_form
 #: model_terms:ir.ui.view,arch_db:construction_sales.view_construction_reservation_form
 msgid "Notes"
-msgstr ""
-"Примечания"
+msgstr "Примечания"
 
 #. module: construction_sales
 #: model:ir.model.fields,field_description:construction_sales.field_construction_contract__message_needaction_counter
 #: model:ir.model.fields,field_description:construction_sales.field_construction_reservation__message_needaction_counter
 msgid "Number of Actions"
-msgstr ""
-"Количество действий"
+msgstr "Количество действий"
 
 #. module: construction_sales
 #: model:ir.model.fields,field_description:construction_sales.field_construction_contract__message_has_error_counter
 #: model:ir.model.fields,field_description:construction_sales.field_construction_reservation__message_has_error_counter
 msgid "Number of errors"
-msgstr ""
-"Количество ошибок"
+msgstr "Количество ошибок"
 
 #. module: construction_sales
 #: model:ir.model.fields,help:construction_sales.field_construction_contract__message_needaction_counter
 #: model:ir.model.fields,help:construction_sales.field_construction_reservation__message_needaction_counter
 msgid "Number of messages requiring action"
-msgstr ""
-"Количество сообщений, требующих внимания"
+msgstr "Количество сообщений, требующих внимания"
 
 #. module: construction_sales
 #: model:ir.model.fields,help:construction_sales.field_construction_contract__message_has_error_counter
 #: model:ir.model.fields,help:construction_sales.field_construction_reservation__message_has_error_counter
 msgid "Number of messages with delivery error"
-msgstr ""
-"Количество сообщений с ошибкой доставки"
+msgstr "Количество сообщений с ошибкой доставки"
 
 #. module: construction_sales
 #. odoo-python
 #: code:addons/construction_sales/models/contract.py:0
 msgid "Only a sales supervisor can cancel contracts."
-msgstr ""
-"Только руководитель отдела продаж может отменять договоры."
+msgstr "Только руководитель отдела продаж может отменять договоры."
 
 #. module: construction_sales
 #. odoo-python
 #: code:addons/construction_sales/models/reservation.py:0
 msgid "Only active reservations can be converted into contracts."
-msgstr ""
-"Только активные бронирования можно преобразовать в договоры."
+msgstr "Только активные бронирования можно преобразовать в договоры."
 
 #. module: construction_sales
 #. odoo-python
 #: code:addons/construction_sales/models/contract.py:0
 msgid "Only active reservations can be linked to a contract."
-msgstr ""
-"К договору можно привязать только активное бронирование."
+msgstr "К договору можно привязать только активное бронирование."
 
 #. module: construction_sales
 #. odoo-python
 #: code:addons/construction_sales/models/contract.py:0
 msgid "Only confirmed contracts can be cancelled."
-msgstr ""
-"Отменить можно только подтверждённые договоры."
+msgstr "Отменить можно только подтверждённые договоры."
 
 #. module: construction_sales
 #. odoo-python
 #: code:addons/construction_sales/models/contract.py:0
 msgid "Only draft contracts can be confirmed."
-msgstr ""
-"Подтвердить можно только договоры в статусе «Черновик»."
+msgstr "Подтвердить можно только договоры в статусе «Черновик»."
 
 #. module: construction_sales
 #. odoo-python
 #: code:addons/construction_sales/models/contract.py:0
 msgid "Only draft contracts can be deleted."
-msgstr ""
-"Удалить можно только договоры в статусе «Черновик»."
+msgstr "Удалить можно только договоры в статусе «Черновик»."
 
 #. module: construction_sales
 #. odoo-python
 #: code:addons/construction_sales/models/reservation.py:0
 msgid "Only draft or active reservations can be cancelled."
-msgstr ""
-"Отменить можно только черновые или активные бронирования."
+msgstr "Отменить можно только черновые или активные бронирования."
 
 #. module: construction_sales
 #. odoo-python
 #: code:addons/construction_sales/models/reservation.py:0
 msgid "Only draft reservations can be confirmed."
-msgstr ""
-"Подтвердить можно только бронирования в статусе «Черновик»."
+msgstr "Подтвердить можно только бронирования в статусе «Черновик»."
 
 #. module: construction_sales
 #. odoo-python
 #: code:addons/construction_sales/models/reservation.py:0
 msgid "Only draft reservations can be deleted."
-msgstr ""
-"Удалить можно только бронирования в статусе «Черновик»."
+msgstr "Удалить можно только бронирования в статусе «Черновик»."
 
 #. module: construction_sales
 #: model_terms:ir.ui.view,arch_db:construction_sales.view_construction_reservation_form
 msgid "Price Snapshot"
-msgstr ""
-"Зафиксированная цена"
+msgstr "Зафиксированная цена"
 
 #. module: construction_sales
 #: model:ir.model.fields,field_description:construction_sales.field_construction_contract__project_id
@@ -635,118 +549,100 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:construction_sales.view_construction_contract_search
 #: model_terms:ir.ui.view,arch_db:construction_sales.view_construction_reservation_search
 msgid "Project"
-msgstr ""
-"Проект"
+msgstr "Проект"
 
 #. module: construction_sales
 #: model:ir.model.fields,field_description:construction_sales.field_construction_contract__reservation_id
 msgid "Reservation"
-msgstr ""
-"Бронирование"
+msgstr "Бронирование"
 
 #. module: construction_sales
 #: model_terms:ir.ui.view,arch_db:construction_sales.view_construction_reservation_form
 msgid "Reservation Details"
-msgstr ""
-"Данные бронирования"
+msgstr "Данные бронирования"
 
 #. module: construction_sales
 #: model:ir.model.fields,field_description:construction_sales.field_construction_reservation__date_end
 msgid "Reservation Expiration"
-msgstr ""
-"Срок действия бронирования"
+msgstr "Срок действия бронирования"
 
 #. module: construction_sales
 #: model:ir.model.fields,field_description:construction_sales.field_construction_reservation__name
 msgid "Reservation Number"
-msgstr ""
-"Номер бронирования"
+msgstr "Номер бронирования"
 
 #. module: construction_sales
 #: model_terms:ir.ui.view,arch_db:construction_sales.view_construction_reservation_form
 msgid "Reservation Period"
-msgstr ""
-"Период бронирования"
+msgstr "Период бронирования"
 
 #. module: construction_sales
 #: model:ir.model.fields,field_description:construction_sales.field_construction_reservation__date_start
 msgid "Reservation Start"
-msgstr ""
-"Начало бронирования"
+msgstr "Начало бронирования"
 
 #. module: construction_sales
 #. odoo-python
 #: code:addons/construction_sales/models/contract.py:0
 msgid "Reservation and contract apartments do not match."
-msgstr ""
-"Квартира в бронировании не совпадает с квартирой в договоре."
+msgstr "Квартира в бронировании не совпадает с квартирой в договоре."
 
 #. module: construction_sales
 #. odoo-python
 #: code:addons/construction_sales/models/contract.py:0
 msgid "Reservation and contract buyers do not match."
-msgstr ""
-"Покупатель в бронировании не совпадает с покупателем в договоре."
+msgstr "Покупатель в бронировании не совпадает с покупателем в договоре."
 
 #. module: construction_sales
 #. odoo-python
 #: code:addons/construction_sales/models/contract.py:0
 msgid "Reservation does not exist."
-msgstr ""
-"Бронирование не существует."
+msgstr "Бронирование не существует."
 
 #. module: construction_sales
 #. odoo-python
 #: code:addons/construction_sales/models/reservation.py:0
 msgid "Reservation expiration must be in the future."
-msgstr ""
-"Срок действия бронирования должен быть в будущем."
+msgstr "Срок действия бронирования должен быть в будущем."
 
 #. module: construction_sales
 #: model:ir.model.constraint,message:construction_sales.constraint_construction_reservation_date_range_check
 msgid "Reservation expiration must be later than its start."
-msgstr ""
-"Дата окончания бронирования должна быть позже даты его начала."
+msgstr "Дата окончания бронирования должна быть позже даты его начала."
 
 #. module: construction_sales
 #. odoo-python
 #: code:addons/construction_sales/models/contract.py:0
 msgid "Reservation links cannot be changed after creation."
-msgstr ""
-"Связи бронирования нельзя изменять после создания."
+msgstr "Связи бронирования нельзя изменять после создания."
 
 #. module: construction_sales
 #: model:ir.actions.act_window,name:construction_sales.action_construction_reservations
 #: model:ir.ui.menu,name:construction_sales.menu_construction_reservations
 msgid "Reservations"
-msgstr ""
-"Бронирования"
+msgstr "Бронирования"
 
 #. module: construction_sales
 #. odoo-python
 #: code:addons/construction_sales/models/reservation.py:0
 msgid "Reservations must be created in Draft status."
-msgstr ""
-"Бронирования должны создаваться в статусе «Черновик»."
+msgstr "Бронирования должны создаваться в статусе «Черновик»."
 
 #. module: construction_sales
 #: model:ir.model.fields.selection,name:construction_sales.selection__construction_reservation__state__reserved
 #: model_terms:ir.ui.view,arch_db:construction_sales.view_construction_reservation_search
 msgid "Reserved"
-msgstr ""
-"Забронирована"
+msgstr "Забронирована"
 
 #. module: construction_sales
 #: model:ir.model.fields,field_description:construction_sales.field_construction_reservation__price_tjs
 msgid "Reserved Price (TJS)"
-msgstr ""
-"Цена бронирования (сомони)"
+msgstr "Цена бронирования (сомони)"
 
 #. module: construction_sales
 #: model:ir.model.fields,field_description:construction_sales.field_construction_reservation__price_usd
 msgid "Reserved Price (USD)"
-msgstr ""
-"Цена бронирования (USD)"
+msgstr "Цена бронирования (USD)"
 
 #. module: construction_sales
 #: model:ir.model.fields,field_description:construction_sales.field_construction_contract__user_id
@@ -754,22 +650,19 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:construction_sales.view_construction_contract_search
 #: model_terms:ir.ui.view,arch_db:construction_sales.view_construction_reservation_search
 msgid "Responsible Manager"
-msgstr ""
-"Ответственный менеджер"
+msgstr "Ответственный менеджер"
 
 #. module: construction_sales
 #: model:ir.model.fields,field_description:construction_sales.field_construction_contract__activity_user_id
 #: model:ir.model.fields,field_description:construction_sales.field_construction_reservation__activity_user_id
 msgid "Responsible User"
-msgstr ""
-"Ответственный пользователь"
+msgstr "Ответственный пользователь"
 
 #. module: construction_sales
 #: model:ir.ui.menu,name:construction_sales.menu_construction_sales
 #: model:res.groups.privilege,name:construction_sales.res_groups_privilege_sales
 msgid "Sales"
-msgstr ""
-"Продажи"
+msgstr "Продажи"
 
 #. module: construction_sales
 #. odoo-python
@@ -777,50 +670,42 @@ msgstr ""
 #: model:ir.model.fields,field_description:construction_sales.field_construction_reservation__contract_id
 #: model_terms:ir.ui.view,arch_db:construction_sales.view_construction_contract_form
 msgid "Sales Contract"
-msgstr ""
-"Договор купли-продажи"
+msgstr "Договор купли-продажи"
 
 #. module: construction_sales
 #: model_terms:ir.ui.view,arch_db:construction_sales.view_construction_contract_list
 msgid "Sales Contracts"
-msgstr ""
-"Договоры купли-продажи"
+msgstr "Договоры купли-продажи"
 
 #. module: construction_sales
 #: model:res.groups,name:construction_sales.group_sales_manager
 msgid "Sales Supervisor"
-msgstr ""
-"Руководитель отдела продаж"
+msgstr "Руководитель отдела продаж"
 
 #. module: construction_sales
 #: model:res.groups,name:construction_sales.group_sales_user
 msgid "Sales User"
-msgstr ""
-"Менеджер по продажам"
+msgstr "Менеджер по продажам"
 
 #. module: construction_sales
 #: model_terms:ir.ui.view,arch_db:construction_sales.view_construction_contract_search
 msgid "Search Contracts"
-msgstr ""
-"Поиск договоров"
+msgstr "Поиск договоров"
 
 #. module: construction_sales
 #: model_terms:ir.ui.view,arch_db:construction_sales.view_construction_reservation_search
 msgid "Search Reservations"
-msgstr ""
-"Поиск бронирований"
+msgstr "Поиск бронирований"
 
 #. module: construction_sales
 #: model:ir.model.fields,field_description:construction_sales.field_construction_contract__contract_file
 msgid "Signed Contract"
-msgstr ""
-"Подписанный договор"
+msgstr "Подписанный договор"
 
 #. module: construction_sales
 #: model_terms:ir.ui.view,arch_db:construction_sales.view_construction_contract_form
 msgid "Signed Document"
-msgstr ""
-"Подписанный документ"
+msgstr "Подписанный документ"
 
 #. module: construction_sales
 #: model:ir.model.fields,field_description:construction_sales.field_construction_contract__state
@@ -828,8 +713,7 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:construction_sales.view_construction_contract_search
 #: model_terms:ir.ui.view,arch_db:construction_sales.view_construction_reservation_search
 msgid "Status"
-msgstr ""
-"Статус"
+msgstr "Статус"
 
 #. module: construction_sales
 #: model:ir.model.fields,help:construction_sales.field_construction_contract__activity_state
@@ -840,134 +724,118 @@ msgid ""
 "Today: Activity date is today\n"
 "Planned: Future activities."
 msgstr ""
-"Статус на основе действий\nПросрочено: срок выполнения уже истёк\nСегодня: дата действия — сегодня\nЗапланировано: действие на будущее."
+"Статус на основе действий\n"
+"Просрочено: срок выполнения уже истёк\n"
+"Сегодня: дата действия — сегодня\n"
+"Запланировано: действие на будущее."
 
 #. module: construction_sales
 #: model:ir.model.fields,field_description:construction_sales.field_construction_contract__currency_tjs_id
 msgid "TJS Currency"
-msgstr ""
-"Валюта TJS"
+msgstr "Валюта TJS"
 
 #. module: construction_sales
 #. odoo-python
 #: code:addons/construction_sales/models/contract.py:0
 msgid "The apartment cannot be changed after contract confirmation."
-msgstr ""
-"После подтверждения договора нельзя изменить квартиру."
+msgstr "После подтверждения договора нельзя изменить квартиру."
 
 #. module: construction_sales
 #. odoo-python
 #: code:addons/construction_sales/models/contract.py:0
 msgid "The contract apartment must match its reservation apartment."
-msgstr ""
-"Квартира в договоре должна совпадать с квартирой в бронировании."
+msgstr "Квартира в договоре должна совпадать с квартирой в бронировании."
 
 #. module: construction_sales
 #. odoo-python
 #: code:addons/construction_sales/models/contract.py:0
 msgid "The linked reservation is not active."
-msgstr ""
-"Связанное бронирование не является активным."
+msgstr "Связанное бронирование не является активным."
 
 #. module: construction_sales
 #. odoo-python
 #: code:addons/construction_sales/models/contract.py:0
 msgid "The reservation has expired."
-msgstr ""
-"Срок действия бронирования истёк."
+msgstr "Срок действия бронирования истёк."
 
 #. module: construction_sales
 #. odoo-python
 #: code:addons/construction_sales/models/contract.py:0
 msgid "The reservation must be active to change the contract apartment."
-msgstr ""
-"Для изменения квартиры в договоре бронирование должно быть активным."
+msgstr "Для изменения квартиры в договоре бронирование должно быть активным."
 
 #. module: construction_sales
 #. odoo-python
 #: code:addons/construction_sales/models/contract.py:0
 msgid "The reserved apartment is not in the expected reserved state."
-msgstr ""
-"Забронированная квартира находится не в ожидаемом статусе."
+msgstr "Забронированная квартира находится не в ожидаемом статусе."
 
 #. module: construction_sales
 #. odoo-python
 #: code:addons/construction_sales/models/contract.py:0
 #: code:addons/construction_sales/models/reservation.py:0
 msgid "This apartment already has a confirmed contract."
-msgstr ""
-"Для этой квартиры уже существует подтверждённый договор."
+msgstr "Для этой квартиры уже существует подтверждённый договор."
 
 #. module: construction_sales
 #. odoo-python
 #: code:addons/construction_sales/models/reservation.py:0
 msgid "This apartment already has an active reservation."
-msgstr ""
-"Для этой квартиры уже существует активное бронирование."
+msgstr "Для этой квартиры уже существует активное бронирование."
 
 #. module: construction_sales
 #. odoo-python
 #: code:addons/construction_sales/models/reservation.py:0
 msgid "This apartment is not available for reservation."
-msgstr ""
-"Эта квартира недоступна для бронирования."
+msgstr "Эта квартира недоступна для бронирования."
 
 #. module: construction_sales
 #. odoo-python
 #: code:addons/construction_sales/models/reservation.py:0
 msgid "This reservation has expired."
-msgstr ""
-"Срок действия этого бронирования истёк."
+msgstr "Срок действия этого бронирования истёк."
 
 #. module: construction_sales
 #: model:ir.model.fields,help:construction_sales.field_construction_contract__activity_exception_decoration
 #: model:ir.model.fields,help:construction_sales.field_construction_reservation__activity_exception_decoration
 msgid "Type of the exception activity on record."
-msgstr ""
-"Тип исключительного действия в записи."
+msgstr "Тип исключительного действия в записи."
 
 #. module: construction_sales
 #: model:ir.model.fields,field_description:construction_sales.field_construction_contract__currency_usd_id
 msgid "USD Currency"
-msgstr ""
-"Валюта USD"
+msgstr "Валюта USD"
 
 #. module: construction_sales
 #: model:ir.model.fields,field_description:construction_sales.field_construction_contract__exchange_rate
 msgid "USD/TJS Exchange Rate"
-msgstr ""
-"Курс USD/TJS"
+msgstr "Курс USD/TJS"
 
 #. module: construction_sales
 #: model:ir.model.fields,field_description:construction_sales.field_construction_reservation__exchange_rate
 msgid "USD/TJS Rate"
-msgstr ""
-"Курс USD/TJS"
+msgstr "Курс USD/TJS"
 
 #. module: construction_sales
 #. odoo-python
 #: code:addons/construction_sales/models/contract.py:0
 msgid "Use contract action buttons to change status."
-msgstr ""
-"Для изменения статуса используйте кнопки действий договора."
+msgstr "Для изменения статуса используйте кнопки действий договора."
 
 #. module: construction_sales
 #. odoo-python
 #: code:addons/construction_sales/models/reservation.py:0
 msgid "Use reservation action buttons to change status."
-msgstr ""
-"Для изменения статуса используйте кнопки действий бронирования."
+msgstr "Для изменения статуса используйте кнопки действий бронирования."
 
 #. module: construction_sales
 #. odoo-python
 #: code:addons/construction_sales/models/contract.py:0
 msgid "You do not have permission to manage contracts."
-msgstr ""
-"У вас нет прав на управление договорами."
+msgstr "У вас нет прав на управление договорами."
 
 #. module: construction_sales
 #. odoo-python
 #: code:addons/construction_sales/models/reservation.py:0
 msgid "You do not have permission to manage reservations."
-msgstr ""
-"У вас нет прав на управление бронированиями."
+msgstr "У вас нет прав на управление бронированиями."

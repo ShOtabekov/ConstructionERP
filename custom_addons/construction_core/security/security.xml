@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="module_category_construction" model="ir.module.category">
+        <field name="name">Construction</field>
+        <field name="sequence">34</field>
+    </record>
+
+    <record id="res_groups_privilege_construction_objects" model="res.groups.privilege">
+        <field name="name">Objects</field>
+        <field name="category_id" ref="module_category_construction"/>
+    </record>
+
+    <!-- May create / edit projects, blocks, floors, units and prices -->
+    <record id="group_construction_admin" model="res.groups">
+        <field name="name">Objects Administrator</field>
+        <field name="privilege_id" ref="res_groups_privilege_construction_objects"/>
+    </record>
+</odoo>

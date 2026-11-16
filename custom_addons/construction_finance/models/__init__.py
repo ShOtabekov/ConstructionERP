@@ -4,5 +4,6 @@ from . import payment_schedule
 from . import payment
 
 from . import contract
+from . import apartment
 
 from . import finance_dashboard

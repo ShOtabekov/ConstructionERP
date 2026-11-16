@@ -8,6 +8,7 @@
                 <field name="name"/>
                 <field name="code"/>
                 <field name="location"/>
+                <field name="usd_tjs_rate"/>
                 <field name="start_date"/>
                 <field name="end_date"/>
                 <field name="state"/>
@@ -31,6 +32,10 @@
                             <field name="code"/>
                             <field name="location"/>
                             <field name="company_id"/>
+                        </group>
+                        <group string="Exchange Rate">
+                            <field name="usd_tjs_rate"/>
+                            <field name="rate_date" readonly="1"/>
                         </group>
                         <group>
                             <field name="state"/>
@@ -67,5 +72,6 @@
         parent="menu_construction_root"
         action="action_construction_project"
         sequence="10"
+        groups="base.group_system,construction_core.group_construction_admin"
     />
 </odoo>

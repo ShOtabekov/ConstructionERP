@@ -129,11 +129,12 @@
         <field name="name">construction.apartment.list</field>
         <field name="model">construction.apartment</field>
         <field name="arch" type="xml">
-                        <list>
+            <list>
                 <field name="number"/>
-                <field name="project_id"/>
+                <field name="unit_type"/>
+                <field name="project_id" optional="hide"/>
                 <field name="building_id"/>
-                <field name="entrance_id"/>
+                <field name="entrance_id" optional="hide"/>
                 <field name="floor_id"/>
                 <field name="rooms"/>
                 <field name="area_total"/>
@@ -146,18 +147,18 @@
                 <field name="price_per_sqm_usd"/>
                 <field name="total_price_usd"/>
 
-                <!-- Exchange Rate -->
-                <field name="usd_tjs_rate"/>
+                <!-- Exchange Rate (from project) -->
+                <field name="usd_tjs_rate" optional="hide"/>
 
                 <!-- Calculated TJS Pricing -->
-                <field name="price_per_sqm_tjs"/>
+                <field name="price_per_sqm_tjs" optional="hide"/>
                 <field name="total_price_tjs"/>
 
-                <!-- Legacy TJS Pricing: hidden by default -->
-                <field name="price_per_sqm" optional="hide"/>
-                <field name="total_price" optional="hide"/>
-
-                <field name="state"/>
+                <field name="state" widget="badge"
+                       decoration-success="state == 'free'"
+                       decoration-warning="state == 'reserved'"
+                       decoration-danger="state == 'sold'"
+                       decoration-muted="state == 'blocked'"/>
             </list>
         </field>
     </record>
@@ -190,7 +191,9 @@
                             <field name="floor_id"/>
                         </group>
                         <group string="Apartment Details">
-                            <field name="rooms"/>
+                            <field name="unit_type" widget="radio"
+                                   options="{'horizontal': true}"/>
+                            <field name="rooms" invisible="unit_type == 'shop'"/>
                             <field name="area_total"/>
                             <field name="area_living"/>
                         </group>
@@ -206,10 +209,6 @@
                         <field name="price_per_sqm_tjs" readonly="1"/>
                         <field name="total_price_tjs" readonly="1"/>
                     </group>
-                    <group string="Legacy Pricing (TJS)">
-                        <field name="price_per_sqm"/>
-                        <field name="total_price" readonly="1"/>
-                    </group>
                     <group>
                         <field name="description"/>
                     </group>
@@ -218,10 +217,49 @@
         </field>
     </record>
 
+    <record id="view_construction_apartment_search" model="ir.ui.view">
+        <field name="name">construction.apartment.search</field>
+        <field name="model">construction.apartment</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="number"/>
+                <field name="building_id"/>
+                <field name="floor_id"/>
+                <filter name="free" string="Free"
+                        domain="[('state', '=', 'free')]"/>
+                <filter name="reserved" string="Reserved"
+                        domain="[('state', '=', 'reserved')]"/>
+                <filter name="sold" string="Sold"
+                        domain="[('state', '=', 'sold')]"/>
+                <separator/>
+                <filter name="type_apartment" string="Apartments"
+                        domain="[('unit_type', '=', 'apartment')]"/>
+                <filter name="type_shop" string="Shops"
+                        domain="[('unit_type', '=', 'shop')]"/>
+                <separator/>
+                <filter name="rooms_1" string="1 room"
+                        domain="[('rooms', '=', 1), ('unit_type', '=', 'apartment')]"/>
+                <filter name="rooms_2" string="2 rooms"
+                        domain="[('rooms', '=', 2), ('unit_type', '=', 'apartment')]"/>
+                <filter name="rooms_3" string="3 rooms"
+                        domain="[('rooms', '=', 3), ('unit_type', '=', 'apartment')]"/>
+                <group>
+                    <filter name="group_building" string="Block"
+                            context="{'group_by': 'building_id'}"/>
+                    <filter name="group_floor" string="Floor"
+                            context="{'group_by': 'floor_id'}"/>
+                    <filter name="group_state" string="Status"
+                            context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
     <record id="action_construction_apartment" model="ir.actions.act_window">
         <field name="name">Apartments</field>
         <field name="res_model">construction.apartment</field>
         <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_construction_apartment_search"/>
     </record>
 <menuitem id="menu_construction_real_estate"
               name="Real Estate"
@@ -229,18 +267,21 @@
               sequence="20"/>
 
     <menuitem id="menu_construction_buildings"
+              groups="base.group_system,construction_core.group_construction_admin"
               name="Buildings"
               parent="menu_construction_real_estate"
               action="action_construction_building"
               sequence="10"/>
 
     <menuitem id="menu_construction_entrances"
+              groups="base.group_system,construction_core.group_construction_admin"
               name="Entrances"
               parent="menu_construction_real_estate"
               action="action_construction_entrance"
               sequence="20"/>
 
     <menuitem id="menu_construction_floors"
+              groups="base.group_system,construction_core.group_construction_admin"
               name="Floors"
               parent="menu_construction_real_estate"
               action="action_construction_floor"

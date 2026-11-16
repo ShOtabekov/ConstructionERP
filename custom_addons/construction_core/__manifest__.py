@@ -1,16 +1,18 @@
 {
     "name": "Construction Core",
-    "version": "19.0.1.2.0",
+    "version": "19.0.1.4.0",
     "category": "Construction",
     "summary": "Construction projects and real estate management",
     "author": "Construction ERP",
     "license": "LGPL-3",
     "depends": ["base"],
     "data": [
+        "security/security.xml",
         "security/ir.model.access.csv",
         "views/project_views.xml",
         "views/real_estate_views.xml",
-        "views/chessboard_views.xml"
+        "views/chessboard_views.xml",
+        "data/recompute_names.xml",
     ],
     "assets": {
         "web.assets_backend": [

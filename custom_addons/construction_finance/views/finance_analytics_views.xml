@@ -108,7 +108,7 @@
         <field name="name">construction.payment.plan.debt.project.graph</field>
         <field name="model">construction.payment.plan</field>
         <field name="arch" type="xml">
-            <graph string="?????????????????????????? ???? ????????????????" type="bar">
+            <graph string="Задолженность по проектам" type="bar">
                 <field name="project_id"/>
                 <field name="balance_usd" type="measure"/>
             </graph>

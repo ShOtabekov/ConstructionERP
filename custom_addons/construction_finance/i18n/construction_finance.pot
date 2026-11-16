@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-13 07:01+0000\n"
-"PO-Revision-Date: 2026-11-13 07:01+0000\n"
+"POT-Creation-Date: 2026-11-16 08:21+0000\n"
+"PO-Revision-Date: 2026-11-16 08:21+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -241,13 +241,13 @@ msgid "Confirmed schedules cannot be modified."
 msgstr ""
 
 #. module: construction_finance
-#: model:ir.module.category,name:construction_finance.module_category_construction_finance
-msgid "Construction Finance"
+#: model:ir.model,name:construction_finance.model_construction_apartment
+msgid "Construction Apartment"
 msgstr ""
 
 #. module: construction_finance
-#: model:ir.model,name:construction_finance.model_construction_finance_dashboard
-msgid "Construction Finance Dashboard"
+#: model:ir.module.category,name:construction_finance.module_category_construction_finance
+msgid "Construction Finance"
 msgstr ""
 
 #. module: construction_finance
@@ -273,6 +273,11 @@ msgstr ""
 #. module: construction_finance
 #: model:ir.model,name:construction_finance.model_construction_contract
 msgid "Construction Sales Contract"
+msgstr ""
+
+#. module: construction_finance
+#: model:ir.actions.server,name:construction_finance.ir_cron_update_overdue_schedule_ir_actions_server
+msgid "Construction: update overdue installments"
 msgstr ""
 
 #. module: construction_finance
@@ -365,6 +370,12 @@ msgid "Description"
 msgstr ""
 
 #. module: construction_finance
+#: model:res.groups,name:construction_finance.group_construction_director
+msgid "Director"
+msgstr ""
+
+#. module: construction_finance
+#: model:ir.model.fields,field_description:construction_finance.field_construction_apartment__display_name
 #: model:ir.model.fields,field_description:construction_finance.field_construction_contract__display_name
 #: model:ir.model.fields,field_description:construction_finance.field_construction_finance_dashboard__display_name
 #: model:ir.model.fields,field_description:construction_finance.field_construction_payment__display_name
@@ -386,22 +397,14 @@ msgid "Due Date"
 msgstr ""
 
 #. module: construction_finance
-#: model_terms:ir.ui.view,arch_db:construction_finance.view_construction_finance_dashboard_form
-msgid "Filters"
-msgstr ""
-
-#. module: construction_finance
 #: model:ir.ui.menu,name:construction_finance.menu_construction_finance
 #: model:res.groups.privilege,name:construction_finance.res_groups_privilege_finance
 msgid "Finance"
 msgstr ""
 
 #. module: construction_finance
-#. odoo-python
-#: code:addons/construction_finance/models/finance_dashboard.py:0
 #: model:ir.actions.act_window,name:construction_finance.action_construction_finance_dashboard
 #: model:ir.ui.menu,name:construction_finance.menu_finance_dashboard
-#: model_terms:ir.ui.view,arch_db:construction_finance.view_construction_finance_dashboard_form
 msgid "Finance Dashboard"
 msgstr ""
 
@@ -413,11 +416,6 @@ msgstr ""
 #. module: construction_finance
 #: model:res.groups,name:construction_finance.group_finance_user
 msgid "Finance User"
-msgstr ""
-
-#. module: construction_finance
-#: model_terms:ir.ui.view,arch_db:construction_finance.view_construction_finance_dashboard_form
-msgid "Financial Analytics"
 msgstr ""
 
 #. module: construction_finance
@@ -487,6 +485,7 @@ msgid "Has Message"
 msgstr ""
 
 #. module: construction_finance
+#: model:ir.model.fields,field_description:construction_finance.field_construction_apartment__id
 #: model:ir.model.fields,field_description:construction_finance.field_construction_contract__id
 #: model:ir.model.fields,field_description:construction_finance.field_construction_finance_dashboard__id
 #: model:ir.model.fields,field_description:construction_finance.field_construction_payment__id
@@ -573,6 +572,11 @@ msgstr ""
 #: model:ir.model.fields,field_description:construction_finance.field_construction_payment_plan__write_date
 #: model:ir.model.fields,field_description:construction_finance.field_construction_payment_schedule__write_date
 msgid "Last Updated on"
+msgstr ""
+
+#. module: construction_finance
+#: model:res.groups.privilege,name:construction_finance.res_groups_privilege_management
+msgid "Management"
 msgstr ""
 
 #. module: construction_finance
@@ -990,11 +994,6 @@ msgid "Received in Period"
 msgstr ""
 
 #. module: construction_finance
-#: model_terms:ir.ui.view,arch_db:construction_finance.view_construction_finance_dashboard_form
-msgid "Refresh"
-msgstr ""
-
-#. module: construction_finance
 #: model_terms:ir.ui.view,arch_db:construction_finance.view_payment_plan_form
 msgid "Remaining (USD)"
 msgstr ""
@@ -1166,13 +1165,78 @@ msgid "View Payments"
 msgstr ""
 
 #. module: construction_finance
-#: model:ir.model.fields,field_description:construction_finance.field_construction_payment__website_message_ids
-#: model:ir.model.fields,field_description:construction_finance.field_construction_payment_plan__website_message_ids
-msgid "Website Messages"
+#: model_terms:ir.ui.view,arch_db:construction_finance.view_construction_finance_dashboard_form
+msgid "Дата по"
 msgstr ""
 
 #. module: construction_finance
-#: model:ir.model.fields,help:construction_finance.field_construction_payment__website_message_ids
-#: model:ir.model.fields,help:construction_finance.field_construction_payment_plan__website_message_ids
-msgid "Website communication history"
+#: model_terms:ir.ui.view,arch_db:construction_finance.view_construction_finance_dashboard_form
+msgid "Дата с"
+msgstr ""
+
+#. module: construction_finance
+#: model_terms:ir.ui.view,arch_db:construction_finance.view_finance_debt_project_graph
+msgid "Задолженность по проектам"
+msgstr ""
+
+#. module: construction_finance
+#: model:ir.model.fields,field_description:construction_finance.field_construction_finance_dashboard__name
+msgid "Название"
+msgstr ""
+
+#. module: construction_finance
+#: model_terms:ir.ui.view,arch_db:construction_finance.view_construction_finance_dashboard_form
+msgid "Обновить"
+msgstr ""
+
+#. module: construction_finance
+#. odoo-python
+#: code:addons/construction_finance/models/apartment.py:0
+msgid "Оплачено"
+msgstr ""
+
+#. module: construction_finance
+#. odoo-python
+#: code:addons/construction_finance/models/apartment.py:0
+msgid "Остаток"
+msgstr ""
+
+#. module: construction_finance
+#: model_terms:ir.ui.view,arch_db:construction_finance.view_construction_payment_form
+msgid "Печать квитанции"
+msgstr ""
+
+#. module: construction_finance
+#. odoo-python
+#: code:addons/construction_finance/models/apartment.py:0
+msgid "План оплаты"
+msgstr ""
+
+#. module: construction_finance
+#. odoo-python
+#: code:addons/construction_finance/models/apartment.py:0
+msgid "Подтверждённый договор не найден."
+msgstr ""
+
+#. module: construction_finance
+#: model_terms:ir.ui.view,arch_db:construction_finance.view_construction_finance_dashboard_form
+msgid "Проект"
+msgstr ""
+
+#. module: construction_finance
+#: model_terms:ir.ui.view,arch_db:construction_finance.view_construction_finance_dashboard_form
+msgid "Фильтры"
+msgstr ""
+
+#. module: construction_finance
+#: model_terms:ir.ui.view,arch_db:construction_finance.view_construction_finance_dashboard_form
+msgid "Финансовая аналитика"
+msgstr ""
+
+#. module: construction_finance
+#. odoo-python
+#: code:addons/construction_finance/models/finance_dashboard.py:0
+#: model:ir.model,name:construction_finance.model_construction_finance_dashboard
+#: model_terms:ir.ui.view,arch_db:construction_finance.view_construction_finance_dashboard_form
+msgid "Финансовая панель"
 msgstr ""

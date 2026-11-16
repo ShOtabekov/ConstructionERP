@@ -8,9 +8,9 @@
     <menuitem
         id="menu_construction_apartment_chessboard"
         name="Apartment Chessboard"
-        parent="menu_construction_real_estate"
+        parent="menu_construction_root"
         action="action_construction_apartment_chessboard"
-        sequence="45"
+        sequence="1"
         groups="base.group_user"
     />
 </odoo>

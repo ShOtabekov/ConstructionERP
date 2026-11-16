@@ -1,120 +1,301 @@
-.o_apartment_chessboard {
-    min-height: 500px;
-    background: #f7f7f9;
+$chess-free: #1f9d55;
+$chess-free-bg: #e3f6ea;
+$chess-reserved: #d48806;
+$chess-reserved-bg: #fff3d6;
+$chess-sold: #c0392b;
+$chess-sold-bg: #fbe3e0;
+$chess-blocked: #6c757d;
+$chess-blocked-bg: #e9ecef;
+$chess-card-width: 360px;
 
-    .o_chess_legend {
-        span {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
+.o_apartment_chessboard {
+    position: relative;
+    height: 100%;
+    overflow: auto;
+    background: #f5f6f8;
+
+    .o_chess_main {
+        padding: 16px 20px 40px;
+        transition: margin-right .2s;
+    }
+
+    &.o_card_open .o_chess_main {
+        margin-right: $chess-card-width;
+    }
+
+    // --- status colours ---------------------------------------------
+    .o_state_free { --st: #{$chess-free}; --st-bg: #{$chess-free-bg}; }
+    .o_state_reserved { --st: #{$chess-reserved}; --st-bg: #{$chess-reserved-bg}; }
+    .o_state_sold { --st: #{$chess-sold}; --st-bg: #{$chess-sold-bg}; }
+    .o_state_blocked { --st: #{$chess-blocked}; --st-bg: #{$chess-blocked-bg}; }
+
+    .o_dot {
+        display: inline-block;
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+        background: var(--st, #999);
+    }
+
+    // --- header -------------------------------------------------------
+    .o_chess_header {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 12px;
+    }
+
+    .o_chess_stats {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+
+        .o_stat {
+            padding: 4px 10px;
+            border-radius: 14px;
+            background: var(--st-bg, #fff);
+            color: var(--st, #444);
+            border: 1px solid var(--st, #dee2e6);
             font-size: 13px;
         }
     }
 
-    .o_status_dot {
-        width: 11px;
-        height: 11px;
-        display: inline-block;
-        border-radius: 50%;
-    }
-
-    .o_free { background: #22a06b; }
-    .o_reserved { background: #e5a12a; }
-    .o_sold { background: #d9534f; }
-    .o_blocked { background: #858585; }
-
-    .o_chess_floor {
+    // --- filters ------------------------------------------------------
+    .o_chess_filters {
         display: flex;
-        align-items: stretch;
-        gap: 12px;
-        padding: 12px;
-        background: white;
-        border: 1px solid #dee2e6;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 10px 16px;
+        padding: 10px 12px;
+        margin-bottom: 16px;
+        background: #fff;
+        border: 1px solid #e3e5e8;
         border-radius: 8px;
+
+        .o_filter_project { width: auto; min-width: 180px; }
+        .o_filter_search { width: 130px; }
     }
 
-    .o_chess_floor_title {
-        min-width: 115px;
+    .o_chips {
+        display: inline-flex;
+        flex-wrap: wrap;
+        gap: 4px;
+    }
+
+    .o_chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        padding: 3px 10px;
+        border: 1px solid #d0d4d9;
+        border-radius: 14px;
+        background: #fff;
+        color: #333;
+        font-size: 13px;
+        line-height: 1.5;
+
+        &:hover { border-color: #714b67; }
+
+        &.active {
+            background: #714b67;
+            border-color: #714b67;
+            color: #fff;
+
+            .o_dot { box-shadow: 0 0 0 2px #fff; }
+        }
+    }
+
+    // --- blocks / grid ----------------------------------------------
+    .o_chess_blocks {
         display: flex;
-        flex-direction: column;
-        justify-content: center;
-        border-right: 1px solid #dee2e6;
-        padding-right: 10px;
-    }
-
-    .o_chess_apartments,
-    .o_plan_units {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(145px, 1fr));
-        gap: 10px;
-        flex: 1;
-    }
-
-    .o_chess_apartment,
-    .o_plan_unit {
-        border: 1px solid #dee2e6;
-        border-left: 5px solid #858585;
-        border-radius: 7px;
-        background: white;
-        padding: 10px;
-        min-width: 0;
-        display: flex;
-        flex-direction: column;
+        flex-wrap: wrap;
         align-items: flex-start;
+        gap: 20px;
+    }
+
+    .o_chess_block {
+        background: #fff;
+        border: 1px solid #e3e5e8;
+        border-radius: 8px;
+        padding: 10px 12px 12px;
+    }
+
+    .o_block_title {
+        display: flex;
+        justify-content: space-between;
+        gap: 16px;
+        margin-bottom: 8px;
+        font-size: 15px;
+
+        span { font-size: 12px; }
+    }
+
+    .o_block_grid {
+        border-collapse: separate;
+        border-spacing: 0 3px;
+
+        td { padding: 0; }
+    }
+
+    .o_floor_label {
+        width: 30px;
+        padding-right: 6px;
+        text-align: right;
+        font-size: 12px;
+        font-weight: 600;
+        color: #8a8f98;
+        vertical-align: middle;
+    }
+
+    .o_floor_units {
+        display: flex;
         gap: 3px;
-        text-align: left;
-        transition: transform .15s, box-shadow .15s;
+    }
+
+    .o_unit {
+        width: 64px;
+        height: 40px;
+        padding: 2px 3px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid var(--st);
+        border-left-width: 4px;
+        border-radius: 4px;
+        background: var(--st-bg);
+        color: #222;
+        line-height: 1.15;
+        cursor: pointer;
+        transition: transform .1s, box-shadow .1s, opacity .15s;
 
         &:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 3px 12px rgba(0,0,0,.12);
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, .15);
+            z-index: 1;
         }
 
-        .o_apartment_number {
-            font-size: 18px;
+        &.o_selected {
+            outline: 2px solid #714b67;
+            outline-offset: 1px;
         }
 
-        small {
-            font-weight: 600;
+        &.o_dimmed {
+            opacity: .18;
         }
     }
 
-    .o_state_free { border-left-color: #22a06b; }
-    .o_state_reserved { border-left-color: #e5a12a; }
-    .o_state_sold { border-left-color: #d9534f; }
-    .o_state_blocked { border-left-color: #858585; }
-
-    .o_plan_floor {
-        display: flex;
-        gap: 12px;
-        align-items: stretch;
-        padding: 12px 0;
-        border-bottom: 1px solid #eee;
+    .o_unit_number {
+        font-weight: 700;
+        font-size: 13px;
     }
 
-    .o_plan_floor_label {
-        width: 100px;
-        flex-shrink: 0;
-        display: flex;
+    .o_unit_meta {
+        font-size: 10px;
+        color: #555;
+        white-space: nowrap;
+    }
+
+    // --- side card ---------------------------------------------------
+    .o_chess_card {
+        position: fixed;
+        top: var(--o-navbar-height, 46px);
+        right: 0;
+        bottom: 0;
+        width: $chess-card-width;
+        z-index: 10;
+        overflow-y: auto;
+        padding: 20px;
+        background: #fff;
+        border-left: 1px solid #e3e5e8;
+        box-shadow: -4px 0 16px rgba(0, 0, 0, .06);
+    }
+
+    .o_card_close {
+        position: absolute;
+        top: 16px;
+        right: 16px;
+    }
+
+    .o_card_status {
+        display: inline-flex;
         align-items: center;
+        gap: 6px;
+        padding: 3px 10px;
+        border-radius: 12px;
+        background: var(--st-bg);
+        color: var(--st);
+        font-weight: 600;
+        font-size: 13px;
+    }
+
+    .o_card_title {
+        margin: 10px 0 2px;
+        font-size: 26px;
+        font-weight: 700;
+    }
+
+    .o_card_facts {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+        margin-bottom: 14px;
+
+        div {
+            padding: 8px 10px;
+            background: #f5f6f8;
+            border-radius: 6px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        span { font-size: 12px; color: #8a8f98; }
+        b { font-size: 15px; }
+    }
+
+    .o_card_price {
+        padding: 12px;
+        margin-bottom: 14px;
+        border: 1px solid #e3e5e8;
+        border-radius: 8px;
+
+        .o_price_main {
+            font-size: 22px;
+            font-weight: 700;
+        }
+    }
+
+    .o_card_info {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        gap: 6px 12px;
+        margin-bottom: 16px;
+
+        dt { font-weight: 400; color: #8a8f98; }
+        dd { margin: 0; font-weight: 600; }
+    }
+
+    .o_card_actions {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+
+        .btn { width: 100%; }
     }
 }
 
 @media (max-width: 768px) {
     .o_apartment_chessboard {
-        .o_chess_floor,
-        .o_plan_floor {
-            flex-direction: column;
-        }
+        &.o_card_open .o_chess_main { margin-right: 0; }
 
-        .o_chess_floor_title {
-            border-right: 0;
-            border-bottom: 1px solid #dee2e6;
-            padding-bottom: 8px;
-        }
-
-        .o_plan_floor_label {
-            width: auto;
+        .o_chess_card {
+            width: 100%;
+            top: auto;
+            max-height: 70vh;
+            border-left: 0;
+            border-top: 1px solid #e3e5e8;
         }
     }
 }
