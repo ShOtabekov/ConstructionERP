@@ -24,6 +24,7 @@
                             <field name="pay_currency" widget="radio"
                                    options="{'horizontal': true}"/>
                             <field name="amount"/>
+                            <field name="amount_currency" invisible="1"/>
                             <field name="exchange_rate" invisible="pay_currency == 'usd'"
                                    required="pay_currency == 'tjs'"/>
                             <field name="amount_usd" invisible="pay_currency == 'usd'"/>

@@ -43,6 +43,11 @@ class ConstructionCashWizard(models.TransientModel):
         default="usd", required=True,
     )
     amount = fields.Float(string="Сумма", digits=(16, 2))
+    # Currency the amount is currently expressed in (to convert only on a
+    # real switch USD <-> TJS, not on every onchange round-trip).
+    amount_currency = fields.Selection(
+        [("usd", "USD"), ("tjs", "Сомони")], default="usd",
+    )
     exchange_rate = fields.Float(string="Курс USD/TJS", digits=(12, 6))
     amount_usd = fields.Monetary(
         string="В долларах", currency_field="currency_usd_id",
@@ -83,19 +88,26 @@ class ConstructionCashWizard(models.TransientModel):
         if not plan:
             return
         # Suggest: everything overdue, otherwise the next installment.
-        self.amount = plan.overdue_usd or plan.next_due_usd
-        self.pay_currency = "usd"
-        self.exchange_rate = plan.project_id.usd_tjs_rate or 0.0
+        self.exchange_rate = self.exchange_rate or plan.project_id.usd_tjs_rate or 0.0
+        suggested = plan.overdue_usd or plan.next_due_usd
+        if self.pay_currency == "tjs" and self.exchange_rate:
+            suggested = round(suggested * self.exchange_rate, 2)
+        self.amount = suggested
+        self.amount_currency = self.pay_currency
 
     @api.onchange("pay_currency")
     def _onchange_currency(self):
-        rate = self.exchange_rate or self.plan_id.project_id.usd_tjs_rate
-        if not rate or not self.amount:
+        if self.pay_currency == self.amount_currency:
             return
-        if self.pay_currency == "tjs" and self.amount_usd == self.amount:
-            self.amount = round(self.amount * rate, 2)
-        elif self.pay_currency == "usd":
-            self.amount = round(self.amount / rate, 2)
+        rate = self.exchange_rate or self.plan_id.project_id.usd_tjs_rate
+        if rate and self.amount:
+            if self.pay_currency == "tjs":
+                self.amount = round(self.amount * rate, 2)
+            else:
+                self.amount = round(self.amount / rate, 2)
+        if rate and not self.exchange_rate:
+            self.exchange_rate = rate
+        self.amount_currency = self.pay_currency
 
     @api.depends("amount", "pay_currency", "exchange_rate")
     def _compute_amount_usd(self):
