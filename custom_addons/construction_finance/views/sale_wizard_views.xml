@@ -12,11 +12,19 @@
                             <field name="apartment_state" invisible="1"/>
                             <field name="reservation_id" readonly="1"
                                    invisible="not reservation_id"/>
-                            <field name="area_total" readonly="1"/>
-                            <field name="price_per_sqm_usd" readonly="1"/>
                             <field name="currency_usd_id" invisible="1"/>
-                            <field name="price_usd" readonly="1"/>
-                            <field name="exchange_rate" readonly="1"/>
+                            <field name="area_total" readonly="1"/>
+                            <field name="list_price_per_sqm" readonly="1"
+                                   invisible="not list_price_usd"/>
+                            <field name="list_price_usd" readonly="1"
+                                   invisible="not list_price_usd"/>
+                            <field name="deal_price_per_sqm" class="fw-bold"/>
+                            <field name="price_usd" class="fw-bold"/>
+                            <field name="discount_usd" readonly="1"
+                                   invisible="not discount_usd"
+                                   decoration-danger="discount_usd &gt; 0"
+                                   decoration-success="discount_usd &lt; 0"/>
+                            <field name="exchange_rate"/>
                             <field name="price_tjs" readonly="1"/>
                         </group>
                         <group string="Клиент">
@@ -30,10 +38,10 @@
                             <field name="contract_date"/>
                         </group>
                     </group>
-                    <div class="alert alert-warning" role="alert"
-                         invisible="price_usd &gt; 0 or not apartment_id">
-                        У этого помещения нет цены. Задайте цену за м² через
-                        «Недвижимость → Прайс-лист».
+                    <div class="alert alert-info" role="alert"
+                         invisible="list_price_usd &gt; 0 or not apartment_id">
+                        У этого помещения нет цены в прайсе — введите цену за м²
+                        или цену договора вручную.
                     </div>
                     <group string="Условия оплаты">
                         <group>

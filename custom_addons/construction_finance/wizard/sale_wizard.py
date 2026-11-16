@@ -36,18 +36,20 @@ class ConstructionSaleWizard(models.TransientModel):
         "res.currency", default=lambda self: self.env.ref("base.USD"),
     )
     area_total = fields.Float(related="apartment_id.area_total", string="Площадь (м²)")
-    price_per_sqm_usd = fields.Monetary(
-        related="apartment_id.price_per_sqm_usd", string="Цена за м² (USD)",
-        currency_field="currency_usd_id",
+    list_price_per_sqm = fields.Float(
+        string="Цена за м² по прайсу", digits=(16, 2), compute="_compute_list_price",
     )
-    price_usd = fields.Monetary(
-        string="Цена (USD)", currency_field="currency_usd_id",
-        compute="_compute_price",
+    list_price_usd = fields.Float(
+        string="Цена по прайсу (USD)", digits=(16, 2), compute="_compute_list_price",
     )
-    exchange_rate = fields.Float(
-        string="Курс USD/TJS", digits=(12, 6), compute="_compute_price",
+    # Deal price: filled from the price list / reservation, editable.
+    deal_price_per_sqm = fields.Float(string="Цена за м² (сделка)", digits=(16, 6))
+    price_usd = fields.Float(string="Цена договора (USD)", digits=(16, 2))
+    discount_usd = fields.Float(
+        string="Скидка (USD)", digits=(16, 2), compute="_compute_discount",
     )
-    price_tjs = fields.Float(string="Цена (сомони)", compute="_compute_price", digits=(16, 2))
+    exchange_rate = fields.Float(string="Курс USD/TJS", digits=(12, 6))
+    price_tjs = fields.Float(string="Цена (сомони)", compute="_compute_price_tjs", digits=(16, 2))
 
     # Terms
     contract_date = fields.Date(
@@ -101,16 +103,50 @@ class ConstructionSaleWizard(models.TransientModel):
             self.partner_id = self.reservation_id.partner_id
 
     @api.depends("apartment_id", "reservation_id")
-    def _compute_price(self):
+    def _compute_list_price(self):
         for wiz in self:
-            source = wiz.reservation_id.sudo() if wiz.reservation_id else False
-            if source:
-                wiz.price_usd = source.price_usd
-                wiz.exchange_rate = source.exchange_rate
+            reservation = wiz.reservation_id.sudo()
+            if reservation:
+                wiz.list_price_usd = reservation.price_usd
             else:
-                wiz.price_usd = wiz.apartment_id.total_price_usd
-                wiz.exchange_rate = wiz.apartment_id.usd_tjs_rate
-            wiz.price_tjs = wiz.price_usd * wiz.exchange_rate
+                wiz.list_price_usd = wiz.apartment_id.total_price_usd
+            area = wiz.apartment_id.area_total
+            wiz.list_price_per_sqm = wiz.list_price_usd / area if area else 0.0
+
+    @api.depends("list_price_usd", "price_usd")
+    def _compute_discount(self):
+        for wiz in self:
+            wiz.discount_usd = (
+                round(wiz.list_price_usd - wiz.price_usd, 2)
+                if wiz.list_price_usd and wiz.price_usd else 0.0
+            )
+
+    @api.depends("price_usd", "exchange_rate")
+    def _compute_price_tjs(self):
+        for wiz in self:
+            wiz.price_tjs = round(wiz.price_usd * wiz.exchange_rate, 2)
+
+    @api.onchange("apartment_id")
+    def _onchange_apartment_price(self):
+        reservation = self.reservation_id.sudo()
+        self.price_usd = self.list_price_usd
+        self.deal_price_per_sqm = self.list_price_per_sqm
+        self.exchange_rate = (
+            reservation.exchange_rate if reservation
+            else self.apartment_id.usd_tjs_rate
+        )
+
+    @api.onchange("deal_price_per_sqm")
+    def _onchange_deal_price_per_sqm(self):
+        if self.area_total:
+            self.price_usd = round(self.deal_price_per_sqm * self.area_total, 2)
+
+    @api.onchange("price_usd")
+    def _onchange_price_usd(self):
+        if self.area_total:
+            per_sqm = self.price_usd / self.area_total
+            if abs(per_sqm - self.deal_price_per_sqm) > 0.000001:
+                self.deal_price_per_sqm = per_sqm
 
     def _schedule_lines(self):
         """[(label, date, amount_usd)] exactly as the plan will create them."""
@@ -188,11 +224,11 @@ class ConstructionSaleWizard(models.TransientModel):
     def _check_terms(self):
         if self.price_usd <= 0:
             raise UserError(_(
-                "У помещения не указана цена. Задайте цену за м² "
-                "(Недвижимость → Прайс-лист) и повторите."
+                "Укажите цену договора: у помещения нет цены в прайсе — "
+                "введите цену за м² или общую цену вручную."
             ))
         if self.exchange_rate <= 0:
-            raise UserError(_("Укажите курс USD/TJS в карточке проекта."))
+            raise UserError(_("Укажите курс USD/TJS."))
         if self.payment_type == "installment":
             if self.installment_count < 1:
                 raise ValidationError(_("Количество платежей должно быть не меньше 1."))
@@ -217,6 +253,13 @@ class ConstructionSaleWizard(models.TransientModel):
 
     def action_sell(self):
         self.ensure_one()
+        if not self.price_usd and self.list_price_usd:
+            self.price_usd = self.list_price_usd
+        if not self.exchange_rate:
+            self.exchange_rate = (
+                self.reservation_id.sudo().exchange_rate
+                or self.apartment_id.usd_tjs_rate
+            )
         self._check_terms()
         Contract = self.env["construction.contract"]
         Contract._check_sales_user()
@@ -235,18 +278,32 @@ class ConstructionSaleWizard(models.TransientModel):
                 ) % reservation.partner_id.display_name)
             reservation.sudo(False).action_create_contract()
             contract = Contract.search([("reservation_id", "=", reservation.id)], limit=1)
-            contract.write({"contract_date": self.contract_date, "notes": self.notes})
+            contract.write({
+                "contract_date": self.contract_date,
+                "notes": self.notes,
+                "price_usd": self.price_usd,
+                "exchange_rate": self.exchange_rate,
+            })
         elif apartment.state == "free":
             contract = Contract.create({
                 "partner_id": partner.id,
                 "apartment_id": apartment.id,
                 "contract_date": self.contract_date,
                 "notes": self.notes,
+                "price_usd": self.price_usd,
+                "exchange_rate": self.exchange_rate,
             })
         else:
             raise UserError(_("Это помещение уже продано или заблокировано."))
 
         contract.action_confirm()
+        if self.list_price_usd and abs(self.list_price_usd - self.price_usd) > 0.009:
+            fmt = lambda v: "{:,.2f}".format(v).replace(",", " ")
+            contract.message_post(body=_(
+                "Цена договора $ %(deal)s (по прайсу $ %(list)s, разница $ %(diff)s).",
+                deal=fmt(self.price_usd), list=fmt(self.list_price_usd),
+                diff=fmt(self.price_usd - self.list_price_usd),
+            ))
 
         # Payment plan: created for the seller even if he has no finance
         # rights; the plan belongs to him (user_id) and to finance.

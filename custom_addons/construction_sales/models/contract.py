@@ -392,6 +392,15 @@ class ConstructionContract(models.Model):
                 exchange_rate = apartment.usd_tjs_rate
                 price_tjs = price_usd * exchange_rate
 
+            # A price / rate negotiated on the draft contract (sale wizard)
+            # takes precedence over the price list and the reservation.
+            if record.price_usd > 0 or record.exchange_rate > 0:
+                if record.price_usd > 0:
+                    price_usd = record.price_usd
+                if record.exchange_rate > 0:
+                    exchange_rate = record.exchange_rate
+                price_tjs = price_usd * exchange_rate
+
             if price_usd <= 0:
                 raise UserError(
                     _("Apartment USD price must be greater than zero.")
