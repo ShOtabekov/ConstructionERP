@@ -14,3 +14,10 @@ access_construction_building_system,construction.building system,model_construct
 access_construction_entrance_system,construction.entrance system,model_construction_entrance,base.group_system,1,1,1,1
 access_construction_floor_system,construction.floor system,model_construction_floor,base.group_system,1,1,1,1
 access_construction_apartment_system,construction.apartment system,model_construction_apartment,base.group_system,1,1,1,1
+access_construction_unit_layout_user,construction.unit.layout user,model_construction_unit_layout,base.group_user,1,0,0,0
+access_construction_unit_layout_admin,construction.unit.layout admin,model_construction_unit_layout,group_construction_admin,1,1,1,1
+access_construction_unit_layout_system,construction.unit.layout system,model_construction_unit_layout,base.group_system,1,1,1,1
+access_construction_block_wizard_admin,construction.block.wizard admin,model_construction_block_wizard,group_construction_admin,1,1,1,1
+access_construction_block_wizard_system,construction.block.wizard system,model_construction_block_wizard,base.group_system,1,1,1,1
+access_construction_block_wizard_line_admin,construction.block.wizard.line admin,model_construction_block_wizard_line,group_construction_admin,1,1,1,1
+access_construction_block_wizard_line_system,construction.block.wizard.line system,model_construction_block_wizard_line,base.group_system,1,1,1,1

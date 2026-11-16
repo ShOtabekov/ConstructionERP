@@ -1,6 +1,6 @@
 {
     "name": "Construction Core",
-    "version": "19.0.1.4.0",
+    "version": "19.0.1.5.0",
     "category": "Construction",
     "summary": "Construction projects and real estate management",
     "author": "Construction ERP",
@@ -11,6 +11,7 @@
         "security/ir.model.access.csv",
         "views/project_views.xml",
         "views/real_estate_views.xml",
+        "views/block_wizard_views.xml",
         "views/chessboard_views.xml",
         "data/recompute_names.xml",
     ],

@@ -65,6 +65,7 @@ export class ApartmentChessboard extends Component {
                 [
                     "number",
                     "rooms",
+                    "unit_type",
                     "area_total",
                     "total_price_usd",
                     "state",
@@ -262,7 +263,16 @@ export class ApartmentChessboard extends Component {
 
     unitTitle(apartment) {
         const price = (apartment.total_price_usd || 0).toLocaleString("ru-RU");
-        return `Кв. ${apartment.number} · ${apartment.rooms}К · ${apartment.area_total} м² · $${price} · ${STATUS[apartment.state] || apartment.state}`;
+        const kind = apartment.unit_type === "shop"
+            ? `Маг. ${apartment.number}`
+            : `Кв. ${apartment.number} · ${apartment.rooms}К`;
+        return `${kind} · ${apartment.area_total} м² · $${price} · ${STATUS[apartment.state] || apartment.state}`;
+    }
+
+    unitMeta(apartment) {
+        return apartment.unit_type === "shop"
+            ? `Маг · ${apartment.area_total}`
+            : `${apartment.rooms}К · ${apartment.area_total}`;
     }
 
     statusLabel(state) {

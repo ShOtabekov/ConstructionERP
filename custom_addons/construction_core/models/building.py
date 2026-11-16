@@ -1,4 +1,4 @@
-from odoo import models, fields
+from odoo import fields, models
 
 
 class ConstructionBuilding(models.Model):
@@ -17,3 +17,14 @@ class ConstructionBuilding(models.Model):
     address = fields.Char(string="Address")
     description = fields.Text(string="Description")
     active = fields.Boolean(default=True)
+
+    floor_plan_image = fields.Image(
+        string="Typical Floor Plan",
+        max_width=2400,
+        max_height=2400,
+    )
+    layout_ids = fields.One2many(
+        "construction.unit.layout",
+        "building_id",
+        string="Floor Layout",
+    )

@@ -108,9 +108,7 @@
                                                                     t-att-title="unitTitle(apartment)"
                                                                     t-on-click="() => this.selectUnit(apartment)">
                                                                 <span class="o_unit_number" t-esc="apartment.number"/>
-                                                                <span class="o_unit_meta">
-                                                                    <t t-esc="apartment.rooms"/>К · <t t-esc="apartment.area_total"/>
-                                                                </span>
+                                                                <span class="o_unit_meta" t-esc="unitMeta(apartment)"/>
                                                             </button>
                                                         </t>
                                                     </div>
@@ -136,14 +134,22 @@
                     <div t-attf-class="o_card_status o_state_#{card.state}">
                         <i class="o_dot"/> <t t-esc="card.state_label"/>
                     </div>
-                    <h3 class="o_card_title">Кв. <t t-esc="card.number"/></h3>
+                    <h3 class="o_card_title"><t t-esc="card.unit_type === 'shop' ? 'Магазин' : 'Кв.'"/> <t t-esc="card.number"/></h3>
                     <div class="text-muted mb-3">
                         <t t-esc="card.building"/> · <t t-esc="card.floor"/> этаж
                         <t t-if="card.entrance"> · <t t-esc="card.entrance"/></t>
                     </div>
 
+                    <div t-if="card.plan" class="o_card_plan">
+                        <a t-att-href="card.plan.url" target="_blank" title="Открыть план">
+                            <img t-att-src="card.plan.url" alt="План этажа"/>
+                        </a>
+                        <span class="o_plan_marker"
+                              t-attf-style="left: {{card.plan.x}}%; top: {{card.plan.y}}%;"/>
+                    </div>
+
                     <div class="o_card_facts">
-                        <div><span>Комнат</span><b t-esc="card.rooms"/></div>
+                        <div t-if="card.unit_type !== 'shop'"><span>Комнат</span><b t-esc="card.rooms"/></div>
                         <div><span>Площадь</span><b><t t-esc="card.area_total"/> м²</b></div>
                         <div t-if="card.area_living"><span>Жилая</span><b><t t-esc="card.area_living"/> м²</b></div>
                         <div><span>Цена за м²</span><b t-esc="money(card.price_per_sqm_usd)"/></div>

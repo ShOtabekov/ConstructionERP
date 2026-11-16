@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_construction_block_wizard_form" model="ir.ui.view">
+        <field name="name">construction.block.wizard.form</field>
+        <field name="model">construction.block.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Create Block">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="project_id"/>
+                            <field name="preset"/>
+                            <field name="name" invisible="preset == 'all'"
+                                   required="preset != 'all'"/>
+                            <field name="code" invisible="preset == 'all'"
+                                   required="preset != 'all'"/>
+                            <field name="numbering" widget="radio"/>
+                        </group>
+                        <group>
+                            <field name="floors_total"/>
+                            <field name="residential_from"/>
+                            <field name="shop_count"/>
+                            <field name="shop_area" invisible="not shop_count"/>
+                            <field name="price_per_sqm_usd"/>
+                            <field name="shop_price_per_sqm_usd" invisible="not shop_count"/>
+                        </group>
+                    </group>
+                    <div class="alert alert-info" role="status">
+                        <i class="fa fa-info-circle" title="Info"/> <field name="summary" readonly="1" nolabel="1" class="d-inline"/>
+                    </div>
+                    <notebook invisible="preset == 'all'">
+                        <page string="Floor Layout" name="layout">
+                            <field name="line_ids">
+                                <list editable="bottom">
+                                    <field name="sequence"/>
+                                    <field name="rooms"/>
+                                    <field name="area_total" sum="Total"/>
+                                    <field name="plan_x" optional="hide"/>
+                                    <field name="plan_y" optional="hide"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Floor Plan" name="plan">
+                            <field name="floor_plan_image" widget="image"
+                                   options="{'size': [0, 480]}"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <footer>
+                    <button name="action_generate" type="object" string="Create"
+                            class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_construction_block_wizard" model="ir.actions.act_window">
+        <field name="name">Create Block</field>
+        <field name="res_model">construction.block.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="menu_construction_block_wizard"
+              name="Create Block"
+              parent="menu_construction_real_estate"
+              action="action_construction_block_wizard"
+              groups="base.group_system,construction_core.group_construction_admin"
+              sequence="5"/>
+
+    <record id="view_construction_project_form_block_button" model="ir.ui.view">
+        <field name="name">construction.project.form.block.button</field>
+        <field name="model">construction.project</field>
+        <field name="inherit_id" ref="view_construction_project_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet" position="before">
+                <header>
+                    <button name="%(action_construction_block_wizard)d"
+                            type="action" string="Create Block" class="btn-primary"
+                            context="{'default_project_id': id}"
+                            groups="base.group_system,construction_core.group_construction_admin"/>
+                </header>
+            </xpath>
+        </field>
+    </record>
+</odoo>

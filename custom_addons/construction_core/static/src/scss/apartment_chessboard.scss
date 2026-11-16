@@ -6,7 +6,7 @@ $chess-sold: #c0392b;
 $chess-sold-bg: #fbe3e0;
 $chess-blocked: #6c757d;
 $chess-blocked-bg: #e9ecef;
-$chess-card-width: 360px;
+$chess-card-width: 420px;
 
 .o_apartment_chessboard {
     position: relative;
@@ -199,6 +199,37 @@ $chess-card-width: 360px;
     }
 
     // --- side card ---------------------------------------------------
+    .o_card_plan {
+        position: relative;
+        margin: 12px 0 16px;
+        border: 1px solid #e3e5e8;
+        border-radius: 8px;
+        overflow: hidden;
+        line-height: 0;
+
+        img {
+            width: 100%;
+            height: auto;
+        }
+
+        .o_plan_marker {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            transform: translate(-50%, -50%);
+            border: 3px solid #e53935;
+            border-radius: 50%;
+            box-shadow: 0 0 0 2000px rgba(0, 0, 0, .25);
+            pointer-events: none;
+            animation: o_plan_pulse 1.6s ease-in-out infinite;
+        }
+    }
+
+    @keyframes o_plan_pulse {
+        0%, 100% { border-color: #e53935; }
+        50% { border-color: #ffb300; }
+    }
+
     .o_chess_card {
         position: fixed;
         top: var(--o-navbar-height, 46px);

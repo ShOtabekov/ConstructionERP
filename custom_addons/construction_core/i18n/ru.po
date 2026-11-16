@@ -24,6 +24,7 @@ msgstr "Адрес"
 #. module: construction_core
 #: model:ir.model.fields,field_description:construction_core.field_construction_apartment__name
 #: model:ir.model.fields.selection,name:construction_core.selection__construction_apartment__unit_type__apartment
+#: model:ir.model.fields.selection,name:construction_core.selection__construction_unit_layout__unit_type__apartment
 msgid "Apartment"
 msgstr "Квартира"
 
@@ -64,6 +65,7 @@ msgstr "Заблокирована"
 #: model:ir.model.fields,field_description:construction_core.field_construction_apartment__building_id
 #: model:ir.model.fields,field_description:construction_core.field_construction_entrance__building_id
 #: model:ir.model.fields,field_description:construction_core.field_construction_floor__building_id
+#: model:ir.model.fields,field_description:construction_core.field_construction_unit_layout__building_id
 msgid "Building"
 msgstr "Корпус"
 
@@ -141,6 +143,9 @@ msgstr "Строительные проекты"
 #: model:ir.model.fields,field_description:construction_core.field_construction_entrance__create_uid
 #: model:ir.model.fields,field_description:construction_core.field_construction_floor__create_uid
 #: model:ir.model.fields,field_description:construction_core.field_construction_project__create_uid
+#: model:ir.model.fields,field_description:construction_core.field_construction_block_wizard__create_uid
+#: model:ir.model.fields,field_description:construction_core.field_construction_block_wizard_line__create_uid
+#: model:ir.model.fields,field_description:construction_core.field_construction_unit_layout__create_uid
 msgid "Created by"
 msgstr "Создал"
 
@@ -150,6 +155,9 @@ msgstr "Создал"
 #: model:ir.model.fields,field_description:construction_core.field_construction_entrance__create_date
 #: model:ir.model.fields,field_description:construction_core.field_construction_floor__create_date
 #: model:ir.model.fields,field_description:construction_core.field_construction_project__create_date
+#: model:ir.model.fields,field_description:construction_core.field_construction_block_wizard__create_date
+#: model:ir.model.fields,field_description:construction_core.field_construction_block_wizard_line__create_date
+#: model:ir.model.fields,field_description:construction_core.field_construction_unit_layout__create_date
 msgid "Created on"
 msgstr "Дата создания"
 
@@ -172,6 +180,9 @@ msgstr "Описание"
 #: model:ir.model.fields,field_description:construction_core.field_construction_entrance__display_name
 #: model:ir.model.fields,field_description:construction_core.field_construction_floor__display_name
 #: model:ir.model.fields,field_description:construction_core.field_construction_project__display_name
+#: model:ir.model.fields,field_description:construction_core.field_construction_block_wizard__display_name
+#: model:ir.model.fields,field_description:construction_core.field_construction_block_wizard_line__display_name
+#: model:ir.model.fields,field_description:construction_core.field_construction_unit_layout__display_name
 msgid "Display Name"
 msgstr "Отображаемое название"
 
@@ -227,6 +238,7 @@ msgstr "Номер этажа"
 #. module: construction_core
 #: model:ir.actions.act_window,name:construction_core.action_construction_floor
 #: model:ir.ui.menu,name:construction_core.menu_construction_floors
+#: model:ir.model.fields,field_description:construction_core.field_construction_block_wizard__floors_total
 msgid "Floors"
 msgstr "Этажи"
 
@@ -242,6 +254,9 @@ msgstr "Свободна"
 #: model:ir.model.fields,field_description:construction_core.field_construction_entrance__id
 #: model:ir.model.fields,field_description:construction_core.field_construction_floor__id
 #: model:ir.model.fields,field_description:construction_core.field_construction_project__id
+#: model:ir.model.fields,field_description:construction_core.field_construction_block_wizard__id
+#: model:ir.model.fields,field_description:construction_core.field_construction_block_wizard_line__id
+#: model:ir.model.fields,field_description:construction_core.field_construction_unit_layout__id
 msgid "ID"
 msgstr "Идентификатор"
 
@@ -256,6 +271,9 @@ msgstr "В процессе"
 #: model:ir.model.fields,field_description:construction_core.field_construction_entrance__write_uid
 #: model:ir.model.fields,field_description:construction_core.field_construction_floor__write_uid
 #: model:ir.model.fields,field_description:construction_core.field_construction_project__write_uid
+#: model:ir.model.fields,field_description:construction_core.field_construction_block_wizard__write_uid
+#: model:ir.model.fields,field_description:construction_core.field_construction_block_wizard_line__write_uid
+#: model:ir.model.fields,field_description:construction_core.field_construction_unit_layout__write_uid
 msgid "Last Updated by"
 msgstr "Последний раз изменил"
 
@@ -265,6 +283,9 @@ msgstr "Последний раз изменил"
 #: model:ir.model.fields,field_description:construction_core.field_construction_entrance__write_date
 #: model:ir.model.fields,field_description:construction_core.field_construction_floor__write_date
 #: model:ir.model.fields,field_description:construction_core.field_construction_project__write_date
+#: model:ir.model.fields,field_description:construction_core.field_construction_block_wizard__write_date
+#: model:ir.model.fields,field_description:construction_core.field_construction_block_wizard_line__write_date
+#: model:ir.model.fields,field_description:construction_core.field_construction_unit_layout__write_date
 msgid "Last Updated on"
 msgstr "Дата последнего изменения"
 
@@ -303,6 +324,7 @@ msgstr "Цена за м² (USD)"
 #: model:ir.model.fields,field_description:construction_core.field_construction_apartment__project_id
 #: model:ir.model.fields,field_description:construction_core.field_construction_building__project_id
 #: model:ir.model.fields,field_description:construction_core.field_construction_floor__project_id
+#: model:ir.model.fields,field_description:construction_core.field_construction_block_wizard__project_id
 msgid "Project"
 msgstr "Проект"
 
@@ -339,6 +361,8 @@ msgstr "Забронирована"
 
 #. module: construction_core
 #: model:ir.model.fields,field_description:construction_core.field_construction_apartment__rooms
+#: model:ir.model.fields,field_description:construction_core.field_construction_block_wizard_line__rooms
+#: model:ir.model.fields,field_description:construction_core.field_construction_unit_layout__rooms
 msgid "Rooms"
 msgstr "Количество комнат"
 
@@ -377,6 +401,8 @@ msgstr "Эквивалент в сомони (расчётный)"
 
 #. module: construction_core
 #: model:ir.model.fields,field_description:construction_core.field_construction_apartment__area_total
+#: model:ir.model.fields,field_description:construction_core.field_construction_block_wizard_line__area_total
+#: model:ir.model.fields,field_description:construction_core.field_construction_unit_layout__area_total
 msgid "Total Area (m2)"
 msgstr "Общая площадь (м²)"
 
@@ -635,6 +661,7 @@ msgstr "Дата курса"
 
 #. module: construction_core
 #: model:ir.model.fields.selection,name:construction_core.selection__construction_apartment__unit_type__shop
+#: model:ir.model.fields.selection,name:construction_core.selection__construction_unit_layout__unit_type__shop
 msgid "Shop"
 msgstr "Магазин"
 
@@ -645,5 +672,250 @@ msgstr "Магазины"
 
 #. module: construction_core
 #: model:ir.model.fields,field_description:construction_core.field_construction_apartment__unit_type
+#: model:ir.model.fields,field_description:construction_core.field_construction_unit_layout__unit_type
 msgid "Unit Type"
 msgstr "Тип помещения"
+
+#. module: construction_core
+#. odoo-python
+#: code:addons/construction_core/wizard/block_wizard.py:0
+msgid "%(blocks)s block(s): %(apartments)s apartments + %(shops)s shops"
+msgstr "Блоков: %(blocks)s — квартир: %(apartments)s, магазинов: %(shops)s"
+
+#. module: construction_core
+#. odoo-python
+#: code:addons/construction_core/wizard/block_wizard.py:0
+msgid "Add at least one apartment to the floor layout."
+msgstr "Добавьте хотя бы одну квартиру в планировку этажа."
+
+#. module: construction_core
+#: model:ir.model.fields,field_description:construction_core.field_construction_unit_layout__apartment_count
+msgid "Apartment Count"
+msgstr "Кол-во помещений"
+
+#. module: construction_core
+#: model:ir.model.fields,field_description:construction_core.field_construction_block_wizard__price_per_sqm_usd
+msgid "Apartment Price per m2 (USD)"
+msgstr "Цена квартир за м² (USD)"
+
+#. module: construction_core
+#: model:ir.model.fields,field_description:construction_core.field_construction_block_wizard__residential_from
+msgid "Apartments From Floor"
+msgstr "Квартиры с этажа"
+
+#. module: construction_core
+#: model:ir.model.fields,field_description:construction_core.field_construction_block_wizard__code
+msgid "Block Code"
+msgstr "Код блока"
+
+#. module: construction_core
+#: model:ir.model.fields,field_description:construction_core.field_construction_block_wizard__name
+msgid "Block Name"
+msgstr "Название блока"
+
+#. module: construction_core
+#. odoo-python
+#: code:addons/construction_core/wizard/block_wizard.py:0
+msgid "Block with code %s already exists in this project."
+msgstr "Блок с кодом %s уже есть в этом проекте."
+
+#. module: construction_core
+#: model:ir.model.fields.selection,name:construction_core.selection__construction_block_wizard__numbering__floor
+msgid "By floor: 201, 202 … 2001"
+msgstr "По этажу: 201, 202 … 2001"
+
+#. module: construction_core
+#: model_terms:ir.ui.view,arch_db:construction_core.view_construction_block_wizard_form
+msgid "Cancel"
+msgstr "Отмена"
+
+#. module: construction_core
+#. odoo-python
+#: code:addons/construction_core/wizard/block_wizard.py:0
+msgid "Check the first apartment floor."
+msgstr "Проверьте этаж, с которого начинаются квартиры."
+
+#. module: construction_core
+#. odoo-python
+#: code:addons/construction_core/wizard/block_wizard.py:0
+msgid "Check the number and area of shops."
+msgstr "Проверьте количество и площадь магазинов."
+
+#. module: construction_core
+#. odoo-python
+#: code:addons/construction_core/wizard/block_wizard.py:0
+msgid "Chessboard"
+msgstr "Шахматка"
+
+#. module: construction_core
+#: model_terms:ir.ui.view,arch_db:construction_core.view_construction_block_wizard_form
+msgid "Create"
+msgstr "Создать"
+
+#. module: construction_core
+#: model:ir.actions.act_window,name:construction_core.action_construction_block_wizard
+#: model:ir.model,name:construction_core.model_construction_block_wizard
+#: model:ir.ui.menu,name:construction_core.menu_construction_block_wizard
+#: model_terms:ir.ui.view,arch_db:construction_core.view_construction_block_wizard_form
+#: model_terms:ir.ui.view,arch_db:construction_core.view_construction_project_form_block_button
+msgid "Create Block"
+msgstr "Создать блок"
+
+#. module: construction_core
+#: model:ir.model,name:construction_core.model_construction_block_wizard_line
+msgid "Create Block: Floor Layout Line"
+msgstr "Создание блока: строка планировки"
+
+#. module: construction_core
+#. odoo-python
+#: code:addons/construction_core/wizard/block_wizard.py:0
+msgid "Enter the block name and code."
+msgstr "Укажите название и код блока."
+
+#. module: construction_core
+#. odoo-python
+#: code:addons/construction_core/wizard/block_wizard.py:0
+msgid "Every apartment needs rooms and an area."
+msgstr "У каждой квартиры должны быть комнаты и площадь."
+
+#. module: construction_core
+#: model:ir.model.fields,field_description:construction_core.field_construction_block_wizard__line_ids
+#: model:ir.model.fields,field_description:construction_core.field_construction_building__layout_ids
+#: model_terms:ir.ui.view,arch_db:construction_core.view_construction_block_wizard_form
+#: model_terms:ir.ui.view,arch_db:construction_core.view_construction_building_form
+msgid "Floor Layout"
+msgstr "Планировка этажа"
+
+#. module: construction_core
+#: model:ir.model.fields,field_description:construction_core.field_construction_apartment__plan_html
+#: model_terms:ir.ui.view,arch_db:construction_core.view_construction_apartment_form
+#: model_terms:ir.ui.view,arch_db:construction_core.view_construction_block_wizard_form
+#: model_terms:ir.ui.view,arch_db:construction_core.view_construction_building_form
+msgid "Floor Plan"
+msgstr "План этажа"
+
+#. module: construction_core
+#: model:ir.model.fields,help:construction_core.field_construction_block_wizard__residential_from
+msgid "Floors below this one have no apartments."
+msgstr "На этажах ниже квартир нет (там магазины)."
+
+#. module: construction_core
+#: model:ir.model.fields,help:construction_core.field_construction_unit_layout__plan_x
+msgid "Horizontal position of the unit on the floor plan, 0-100 %."
+msgstr "Положение на плане по горизонтали, 0–100 %."
+
+#. module: construction_core
+#: model:ir.model.fields,field_description:construction_core.field_construction_apartment__layout_id
+msgid "Layout"
+msgstr "Планировка"
+
+#. module: construction_core
+#: model:ir.model.fields.selection,name:construction_core.selection__construction_block_wizard__preset__custom
+msgid "Manual"
+msgstr "Вручную"
+
+#. module: construction_core
+#: model:ir.model.fields,field_description:construction_core.field_construction_unit_layout__name
+msgid "Name"
+msgstr "Название"
+
+#. module: construction_core
+#. odoo-python
+#: code:addons/construction_core/wizard/block_wizard.py:0
+msgid "Number of floors must be between 1 and 60."
+msgstr "Количество этажей должно быть от 1 до 60."
+
+#. module: construction_core
+#: model:ir.model.fields,field_description:construction_core.field_construction_block_wizard__numbering
+msgid "Numbering"
+msgstr "Нумерация"
+
+#. module: construction_core
+#: model:ir.model.fields,field_description:construction_core.field_construction_block_wizard_line__plan_x
+#: model:ir.model.fields,field_description:construction_core.field_construction_unit_layout__plan_x
+msgid "Plan X (%)"
+msgstr "План X (%)"
+
+#. module: construction_core
+#: model:ir.model.fields,field_description:construction_core.field_construction_block_wizard_line__plan_y
+#: model:ir.model.fields,field_description:construction_core.field_construction_unit_layout__plan_y
+msgid "Plan Y (%)"
+msgstr "План Y (%)"
+
+#. module: construction_core
+#: model:ir.model.fields,field_description:construction_core.field_construction_block_wizard_line__sequence
+#: model:ir.model.fields,field_description:construction_core.field_construction_unit_layout__sequence
+msgid "Position"
+msgstr "Позиция"
+
+#. module: construction_core
+#: model:ir.model.fields,help:construction_core.field_construction_apartment__layout_id
+msgid "Position of the unit on the typical floor plan of the block."
+msgstr "Место помещения на типовом плане этажа блока."
+
+#. module: construction_core
+#: model:ir.model.fields.selection,name:construction_core.selection__construction_block_wizard__preset__all
+msgid "Rahmoniyon — all 5 blocks"
+msgstr "Rahmoniyon — все 5 блоков"
+
+#. module: construction_core
+#: model:ir.model.fields,field_description:construction_core.field_construction_block_wizard__shop_area
+msgid "Shop Area (m2)"
+msgstr "Площадь магазина (м²)"
+
+#. module: construction_core
+#: model:ir.model.fields,field_description:construction_core.field_construction_block_wizard__shop_price_per_sqm_usd
+msgid "Shop Price per m2 (USD)"
+msgstr "Цена магазинов за м² (USD)"
+
+#. module: construction_core
+#: model:ir.model.fields,field_description:construction_core.field_construction_block_wizard__shop_count
+msgid "Shops on 1st Floor"
+msgstr "Магазинов на 1 этаже"
+
+#. module: construction_core
+#: model:ir.model.fields,field_description:construction_core.field_construction_block_wizard__summary
+msgid "Summary"
+msgstr "Итого"
+
+#. module: construction_core
+#: model:ir.model.fields,field_description:construction_core.field_construction_block_wizard__preset
+msgid "Template"
+msgstr "Шаблон"
+
+#. module: construction_core
+#: model:ir.model.fields.selection,name:construction_core.selection__construction_block_wizard__numbering__through
+msgid "Through the block: 1, 2, 3 …"
+msgstr "Сквозная по блоку: 1, 2, 3 …"
+
+#. module: construction_core
+#: model_terms:ir.ui.view,arch_db:construction_core.view_construction_block_wizard_form
+#: model_terms:ir.ui.view,arch_db:construction_core.view_construction_building_form
+msgid "Total"
+msgstr "Итого"
+
+#. module: construction_core
+#: model:ir.model.fields,field_description:construction_core.field_construction_block_wizard__floor_plan_image
+#: model:ir.model.fields,field_description:construction_core.field_construction_building__floor_plan_image
+msgid "Typical Floor Plan"
+msgstr "Типовой план этажа"
+
+#. module: construction_core
+#: model:ir.model,name:construction_core.model_construction_unit_layout
+msgid "Unit Layout"
+msgstr "Планировка помещения"
+
+#. module: construction_core
+#: model:ir.model.fields,field_description:construction_core.field_construction_unit_layout__apartment_ids
+msgid "Units"
+msgstr "Помещения"
+
+#. module: construction_core
+#: model:ir.model.fields,help:construction_core.field_construction_unit_layout__plan_y
+msgid "Vertical position of the unit on the floor plan, 0-100 %."
+msgstr "Положение на плане по вертикали, 0–100 %."
+
+#. module: construction_core
+#: model:ir.model.fields,field_description:construction_core.field_construction_block_wizard_line__wizard_id
+msgid "Wizard"
+msgstr "Мастер"

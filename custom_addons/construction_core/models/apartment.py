@@ -1,3 +1,5 @@
+from markupsafe import Markup
+
 from odoo import models, fields, api, _
 from odoo.exceptions import ValidationError
 
@@ -53,6 +55,20 @@ class ConstructionApartment(models.Model):
     floor_number = fields.Integer(
         related="floor_id.number",
         string="Floor Number",
+    )
+
+    layout_id = fields.Many2one(
+        "construction.unit.layout",
+        string="Layout",
+        ondelete="set null",
+        index=True,
+        help="Position of the unit on the typical floor plan of the block.",
+    )
+
+    plan_html = fields.Html(
+        string="Floor Plan",
+        compute="_compute_plan_html",
+        sanitize=False,
     )
 
     unit_type = fields.Selection(
@@ -182,6 +198,46 @@ class ConstructionApartment(models.Model):
                 if record.number
                 else False
             )
+
+    def _plan_data(self):
+        """Floor plan image URL and marker position, or None."""
+        self.ensure_one()
+        layout = self.layout_id
+        building = self.building_id
+        if not (layout and building and building.floor_plan_image
+                and (layout.plan_x or layout.plan_y)):
+            return None
+        return {
+            "url": "/web/image/construction.building/%d/floor_plan_image"
+                   % building.id,
+            "x": layout.plan_x,
+            "y": layout.plan_y,
+        }
+
+    @api.depends(
+        "layout_id.plan_x",
+        "layout_id.plan_y",
+        "building_id.floor_plan_image",
+    )
+    def _compute_plan_html(self):
+        for record in self:
+            plan = record._plan_data() if record.id else None
+            if not plan:
+                record.plan_html = False
+                continue
+            record.plan_html = Markup(
+                '<div class="o_unit_plan" style="position:relative;'
+                'display:inline-block;max-width:100%%;overflow:hidden;'
+                'border-radius:8px;border:1px solid #dee2e6;">'
+                '<a href="%(url)s" target="_blank">'
+                '<img src="%(url)s" style="display:block;max-width:100%%;'
+                'height:auto;" alt="plan"/></a>'
+                '<span style="position:absolute;left:%(x).2f%%;top:%(y).2f%%;'
+                'width:64px;height:64px;transform:translate(-50%%,-50%%);'
+                'border:5px solid #e53935;border-radius:50%%;'
+                'box-shadow:0 0 0 2000px rgba(0,0,0,.28);'
+                'pointer-events:none;"></span></div>'
+            ) % plan
 
     @api.depends("area_total", "price_per_sqm")
     def _compute_total_price(self):
@@ -375,6 +431,8 @@ class ConstructionApartment(models.Model):
             "total_price_usd": self.total_price_usd,
             "total_price_tjs": self.total_price_tjs,
             "usd_tjs_rate": self.usd_tjs_rate,
+            "unit_type": self.unit_type,
+            "plan": self._plan_data(),
             "state": self.state,
             "state_label": state_labels.get(self.state, self.state),
             "info": [],
