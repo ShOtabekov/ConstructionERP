@@ -285,7 +285,7 @@ class ConstructionReservation(models.Model):
         ):
             return False
 
-        apartment.write({"state": "free"})
+        apartment._set_state("free")
         return True
 
     def _check_sales_user(self):
@@ -357,7 +357,7 @@ class ConstructionReservation(models.Model):
                 "state": "reserved",
             })
 
-            apartment.write({"state": "reserved"})
+            apartment._set_state("reserved")
 
         return True
 

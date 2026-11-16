@@ -409,7 +409,7 @@ class ConstructionContract(models.Model):
                 "state": "confirmed",
             })
 
-            apartment.write({"state": "sold"})
+            apartment._set_state("sold")
 
             if reservation:
                 reservation._write_workflow({
@@ -468,8 +468,8 @@ class ConstructionContract(models.Model):
                 # Preserve an explicitly blocked apartment.
                 pass
             elif active_reservations:
-                apartment.write({"state": "reserved"})
+                apartment._set_state("reserved")
             else:
-                apartment.write({"state": "free"})
+                apartment._set_state("free")
 
         return True

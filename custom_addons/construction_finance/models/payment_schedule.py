@@ -129,3 +129,20 @@ class ConstructionPaymentSchedule(models.Model):
             if line.plan_id.state != "draft" or line.payment_ids:
                 raise UserError(_("This schedule line cannot be deleted."))
         return super().unlink()
+
+    @api.model
+    def _cron_update_overdue(self):
+        """Daily: move unpaid lines past their due date to Overdue.
+
+        "state" is a stored compute that otherwise changes only when a
+        payment is posted, so it would never become Overdue by itself.
+        """
+        today = fields.Date.context_today(self)
+        lines = self.sudo().search([
+            ("state", "in", ("pending", "partial")),
+            ("due_date", "<", today),
+        ])
+        if lines:
+            lines.modified(["due_date"])
+            self.env.flush_all()
+        return True

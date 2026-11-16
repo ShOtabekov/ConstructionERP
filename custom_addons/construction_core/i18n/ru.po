@@ -522,3 +522,38 @@ msgstr ""
 #: code:addons/construction_core/static/src/xml/apartment_chessboard.xml:0
 msgid "м²"
 msgstr ""
+
+#. module: construction_core
+#: code:addons/construction_core/models/apartment.py:0
+msgid "A new apartment can only be Free or Blocked."
+msgstr "Новая квартира может быть только «Свободна» или «Заблокирована»."
+
+#. module: construction_core
+#: code:addons/construction_core/models/apartment.py:0
+msgid "Apartment status is changed only by reservations, contracts or the Block / Unblock buttons."
+msgstr "Статус квартиры меняется только через бронь, договор или кнопки «Заблокировать» / «Разблокировать»."
+
+#. module: construction_core
+#: code:addons/construction_core/models/apartment.py:0
+msgid "Only a sales supervisor can block or unblock apartments."
+msgstr "Блокировать и разблокировать квартиры может только руководитель продаж."
+
+#. module: construction_core
+#: code:addons/construction_core/models/apartment.py:0
+msgid "Only a free apartment can be blocked."
+msgstr "Заблокировать можно только свободную квартиру."
+
+#. module: construction_core
+#: code:addons/construction_core/models/apartment.py:0
+msgid "Only a blocked apartment can be unblocked."
+msgstr "Разблокировать можно только заблокированную квартиру."
+
+#. module: construction_core
+#: model_terms:ir.ui.view,arch_db:construction_core.view_construction_apartment_form
+msgid "Block"
+msgstr "Заблокировать"
+
+#. module: construction_core
+#: model_terms:ir.ui.view,arch_db:construction_core.view_construction_apartment_form
+msgid "Unblock"
+msgstr "Разблокировать"

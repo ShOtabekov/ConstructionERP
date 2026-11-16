@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="ir_cron_update_overdue_schedule" model="ir.cron">
+            <field name="name">Construction: update overdue installments</field>
+            <field name="model_id" ref="model_construction_payment_schedule"/>
+            <field name="state">code</field>
+            <field name="code">model._cron_update_overdue()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="active" eval="True"/>
+        </record>
+    </data>
+
+    <!-- Recalculate overdue lines right away on install / upgrade -->
+    <function model="construction.payment.schedule" name="_cron_update_overdue"/>
+</odoo>

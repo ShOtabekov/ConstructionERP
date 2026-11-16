@@ -122,7 +122,10 @@ class ConstructionPaymentPlan(models.Model):
     first_payment_date = fields.Date(
         string="First Installment Date",
         required=True,
-        default=fields.Date.context_today,
+        # One month after the deposit, so deposit and first
+        # installment do not fall on the same day by default.
+        default=lambda self: fields.Date.context_today(self)
+        + relativedelta(months=1),
     )
 
     schedule_currency_id = fields.Many2one(

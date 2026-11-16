@@ -1,4 +1,4 @@
-from odoo import models, fields, api
+from odoo import models, fields, api, _
 from odoo.exceptions import ValidationError
 
 
@@ -141,6 +141,8 @@ class ConstructionApartment(models.Model):
         default="free",
         required=True,
         index=True,
+        readonly=True,
+        copy=False,
     )
 
     description = fields.Text(string="Description")
@@ -251,3 +253,67 @@ class ConstructionApartment(models.Model):
                 raise ValidationError(
                     "USD price per square meter cannot be negative."
                 )
+
+    # ------------------------------------------------------------------
+    # Status protection
+    # ------------------------------------------------------------------
+    # The apartment status is driven only by the sales workflow
+    # (reservation / contract) and by explicit Block / Unblock buttons.
+    # Direct writes of "state" (form, import, RPC) are rejected.
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        for vals in vals_list:
+            if vals.get("state", "free") not in ("free", "blocked"):
+                raise ValidationError(
+                    _("A new apartment can only be Free or Blocked.")
+                )
+        return super().create(vals_list)
+
+    def write(self, vals):
+        if "state" in vals:
+            raise ValidationError(
+                _("Apartment status is changed only by reservations, "
+                "contracts or the Block / Unblock buttons.")
+            )
+        return super().write(vals)
+
+    def _set_state(self, state):
+        """Internal workflow method (not callable via RPC)."""
+        return super(ConstructionApartment, self.sudo()).write(
+            {"state": state}
+        )
+
+    def _check_block_rights(self):
+        user = self.env.user
+        if user.has_group("base.group_system"):
+            return
+        group = self.env.ref(
+            "construction_sales.group_sales_manager",
+            raise_if_not_found=False,
+        )
+        if group and user.has_group("construction_sales.group_sales_manager"):
+            return
+        raise ValidationError(
+            _("Only a sales supervisor can block or unblock apartments.")
+        )
+
+    def action_block(self):
+        self._check_block_rights()
+        for record in self:
+            if record.state != "free":
+                raise ValidationError(
+                    _("Only a free apartment can be blocked.")
+                )
+            record._set_state("blocked")
+        return True
+
+    def action_unblock(self):
+        self._check_block_rights()
+        for record in self:
+            if record.state != "blocked":
+                raise ValidationError(
+                    _("Only a blocked apartment can be unblocked.")
+                )
+            record._set_state("free")
+        return True

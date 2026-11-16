@@ -167,6 +167,14 @@
         <field name="model">construction.apartment</field>
         <field name="arch" type="xml">
             <form>
+                <header>
+                    <button name="action_block" type="object"
+                            string="Block" invisible="state != 'free'"/>
+                    <button name="action_unblock" type="object"
+                            string="Unblock" invisible="state != 'blocked'"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="free,reserved,sold"/>
+                </header>
                 <sheet>
                     <div class="oe_title">
                         <h1>
@@ -185,7 +193,6 @@
                             <field name="rooms"/>
                             <field name="area_total"/>
                             <field name="area_living"/>
-                            <field name="state"/>
                         </group>
                     </group>
                     <group string="Selling Price (USD)">
