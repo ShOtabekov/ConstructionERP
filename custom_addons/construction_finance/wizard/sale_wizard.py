@@ -1,0 +1,285 @@
+from dateutil.relativedelta import relativedelta
+from markupsafe import Markup, escape
+
+from odoo import _, api, fields, models
+from odoo.exceptions import UserError, ValidationError
+
+
+class ConstructionSaleWizard(models.TransientModel):
+    """One window to sell a unit: client + unit + payment terms.
+
+    Creates (or takes from the active reservation) the sales contract,
+    confirms it, creates the payment plan with its schedule and confirms
+    the plan.
+    """
+
+    _name = "construction.sale.wizard"
+    _description = "Продажа квартиры"
+
+    apartment_id = fields.Many2one(
+        "construction.apartment", string="Квартира / помещение", required=True,
+        domain="[('state', 'in', ('free', 'reserved'))]",
+    )
+    apartment_state = fields.Selection(related="apartment_id.state")
+    reservation_id = fields.Many2one(
+        "construction.reservation", string="Бронь",
+        compute="_compute_reservation",
+    )
+
+    # Client
+    partner_id = fields.Many2one("res.partner", string="Клиент")
+    new_partner_name = fields.Char(string="ФИО нового клиента")
+    new_partner_phone = fields.Char(string="Телефон")
+
+    # Price
+    currency_usd_id = fields.Many2one(
+        "res.currency", default=lambda self: self.env.ref("base.USD"),
+    )
+    area_total = fields.Float(related="apartment_id.area_total", string="Площадь (м²)")
+    price_per_sqm_usd = fields.Monetary(
+        related="apartment_id.price_per_sqm_usd", string="Цена за м² (USD)",
+        currency_field="currency_usd_id",
+    )
+    price_usd = fields.Monetary(
+        string="Цена (USD)", currency_field="currency_usd_id",
+        compute="_compute_price",
+    )
+    exchange_rate = fields.Float(
+        string="Курс USD/TJS", digits=(12, 6), compute="_compute_price",
+    )
+    price_tjs = fields.Float(string="Цена (сомони)", compute="_compute_price", digits=(16, 2))
+
+    # Terms
+    contract_date = fields.Date(
+        string="Дата договора", required=True, default=fields.Date.context_today,
+    )
+    payment_type = fields.Selection(
+        [("installment", "Рассрочка"), ("full", "Полная оплата")],
+        string="Оплата", default="installment", required=True,
+    )
+    deposit_mode = fields.Selection(
+        [("percent", "Процент"), ("fixed", "Сумма (USD)")],
+        string="Первый взнос", default="percent", required=True,
+    )
+    deposit_value = fields.Float(string="Взнос", default=30.0, digits=(16, 2))
+    installment_count = fields.Integer(string="Количество платежей", default=12)
+    schedule_interval = fields.Selection(
+        [("monthly", "Ежемесячно"), ("quarterly", "Ежеквартально")],
+        string="Периодичность", default="monthly", required=True,
+    )
+    first_payment_date = fields.Date(
+        string="Первый платёж по графику",
+        default=lambda self: fields.Date.context_today(self) + relativedelta(months=1),
+    )
+    deposit_usd = fields.Monetary(
+        string="Первый взнос (USD)", currency_field="currency_usd_id",
+        compute="_compute_terms",
+    )
+    installment_usd = fields.Monetary(
+        string="Платёж (USD)", currency_field="currency_usd_id",
+        compute="_compute_terms",
+    )
+    schedule_preview = fields.Html(
+        string="График", compute="_compute_terms", sanitize=False,
+    )
+    notes = fields.Text(string="Примечание")
+
+    # ------------------------------------------------------------------
+
+    @api.depends("apartment_id", "apartment_id.state")
+    def _compute_reservation(self):
+        Reservation = self.env["construction.reservation"].sudo()
+        for wiz in self:
+            wiz.reservation_id = Reservation.search([
+                ("apartment_id", "=", wiz.apartment_id.id),
+                ("state", "=", "reserved"),
+            ], limit=1) if wiz.apartment_id else False
+
+    @api.onchange("apartment_id")
+    def _onchange_apartment(self):
+        if self.reservation_id and not self.partner_id:
+            self.partner_id = self.reservation_id.partner_id
+
+    @api.depends("apartment_id", "reservation_id")
+    def _compute_price(self):
+        for wiz in self:
+            source = wiz.reservation_id.sudo() if wiz.reservation_id else False
+            if source:
+                wiz.price_usd = source.price_usd
+                wiz.exchange_rate = source.exchange_rate
+            else:
+                wiz.price_usd = wiz.apartment_id.total_price_usd
+                wiz.exchange_rate = wiz.apartment_id.usd_tjs_rate
+            wiz.price_tjs = wiz.price_usd * wiz.exchange_rate
+
+    def _schedule_lines(self):
+        """[(label, date, amount_usd)] exactly as the plan will create them."""
+        self.ensure_one()
+        total = self.price_usd
+        if total <= 0:
+            return []
+        if self.payment_type == "full":
+            return [(_("Полная оплата"), self.contract_date, total)]
+        usd = self.currency_usd_id or self.env.ref("base.USD")
+        deposit = usd.round(self.deposit_usd)
+        count = max(self.installment_count, 1)
+        rest = total - deposit
+        lines = []
+        if deposit > 0:
+            lines.append((_("Первый взнос"), self.contract_date, deposit))
+        step = 1 if self.schedule_interval == "monthly" else 3
+        created = 0.0
+        for index in range(count):
+            if index == count - 1:
+                amount = usd.round(rest - created)
+            else:
+                amount = usd.round(rest / count)
+                created += amount
+            date = (self.first_payment_date or self.contract_date) + relativedelta(
+                months=index * step
+            )
+            lines.append((_("Платёж %s") % (index + 1), date, amount))
+        return lines
+
+    @api.depends(
+        "price_usd", "payment_type", "deposit_mode", "deposit_value",
+        "installment_count", "schedule_interval", "first_payment_date",
+        "contract_date",
+    )
+    def _compute_terms(self):
+        for wiz in self:
+            if wiz.payment_type == "full":
+                wiz.deposit_usd = wiz.price_usd
+            elif wiz.deposit_mode == "percent":
+                wiz.deposit_usd = wiz.price_usd * wiz.deposit_value / 100.0
+            else:
+                wiz.deposit_usd = wiz.deposit_value
+            count = max(wiz.installment_count, 1)
+            wiz.installment_usd = (
+                0.0 if wiz.payment_type == "full"
+                else max(wiz.price_usd - wiz.deposit_usd, 0.0) / count
+            )
+            lines = wiz._schedule_lines() if wiz.price_usd > 0 else []
+            if not lines:
+                wiz.schedule_preview = False
+                continue
+            rows = Markup("").join(
+                Markup(
+                    "<tr><td>%s</td><td>%s</td>"
+                    "<td class='text-end'>$ %s</td></tr>"
+                ) % (
+                    escape(label),
+                    date.strftime("%d.%m.%Y") if date else "",
+                    "{:,.2f}".format(amount).replace(",", " "),
+                )
+                for label, date, amount in lines
+            )
+            total = sum(amount for _l, _d, amount in lines)
+            wiz.schedule_preview = Markup(
+                "<table class='table table-sm o_sale_schedule'>"
+                "<thead><tr><th>Платёж</th><th>Дата</th>"
+                "<th class='text-end'>Сумма</th></tr></thead>"
+                "<tbody>%s</tbody><tfoot><tr><th colspan='2'>Итого</th>"
+                "<th class='text-end'>$ %s</th></tr></tfoot></table>"
+            ) % (rows, "{:,.2f}".format(total).replace(",", " "))
+
+    # ------------------------------------------------------------------
+
+    def _check_terms(self):
+        if self.price_usd <= 0:
+            raise UserError(_(
+                "У помещения не указана цена. Задайте цену за м² "
+                "(Недвижимость → Прайс-лист) и повторите."
+            ))
+        if self.exchange_rate <= 0:
+            raise UserError(_("Укажите курс USD/TJS в карточке проекта."))
+        if self.payment_type == "installment":
+            if self.installment_count < 1:
+                raise ValidationError(_("Количество платежей должно быть не меньше 1."))
+            if self.deposit_value < 0:
+                raise ValidationError(_("Взнос не может быть отрицательным."))
+            if self.deposit_usd >= self.price_usd:
+                raise ValidationError(_(
+                    "Первый взнос покрывает всю сумму — выберите «Полная оплата»."
+                ))
+            if not self.first_payment_date:
+                raise ValidationError(_("Укажите дату первого платежа по графику."))
+        if not self.partner_id and not (self.new_partner_name or "").strip():
+            raise ValidationError(_("Выберите клиента или введите ФИО нового клиента."))
+
+    def _get_partner(self):
+        if self.partner_id:
+            return self.partner_id
+        return self.env["res.partner"].create({
+            "name": self.new_partner_name.strip(),
+            "phone": (self.new_partner_phone or "").strip() or False,
+        })
+
+    def action_sell(self):
+        self.ensure_one()
+        self._check_terms()
+        Contract = self.env["construction.contract"]
+        Contract._check_sales_user()
+
+        apartment = self.apartment_id
+        partner = self._get_partner()
+
+        if apartment.state == "reserved":
+            reservation = self.reservation_id
+            if not reservation:
+                raise UserError(_("Квартира забронирована, но активная бронь не найдена."))
+            if reservation.partner_id != partner:
+                raise UserError(_(
+                    "Квартира забронирована на клиента %s. Оформить договор "
+                    "можно только на него (или сначала отмените бронь)."
+                ) % reservation.partner_id.display_name)
+            reservation.sudo(False).action_create_contract()
+            contract = Contract.search([("reservation_id", "=", reservation.id)], limit=1)
+            contract.write({"contract_date": self.contract_date, "notes": self.notes})
+        elif apartment.state == "free":
+            contract = Contract.create({
+                "partner_id": partner.id,
+                "apartment_id": apartment.id,
+                "contract_date": self.contract_date,
+                "notes": self.notes,
+            })
+        else:
+            raise UserError(_("Это помещение уже продано или заблокировано."))
+
+        contract.action_confirm()
+
+        # Payment plan: created for the seller even if he has no finance
+        # rights; the plan belongs to him (user_id) and to finance.
+        plan_vals = {
+            "contract_id": contract.id,
+            "user_id": self.env.uid,
+            "date": self.contract_date,
+            "schedule_interval": self.schedule_interval,
+            "first_payment_date": self.first_payment_date or self.contract_date,
+        }
+        if self.payment_type == "full":
+            plan_vals.update({
+                "deposit_mode": "fixed",
+                "deposit_value": 0.0,
+                "installment_count": 1,
+                "first_payment_date": self.contract_date,
+            })
+        else:
+            plan_vals.update({
+                "deposit_mode": self.deposit_mode,
+                "deposit_value": self.deposit_value,
+                "installment_count": self.installment_count,
+            })
+        plan = self.env["construction.payment.plan"].sudo().create(plan_vals)
+        plan.action_generate_schedule()
+        plan.action_confirm()
+
+        return {
+            "type": "ir.actions.act_window",
+            "name": _("Договор"),
+            "res_model": "construction.contract",
+            "res_id": contract.id,
+            "view_mode": "form",
+            "views": [(False, "form")],
+            "target": "current",
+        }

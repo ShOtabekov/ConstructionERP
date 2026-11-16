@@ -21,3 +21,5 @@ access_construction_block_wizard_admin,construction.block.wizard admin,model_con
 access_construction_block_wizard_system,construction.block.wizard system,model_construction_block_wizard,base.group_system,1,1,1,1
 access_construction_block_wizard_line_admin,construction.block.wizard.line admin,model_construction_block_wizard_line,group_construction_admin,1,1,1,1
 access_construction_block_wizard_line_system,construction.block.wizard.line system,model_construction_block_wizard_line,base.group_system,1,1,1,1
+access_construction_price_wizard_admin,construction.price.wizard admin,model_construction_price_wizard,group_construction_admin,1,1,1,1
+access_construction_price_wizard_system,construction.price.wizard system,model_construction_price_wizard,base.group_system,1,1,1,1

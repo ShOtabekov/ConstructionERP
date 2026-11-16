@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_construction_sale_wizard_form" model="ir.ui.view">
+        <field name="name">construction.sale.wizard.form</field>
+        <field name="model">construction.sale.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Продажа">
+                <sheet>
+                    <group>
+                        <group string="Помещение">
+                            <field name="apartment_id" options="{'no_create': True}"/>
+                            <field name="apartment_state" invisible="1"/>
+                            <field name="reservation_id" readonly="1"
+                                   invisible="not reservation_id"/>
+                            <field name="area_total" readonly="1"/>
+                            <field name="price_per_sqm_usd" readonly="1"/>
+                            <field name="currency_usd_id" invisible="1"/>
+                            <field name="price_usd" readonly="1"/>
+                            <field name="exchange_rate" readonly="1"/>
+                            <field name="price_tjs" readonly="1"/>
+                        </group>
+                        <group string="Клиент">
+                            <field name="partner_id"
+                                   placeholder="Найти клиента по имени или телефону"
+                                   options="{'no_quick_create': True}"/>
+                            <field name="new_partner_name" invisible="partner_id"
+                                   placeholder="или введите нового клиента"/>
+                            <field name="new_partner_phone" invisible="partner_id"
+                                   placeholder="+992 ..."/>
+                            <field name="contract_date"/>
+                        </group>
+                    </group>
+                    <div class="alert alert-warning" role="alert"
+                         invisible="price_usd &gt; 0 or not apartment_id">
+                        У этого помещения нет цены. Задайте цену за м² через
+                        «Недвижимость → Прайс-лист».
+                    </div>
+                    <group string="Условия оплаты">
+                        <group>
+                            <field name="payment_type" widget="radio"
+                                   options="{'horizontal': true}"/>
+                            <field name="deposit_mode" widget="radio"
+                                   options="{'horizontal': true}"
+                                   invisible="payment_type == 'full'"/>
+                            <label for="deposit_value" invisible="payment_type == 'full'"/>
+                            <div class="o_row" invisible="payment_type == 'full'">
+                                <field name="deposit_value"/>
+                                <span invisible="deposit_mode != 'percent'">%</span>
+                                <span invisible="deposit_mode != 'fixed'">USD</span>
+                            </div>
+                            <field name="deposit_usd" invisible="payment_type == 'full'"/>
+                        </group>
+                        <group invisible="payment_type == 'full'">
+                            <field name="installment_count"/>
+                            <field name="schedule_interval"/>
+                            <field name="first_payment_date"/>
+                            <field name="installment_usd"/>
+                        </group>
+                    </group>
+                    <field name="schedule_preview" nolabel="1" readonly="1"/>
+                    <field name="notes" placeholder="Примечание к договору"/>
+                </sheet>
+                <footer>
+                    <button name="action_sell" type="object" string="Оформить продажу"
+                            class="btn-primary"/>
+                    <button string="Отмена" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_construction_sale_wizard" model="ir.actions.act_window">
+        <field name="name">Новая продажа</field>
+        <field name="res_model">construction.sale.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="menu_construction_sale_wizard"
+              name="Новая продажа"
+              parent="construction_sales.menu_construction_sales"
+              action="action_construction_sale_wizard"
+              sequence="1"
+              groups="base.group_system,construction_sales.group_sales_user"/>
+</odoo>

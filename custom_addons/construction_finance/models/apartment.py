@@ -13,6 +13,18 @@ class ConstructionApartment(models.Model):
 
     def chessboard_card(self):
         card = super().chessboard_card()
+        if self.state in ("free", "reserved") and self._chessboard_is_sales_user():
+            # One-window sale replaces the old "create contract" button.
+            card["actions"] = [
+                act for act in card["actions"]
+                if act["method"] != "action_chessboard_contract"
+            ]
+            card["actions"].append({
+                "method": "action_chessboard_sell",
+                "label": _("Продать"),
+                "style": "success",
+                "sequence": 5,
+            })
         if self.state != "sold" or not self._chessboard_is_finance_user():
             return card
 
@@ -51,3 +63,17 @@ class ConstructionApartment(models.Model):
         if not contract:
             raise UserError(_("Подтверждённый договор не найден."))
         return contract.action_open_payment_plan()
+
+    def action_chessboard_sell(self):
+        self.ensure_one()
+        if self.state not in ("free", "reserved"):
+            raise UserError(_("Продать можно только свободное или забронированное помещение."))
+        return {
+            "type": "ir.actions.act_window",
+            "name": _("Продажа: %s") % self.name,
+            "res_model": "construction.sale.wizard",
+            "view_mode": "form",
+            "views": [(False, "form")],
+            "target": "new",
+            "context": {"default_apartment_id": self.id},
+        }

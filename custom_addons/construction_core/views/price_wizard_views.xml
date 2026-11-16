@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_construction_price_wizard_form" model="ir.ui.view">
+        <field name="name">construction.price.wizard.form</field>
+        <field name="model">construction.price.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Прайс-лист">
+                <sheet>
+                    <group>
+                        <group string="Какие помещения">
+                            <field name="project_id"/>
+                            <field name="building_ids" widget="many2many_tags"
+                                   placeholder="все блоки"/>
+                            <field name="unit_type" widget="radio"/>
+                            <label for="floor_from" string="Этажи"/>
+                            <div class="o_row">
+                                <field name="floor_from"/> — <field name="floor_to"/>
+                            </div>
+                            <field name="rooms" invisible="unit_type == 'shop'"/>
+                            <field name="only_free"/>
+                        </group>
+                        <group string="Цена">
+                            <field name="price_per_sqm_usd"/>
+                            <field name="unit_count"/>
+                            <field name="area_total"/>
+                            <field name="total_usd"/>
+                        </group>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_apply" type="object" string="Применить цену"
+                            class="btn-primary"/>
+                    <button string="Отмена" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_construction_price_wizard" model="ir.actions.act_window">
+        <field name="name">Прайс-лист</field>
+        <field name="res_model">construction.price.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="menu_construction_price_wizard"
+              name="Прайс-лист"
+              parent="menu_construction_real_estate"
+              action="action_construction_price_wizard"
+              groups="base.group_system,construction_core.group_construction_admin"
+              sequence="6"/>
+</odoo>

@@ -13,3 +13,5 @@ access_payment_schedule_system,payment.schedule.system,model_construction_paymen
 access_payment_system,payment.system,model_construction_payment,base.group_system,1,1,1,1
 access_finance_dashboard_user,finance.dashboard.user,model_construction_finance_dashboard,group_finance_user,1,1,1,1
 access_finance_dashboard_system,finance.dashboard.system,model_construction_finance_dashboard,base.group_system,1,1,1,1
+access_construction_sale_wizard_sales,construction.sale.wizard sales,model_construction_sale_wizard,construction_sales.group_sales_user,1,1,1,1
+access_construction_sale_wizard_system,construction.sale.wizard system,model_construction_sale_wizard,base.group_system,1,1,1,1
