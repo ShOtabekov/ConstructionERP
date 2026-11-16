@@ -50,6 +50,12 @@ class ConstructionApartment(models.Model):
 
         if self._chessboard_confirmed_contract():
             card["actions"].append({
+                "method": "action_chessboard_cash",
+                "label": _("Принять платёж"),
+                "style": "success",
+                "sequence": 10,
+            })
+            card["actions"].append({
                 "method": "action_chessboard_payment_plan",
                 "label": _("План оплаты"),
                 "style": "primary",
@@ -76,4 +82,22 @@ class ConstructionApartment(models.Model):
             "views": [(False, "form")],
             "target": "new",
             "context": {"default_apartment_id": self.id},
+        }
+
+    def action_chessboard_cash(self):
+        self.ensure_one()
+        contract = self._chessboard_confirmed_contract()
+        if not contract:
+            raise UserError(_("Подтверждённый договор не найден."))
+        return {
+            "type": "ir.actions.act_window",
+            "name": _("Принять платёж: %s") % self.name,
+            "res_model": "construction.cash.wizard",
+            "view_mode": "form",
+            "views": [(False, "form")],
+            "target": "new",
+            "context": {
+                "default_partner_id": contract.partner_id.id,
+                "default_contract_id": contract.id,
+            },
         }

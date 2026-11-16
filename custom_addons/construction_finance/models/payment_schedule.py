@@ -145,4 +145,10 @@ class ConstructionPaymentSchedule(models.Model):
         if lines:
             lines.modified(["due_date"])
             self.env.flush_all()
+        plans = self.env["construction.payment.plan"].sudo().search(
+            [("state", "=", "confirmed")]
+        )
+        if plans:
+            plans.modified(["schedule_ids"])
+            self.env.flush_all()
         return True

@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- Cash desk wizard -->
+    <record id="view_construction_cash_wizard_form" model="ir.ui.view">
+        <field name="name">construction.cash.wizard.form</field>
+        <field name="model">construction.cash.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Принять платёж">
+                <sheet>
+                    <group>
+                        <group string="Клиент">
+                            <field name="partner_id" options="{'no_create': True}"
+                                   placeholder="Имя или телефон клиента"/>
+                            <field name="contract_id" options="{'no_create': True}"/>
+                            <field name="plan_id" invisible="1"/>
+                            <field name="currency_usd_id" invisible="1"/>
+                            <field name="balance_usd" invisible="not plan_id"/>
+                            <field name="overdue_usd" invisible="not plan_id"
+                                   decoration-danger="overdue_usd &gt; 0"/>
+                            <field name="next_due_date" invisible="not plan_id"/>
+                        </group>
+                        <group string="Оплата">
+                            <field name="payment_date"/>
+                            <field name="pay_currency" widget="radio"
+                                   options="{'horizontal': true}"/>
+                            <field name="amount"/>
+                            <field name="exchange_rate" invisible="pay_currency == 'usd'"
+                                   required="pay_currency == 'tjs'"/>
+                            <field name="amount_usd" invisible="pay_currency == 'usd'"/>
+                            <field name="method_id"/>
+                            <field name="reference"/>
+                        </group>
+                    </group>
+                    <div class="alert alert-warning" role="alert"
+                         invisible="plan_id or not contract_id">
+                        У договора нет подтверждённого плана оплаты.
+                    </div>
+                    <field name="allocation_preview" nolabel="1" readonly="1"/>
+                </sheet>
+                <footer>
+                    <button name="action_receive" type="object" string="Принять и провести"
+                            class="btn-primary"/>
+                    <button string="Отмена" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_construction_cash_wizard" model="ir.actions.act_window">
+        <field name="name">Принять платёж</field>
+        <field name="res_model">construction.cash.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <!-- Debtors -->
+    <record id="view_construction_debtors_list" model="ir.ui.view">
+        <field name="name">construction.payment.plan.debtors.list</field>
+        <field name="model">construction.payment.plan</field>
+        <field name="priority">30</field>
+        <field name="arch" type="xml">
+            <list string="Должники" default_order="overdue_days desc"
+                  decoration-danger="overdue_days &gt; 30"
+                  decoration-warning="overdue_days &gt; 0 and overdue_days &lt;= 30">
+                <field name="partner_id" string="Клиент"/>
+                <field name="partner_phone" widget="phone"/>
+                <field name="apartment_id" string="Квартира"/>
+                <field name="project_id" optional="hide"/>
+                <field name="contract_id" string="Договор" optional="show"/>
+                <field name="currency_usd_id" column_invisible="1"/>
+                <field name="overdue_usd" sum="Итого"/>
+                <field name="overdue_days"/>
+                <field name="next_due_date"/>
+                <field name="next_due_usd" optional="show"/>
+                <field name="balance_usd" string="Весь остаток" sum="Итого"/>
+                <field name="user_id" string="Менеджер" optional="hide"/>
+                <button name="action_open_cash_wizard" type="object"
+                        string="Принять платёж" icon="fa-money" class="btn-link"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_construction_debtors_search" model="ir.ui.view">
+        <field name="name">construction.payment.plan.debtors.search</field>
+        <field name="model">construction.payment.plan</field>
+        <field name="priority">30</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="partner_id" string="Клиент"/>
+                <field name="partner_phone"/>
+                <field name="apartment_id"/>
+                <filter name="overdue" string="С просрочкой"
+                        domain="[('overdue_usd', '&gt;', 0)]"/>
+                <filter name="overdue_30" string="Больше 30 дней"
+                        domain="[('overdue_days', '&gt;', 30)]"/>
+                <filter name="with_balance" string="Все с остатком"
+                        domain="[('balance_usd', '&gt;', 0)]"/>
+                <group>
+                    <filter name="group_project" string="Проект"
+                            context="{'group_by': 'project_id'}"/>
+                    <filter name="group_user" string="Менеджер"
+                            context="{'group_by': 'user_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_construction_debtors" model="ir.actions.act_window">
+        <field name="name">Должники</field>
+        <field name="res_model">construction.payment.plan</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('state', '=', 'confirmed')]</field>
+        <field name="context">{'search_default_overdue': 1}</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+            (0, 0, {'view_mode': 'list', 'view_id': ref('view_construction_debtors_list')})]"/>
+        <field name="search_view_id" ref="view_construction_debtors_search"/>
+    </record>
+
+    <!-- Cash today -->
+    <record id="action_construction_cash_today" model="ir.actions.act_window">
+        <field name="name">Касса сегодня</field>
+        <field name="res_model">construction.payment</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('state', '=', 'posted'), ('payment_date', '=', context_today().strftime('%Y-%m-%d'))]</field>
+        <field name="context">{'group_by': ['method_id']}</field>
+    </record>
+
+    <menuitem id="menu_construction_cash_root" name="Касса"
+              parent="construction_core.menu_construction_root" sequence="35"
+              groups="base.group_system,construction_finance.group_finance_user"/>
+    <menuitem id="menu_construction_cash_receive" name="Принять платёж"
+              parent="menu_construction_cash_root" sequence="1"
+              action="action_construction_cash_wizard"/>
+    <menuitem id="menu_construction_debtors" name="Должники"
+              parent="menu_construction_cash_root" sequence="2"
+              action="action_construction_debtors"/>
+    <menuitem id="menu_construction_cash_today" name="Касса сегодня"
+              parent="menu_construction_cash_root" sequence="3"
+              action="action_construction_cash_today"/>
+</odoo>

@@ -13,7 +13,7 @@
                 <field name="amount"/>
                 <field name="currency_id"/>
                 <field name="exchange_rate"/>
-                <field name="amount_usd"/>
+                <field name="amount_usd" sum="Итого"/>
                 <field name="method_id"/>
                 <field name="state"/>
             </list>

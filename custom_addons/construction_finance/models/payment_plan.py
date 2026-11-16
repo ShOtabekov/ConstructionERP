@@ -185,6 +185,57 @@ class ConstructionPaymentPlan(models.Model):
 
     notes = fields.Text(string="Notes")
 
+    # Collections ("Должники")
+    partner_phone = fields.Char(related="partner_id.phone", string="Телефон")
+    overdue_usd = fields.Monetary(
+        string="Просрочено (USD)", currency_field="currency_usd_id",
+        compute="_compute_debt", store=True,
+    )
+    overdue_days = fields.Integer(
+        string="Дней просрочки", compute="_compute_debt", store=True,
+    )
+    next_due_date = fields.Date(
+        string="Следующий платёж", compute="_compute_debt", store=True,
+    )
+    next_due_usd = fields.Monetary(
+        string="Сумма следующего (USD)", currency_field="currency_usd_id",
+        compute="_compute_debt", store=True,
+    )
+
+    @api.depends(
+        "schedule_ids",
+        "schedule_ids.state",
+        "schedule_ids.balance_usd",
+        "schedule_ids.due_date",
+    )
+    def _compute_debt(self):
+        today = fields.Date.context_today(self)
+        for plan in self:
+            lines = plan.schedule_ids.filtered(lambda l: l.balance_usd > 0.01)
+            overdue = lines.filtered(lambda l: l.due_date and l.due_date < today)
+            upcoming = (lines - overdue).sorted("due_date")
+            plan.overdue_usd = sum(overdue.mapped("balance_usd"))
+            plan.overdue_days = (
+                (today - min(overdue.mapped("due_date"))).days if overdue else 0
+            )
+            plan.next_due_date = upcoming[:1].due_date or False
+            plan.next_due_usd = upcoming[:1].balance_usd or 0.0
+
+    def action_open_cash_wizard(self):
+        self.ensure_one()
+        return {
+            "type": "ir.actions.act_window",
+            "name": _("Принять платёж"),
+            "res_model": "construction.cash.wizard",
+            "view_mode": "form",
+            "views": [(False, "form")],
+            "target": "new",
+            "context": {
+                "default_partner_id": self.partner_id.id,
+                "default_contract_id": self.contract_id.id,
+            },
+        }
+
     @api.depends("deposit_mode", "deposit_value", "contract_amount_usd")
     def _compute_deposit_usd(self):
         for plan in self:

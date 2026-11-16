@@ -39,10 +39,10 @@
         </record>
 
         <record id="rule_finance_plan_user" model="ir.rule">
-            <field name="name">Finance User: Own Plans</field>
+            <field name="name">Finance User: All Plans</field>
             <field name="model_id" ref="model_construction_payment_plan"/>
             <field name="groups" eval="[(4, ref('group_finance_user'))]"/>
-            <field name="domain_force">[('user_id', '=', user.id)]</field>
+            <field name="domain_force">[(1, '=', 1)]</field>
         </record>
         <record id="rule_finance_plan_manager" model="ir.rule">
             <field name="name">Finance Manager: All Plans</field>
@@ -52,10 +52,10 @@
         </record>
 
         <record id="rule_finance_payment_user" model="ir.rule">
-            <field name="name">Finance User: Own Payments</field>
+            <field name="name">Finance User: All Payments</field>
             <field name="model_id" ref="model_construction_payment"/>
             <field name="groups" eval="[(4, ref('group_finance_user'))]"/>
-            <field name="domain_force">[('user_id', '=', user.id)]</field>
+            <field name="domain_force">[(1, '=', 1)]</field>
         </record>
         <record id="rule_finance_payment_manager" model="ir.rule">
             <field name="name">Finance Manager: All Payments</field>
@@ -65,10 +65,10 @@
         </record>
     
         <record id="rule_finance_schedule_user" model="ir.rule">
-            <field name="name">Finance User: Own Payment Schedules</field>
+            <field name="name">Finance User: All Payment Schedules</field>
             <field name="model_id" ref="model_construction_payment_schedule"/>
             <field name="groups" eval="[(4, ref('group_finance_user'))]"/>
-            <field name="domain_force">[('plan_id.user_id', '=', user.id)]</field>
+            <field name="domain_force">[(1, '=', 1)]</field>
         </record>
 
         <record id="rule_finance_schedule_manager" model="ir.rule">
