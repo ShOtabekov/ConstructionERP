@@ -5,7 +5,9 @@
 !/docs/
 !/scripts/
 !/tests/
+!/installer/
 __pycache__/
 *.pyc
 *.bak
 *_backup*
+*.zip
