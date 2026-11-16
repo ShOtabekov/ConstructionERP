@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- 3D-визуализации ЖК Rahmoniyon (добавляются один раз, если фото нет) -->
+    <function model="construction.project" name="_fill_rahmoniyon_renders"/>
+</odoo>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_construction_project_image_kanban" model="ir.ui.view">
+        <field name="name">construction.project.image.kanban</field>
+        <field name="model">construction.project.image</field>
+        <field name="arch" type="xml">
+            <kanban>
+                <field name="id"/>
+                <templates>
+                    <t t-name="card" class="p-0">
+                        <field name="image_512" widget="image" class="w-100" options="{'size': [0, 140]}"/>
+                        <div class="px-2 py-1"><field name="name"/></div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+    <record id="view_construction_project_image_form" model="ir.ui.view">
+        <field name="name">construction.project.image.form</field>
+        <field name="model">construction.project.image</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <field name="image_1920" widget="image" options="{'preview_image': 'image_512'}"/>
+                    <group>
+                        <field name="name"/>
+                        <field name="sequence"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="view_construction_project_form_images" model="ir.ui.view">
+        <field name="name">construction.project.form.images</field>
+        <field name="model">construction.project</field>
+        <field name="inherit_id" ref="view_construction_project_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="Фото и визуализации" name="images">
+                    <field name="image_ids" mode="kanban" context="{'default_project_id': id}"/>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

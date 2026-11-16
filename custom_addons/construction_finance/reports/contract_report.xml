@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
     <record id="action_report_sales_contract" model="ir.actions.report">
-        <field name="name">Договор купли-продажи</field>
+        <field name="name">Договор (рус.)</field>
         <field name="model">construction.contract</field>
         <field name="report_type">qweb-pdf</field>
         <field name="report_name">construction_finance.report_sales_contract</field>
@@ -28,9 +28,9 @@
                         </div>
 
                         <p><b t-esc="company.name"/>, именуемое в дальнейшем «Продавец», в лице
-                            директора ______________________, действующего на основании Устава, с одной стороны,
-                            и гражданин(ка) <b t-esc="o.partner_id.name"/>, паспорт серии ______ № __________,
-                            выдан ____________________________, именуемый(ая) в дальнейшем «Покупатель»,
+                            директора <t t-esc="project.director_name or '______________________'"/>, действующего на основании Устава, с одной стороны,
+                            и гражданин(ка) <b t-esc="o.partner_id.name"/>, паспорт серии <t t-esc="o.partner_id.passport_series or '______'"/> № <t t-esc="o.partner_id.passport_number or '__________'"/>,
+                            выдан <t t-esc="o.partner_id.passport_issued_by or '____________________________'"/><t t-if="o.partner_id.passport_issue_date"> <t t-esc="o.partner_id.passport_issue_date.strftime('%d.%m.%Y')"/></t>, именуемый(ая) в дальнейшем «Покупатель»,
                             с другой стороны, заключили настоящий договор о нижеследующем.</p>
 
                         <h6 class="mt-3">1. ПРЕДМЕТ ДОГОВОРА</h6>
@@ -123,7 +123,7 @@
                                 <b>Покупатель:</b><br/>
                                 <t t-esc="o.partner_id.name"/><br/>
                                 <t t-if="o.partner_id.phone">Тел.: <t t-esc="o.partner_id.phone"/><br/></t>
-                                Паспорт: ____________________<br/>
+                                Паспорт: <t t-esc="o.partner_id.passport_series or ''"/> <t t-esc="o.partner_id.passport_number or '____________________'"/><br/>
                                 <br/>____________________ / ____________
                             </div>
                         </div>

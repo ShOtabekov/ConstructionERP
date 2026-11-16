@@ -23,3 +23,6 @@ access_construction_block_wizard_line_admin,construction.block.wizard.line admin
 access_construction_block_wizard_line_system,construction.block.wizard.line system,model_construction_block_wizard_line,base.group_system,1,1,1,1
 access_construction_price_wizard_admin,construction.price.wizard admin,model_construction_price_wizard,group_construction_admin,1,1,1,1
 access_construction_price_wizard_system,construction.price.wizard system,model_construction_price_wizard,base.group_system,1,1,1,1
+access_construction_project_image_user,construction.project.image user,model_construction_project_image,base.group_user,1,0,0,0
+access_construction_project_image_admin,construction.project.image admin,model_construction_project_image,group_construction_admin,1,1,1,1
+access_construction_project_image_system,construction.project.image system,model_construction_project_image,base.group_system,1,1,1,1

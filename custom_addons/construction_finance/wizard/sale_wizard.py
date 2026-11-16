@@ -30,6 +30,19 @@ class ConstructionSaleWizard(models.TransientModel):
     partner_id = fields.Many2one("res.partner", string="Клиент")
     new_partner_name = fields.Char(string="ФИО нового клиента")
     new_partner_phone = fields.Char(string="Телефон")
+    passport_series = fields.Char(string="Паспорт: серия")
+    passport_number = fields.Char(string="Паспорт: номер")
+    passport_issued_by = fields.Char(string="Кем выдан")
+    passport_issue_date = fields.Date(string="Дата выдачи")
+    residence = fields.Char(string="Место жительства")
+
+    _PASSPORT_FIELDS = ("passport_series", "passport_number", "passport_issued_by",
+                        "passport_issue_date", "residence")
+
+    @api.onchange("partner_id")
+    def _onchange_partner_passport(self):
+        for fname in self._PASSPORT_FIELDS:
+            self[fname] = self.partner_id[fname] if self.partner_id else False
 
     # Price
     currency_usd_id = fields.Many2one(
@@ -244,12 +257,15 @@ class ConstructionSaleWizard(models.TransientModel):
             raise ValidationError(_("Выберите клиента или введите ФИО нового клиента."))
 
     def _get_partner(self):
+        passport = {f: self[f] for f in self._PASSPORT_FIELDS if self[f]}
         if self.partner_id:
+            if passport:
+                self.partner_id.sudo().write(passport)
             return self.partner_id
-        return self.env["res.partner"].create({
+        return self.env["res.partner"].create(dict(passport, **{
             "name": self.new_partner_name.strip(),
             "phone": (self.new_partner_phone or "").strip() or False,
-        })
+        }))
 
     def action_sell(self):
         self.ensure_one()

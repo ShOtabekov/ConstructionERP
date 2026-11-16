@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- ============ Паспорт клиента ============ -->
+    <record id="view_partner_form_passport" model="ir.ui.view">
+        <field name="name">res.partner.form.passport</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="Паспорт" name="passport">
+                    <group>
+                        <group>
+                            <field name="passport_series"/>
+                            <field name="passport_number"/>
+                            <field name="passport_issued_by"/>
+                            <field name="passport_issue_date"/>
+                        </group>
+                        <group>
+                            <field name="residence"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- ============ Реквизиты для печати в проекте ============ -->
+    <record id="view_construction_project_form_print" model="ir.ui.view">
+        <field name="name">construction.project.form.print</field>
+        <field name="model">construction.project</field>
+        <field name="inherit_id" ref="construction_core.view_construction_project_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="Реквизиты для договоров" name="print_docs">
+                    <group>
+                        <group string="Продавец">
+                            <field name="seller_name_tj"/>
+                            <field name="seller_address_tj"/>
+                            <field name="director_name"/>
+                            <field name="director_short"/>
+                            <field name="chief_accountant"/>
+                            <field name="cashier_name"/>
+                        </group>
+                        <group string="Объект">
+                            <field name="contract_city_tj"/>
+                            <field name="object_address_tj"/>
+                            <field name="permit_text_tj"/>
+                            <field name="completion_text_tj"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- ============ Приходные ордера ============ -->
+    <record id="view_cash_receipt_list" model="ir.ui.view">
+        <field name="name">construction.cash.receipt.list</field>
+        <field name="model">construction.cash.receipt</field>
+        <field name="arch" type="xml">
+            <list string="Приходные ордера" create="0">
+                <field name="name"/>
+                <field name="date"/>
+                <field name="partner_id"/>
+                <field name="apartment_id" optional="show"/>
+                <field name="basis"/>
+                <field name="pay_currency"/>
+                <field name="amount" sum="Итого"/>
+                <field name="amount_usd" sum="Итого USD" optional="show"/>
+                <field name="method_id" optional="show"/>
+                <field name="user_id" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_cash_receipt_form" model="ir.ui.view">
+        <field name="name">construction.cash.receipt.form</field>
+        <field name="model">construction.cash.receipt</field>
+        <field name="arch" type="xml">
+            <form string="Приходный ордер" create="0">
+                <header>
+                    <button name="%(action_report_cash_receipt_tj)d" type="action"
+                            string="Печать (тоҷикӣ)" class="btn-primary" icon="fa-print"/>
+                    <button name="%(action_report_cash_receipt_ru)d" type="action"
+                            string="Печать (рус.)" icon="fa-print"/>
+                </header>
+                <sheet>
+                    <div class="oe_title"><h1>Приходный ордер № <field name="name" readonly="1" class="oe_inline"/></h1></div>
+                    <group>
+                        <group>
+                            <field name="date" readonly="1"/>
+                            <field name="partner_id" readonly="1"/>
+                            <field name="contract_id" readonly="1"/>
+                            <field name="apartment_id"/>
+                        </group>
+                        <group>
+                            <field name="pay_currency" readonly="1"/>
+                            <field name="amount" readonly="1"/>
+                            <field name="exchange_rate" readonly="1"/>
+                            <field name="amount_usd"/>
+                            <field name="method_id" readonly="1"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="basis"/>
+                        <field name="attachment"/>
+                    </group>
+                    <field name="payment_ids" readonly="1">
+                        <list>
+                            <field name="schedule_id"/>
+                            <field name="amount"/>
+                            <field name="currency_id"/>
+                            <field name="amount_usd" sum="USD"/>
+                        </list>
+                    </field>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_cash_receipt_search" model="ir.ui.view">
+        <field name="name">construction.cash.receipt.search</field>
+        <field name="model">construction.cash.receipt</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="apartment_id"/>
+                <filter name="today" string="Сегодня"
+                        domain="[('date', '=', context_today().strftime('%Y-%m-%d'))]"/>
+                <filter name="month" string="Этот месяц"
+                        domain="[('date', '&gt;=', context_today().strftime('%Y-%m-01'))]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_cash_receipt" model="ir.actions.act_window">
+        <field name="name">Приходные ордера</field>
+        <field name="res_model">construction.cash.receipt</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- ============ Расходы кассы ============ -->
+    <record id="view_cash_expense_list" model="ir.ui.view">
+        <field name="name">construction.cash.expense.list</field>
+        <field name="model">construction.cash.expense</field>
+        <field name="arch" type="xml">
+            <list string="Расходы кассы" decoration-muted="state == 'cancelled'"
+                  decoration-info="state == 'draft'">
+                <field name="name"/>
+                <field name="date"/>
+                <field name="category"/>
+                <field name="recipient"/>
+                <field name="basis"/>
+                <field name="pay_currency"/>
+                <field name="amount" sum="Итого"/>
+                <field name="amount_usd" sum="Итого USD" optional="show"/>
+                <field name="method_id" optional="hide"/>
+                <field name="state" widget="badge" decoration-success="state == 'posted'"
+                       decoration-info="state == 'draft'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_cash_expense_form" model="ir.ui.view">
+        <field name="name">construction.cash.expense.form</field>
+        <field name="model">construction.cash.expense</field>
+        <field name="arch" type="xml">
+            <form string="Расход кассы">
+                <header>
+                    <button name="action_post" type="object" string="Провести" class="btn-primary"
+                            invisible="state != 'draft'"/>
+                    <button name="action_print_tj" type="object" string="Печать (тоҷикӣ)"
+                            icon="fa-print" class="btn-primary" invisible="state != 'posted'"/>
+                    <button name="action_print_ru" type="object" string="Печать (рус.)"
+                            icon="fa-print" invisible="state != 'posted'"/>
+                    <button name="action_cancel" type="object" string="Отменить"
+                            invisible="state != 'posted'"
+                            confirm="Отменить расход? Деньги вернутся в остаток кассы."/>
+                    <button name="action_draft" type="object" string="В черновик"
+                            invisible="state != 'cancelled'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,posted"/>
+                </header>
+                <sheet>
+                    <div class="oe_title"><h1>
+                        <span invisible="name != '/'">Новый расход</span>
+                        <span invisible="name == '/'">Расходный ордер № <field name="name" readonly="1" class="oe_inline"/></span>
+                    </h1></div>
+                    <group>
+                        <group>
+                            <field name="date" readonly="state != 'draft'"/>
+                            <field name="category" readonly="state != 'draft'"/>
+                            <field name="partner_id" readonly="state != 'draft'"
+                                   options="{'no_create': True}" placeholder="необязательно"/>
+                            <field name="recipient" readonly="state != 'draft'"/>
+                            <field name="id_document" placeholder="паспорт А 1234567, ШВКД ..."/>
+                        </group>
+                        <group>
+                            <field name="pay_currency" widget="radio" options="{'horizontal': true}"
+                                   readonly="state != 'draft'"/>
+                            <field name="amount" readonly="state != 'draft'"/>
+                            <field name="exchange_rate" readonly="state != 'draft'"/>
+                            <field name="amount_usd" invisible="pay_currency == 'usd'"/>
+                            <field name="amount_tjs" invisible="pay_currency == 'tjs'"/>
+                            <field name="method_id" readonly="state != 'draft'"/>
+                            <field name="project_id" readonly="state != 'draft'"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="basis" readonly="state != 'draft'"
+                               placeholder="например: маош барои моҳи октябр"/>
+                        <field name="attachment"/>
+                        <field name="refund_line_id" invisible="not refund_line_id"/>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_cash_expense_search" model="ir.ui.view">
+        <field name="name">construction.cash.expense.search</field>
+        <field name="model">construction.cash.expense</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="recipient"/>
+                <field name="basis"/>
+                <field name="name"/>
+                <filter name="posted" string="Проведённые" domain="[('state', '=', 'posted')]"/>
+                <filter name="draft" string="Черновики" domain="[('state', '=', 'draft')]"/>
+                <separator/>
+                <filter name="month" string="Этот месяц"
+                        domain="[('date', '&gt;=', context_today().strftime('%Y-%m-01'))]"/>
+                <group>
+                    <filter name="group_category" string="Статья" context="{'group_by': 'category'}"/>
+                    <filter name="group_month" string="Месяц" context="{'group_by': 'date:month'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_cash_expense" model="ir.actions.act_window">
+        <field name="name">Расходы кассы</field>
+        <field name="res_model">construction.cash.expense</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{'search_default_posted': 1, 'search_default_draft': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Записать расход из кассы</p>
+            <p>Зарплата, материалы, транспорт и другие выплаты. Возвраты клиентам
+               появляются здесь автоматически, когда вы отмечаете выдачу.</p>
+        </field>
+    </record>
+
+    <!-- ============ Кассовая книга ============ -->
+    <record id="view_cash_book_form" model="ir.ui.view">
+        <field name="name">construction.cash.book.form</field>
+        <field name="model">construction.cash.book</field>
+        <field name="arch" type="xml">
+            <form string="Кассовая книга">
+                <header>
+                    <button name="action_print" type="object" string="Печать PDF"
+                            class="btn-primary" icon="fa-print"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <label for="date_from" string="Период"/>
+                            <div class="o_row">
+                                <field name="date_from"/> — <field name="date_to"/>
+                            </div>
+                        </group>
+                    </group>
+                    <field name="book_html" nolabel="1" readonly="1"/>
+                    <group string="Начальный остаток кассы (заполняется один раз)">
+                        <group>
+                            <field name="cash_opening_date" string="На дату"/>
+                            <field name="cash_opening_tjs" string="Сомони"/>
+                            <field name="cash_opening_usd" string="USD"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_cash_book" model="ir.actions.act_window">
+        <field name="name">Кассовая книга</field>
+        <field name="res_model">construction.cash.book</field>
+        <field name="view_mode">form</field>
+        <field name="target">current</field>
+    </record>
+
+    <menuitem id="menu_cash_expense_new" name="Расходы"
+              parent="menu_construction_cash_root" sequence="2"
+              action="action_cash_expense"/>
+    <menuitem id="menu_cash_receipts" name="Приходные ордера"
+              parent="menu_construction_cash_root" sequence="5"
+              action="action_cash_receipt"/>
+    <menuitem id="menu_cash_book" name="Кассовая книга"
+              parent="menu_construction_cash_root" sequence="6"
+              action="action_cash_book"/>
+</odoo>

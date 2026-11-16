@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="paperformat_construction_cash" model="report.paperformat">
+        <field name="name">Строительство: кассовый ордер</field>
+        <field name="format">A4</field>
+        <field name="orientation">Landscape</field>
+        <field name="margin_top">10</field>
+        <field name="margin_bottom">10</field>
+        <field name="margin_left">10</field>
+        <field name="margin_right">10</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">0</field>
+        <field name="dpi">96</field>
+    </record>
+
+    <record id="action_report_cash_receipt_tj" model="ir.actions.report">
+        <field name="name">Ордери даромадӣ КО-1 (тоҷикӣ)</field>
+        <field name="model">construction.cash.receipt</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">construction_finance.report_cash_receipt_tj</field>
+        <field name="report_file">construction_finance.report_cash_receipt_tj</field>
+        <field name="print_report_name">'Ордер %s' % (object.name)</field>
+        <field name="paperformat_id" ref="paperformat_construction_cash"/>
+        <field name="binding_model_id" ref="model_construction_cash_receipt"/>
+        <field name="binding_type">report</field>
+    </record>
+    <record id="action_report_cash_receipt_ru" model="ir.actions.report">
+        <field name="name">Приходный ордер КО-1 (рус.)</field>
+        <field name="model">construction.cash.receipt</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">construction_finance.report_cash_receipt_ru</field>
+        <field name="report_file">construction_finance.report_cash_receipt_ru</field>
+        <field name="print_report_name">'ПКО %s' % (object.name)</field>
+        <field name="paperformat_id" ref="paperformat_construction_cash"/>
+        <field name="binding_model_id" ref="model_construction_cash_receipt"/>
+        <field name="binding_type">report</field>
+    </record>
+    <record id="action_report_cash_expense_tj" model="ir.actions.report">
+        <field name="name">Содирномаи хазинавӣ (тоҷикӣ)</field>
+        <field name="model">construction.cash.expense</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">construction_finance.report_cash_expense_tj</field>
+        <field name="report_file">construction_finance.report_cash_expense_tj</field>
+        <field name="print_report_name">'Содирнома %s' % (object.name)</field>
+        <field name="paperformat_id" ref="paperformat_construction_doc"/>
+        <field name="binding_model_id" ref="model_construction_cash_expense"/>
+        <field name="binding_type">report</field>
+    </record>
+    <record id="action_report_cash_expense_ru" model="ir.actions.report">
+        <field name="name">Расходный ордер КО-2 (рус.)</field>
+        <field name="model">construction.cash.expense</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">construction_finance.report_cash_expense_ru</field>
+        <field name="report_file">construction_finance.report_cash_expense_ru</field>
+        <field name="print_report_name">'РКО %s' % (object.name)</field>
+        <field name="paperformat_id" ref="paperformat_construction_doc"/>
+        <field name="binding_model_id" ref="model_construction_cash_expense"/>
+        <field name="binding_type">report</field>
+    </record>
+    <record id="action_report_cash_book" model="ir.actions.report">
+        <field name="name">Кассовая книга</field>
+        <field name="model">construction.cash.book</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">construction_finance.report_cash_book</field>
+        <field name="report_file">construction_finance.report_cash_book</field>
+        <field name="print_report_name">'Кассовая книга %s' % (object.date_to)</field>
+    </record>
+
+    <template id="cash_style">
+        <style>
+            .ko { font-family: 'Times New Roman', serif; font-size: 13px; color: #000; }
+            .ko table.g { border-collapse: collapse; width: 100%; }
+            .ko table.g td { border: 1px solid #000; padding: 3px 5px; text-align: center; font-size: 12px; }
+            .ko .line { border-bottom: 1px solid #000; min-height: 18px; padding: 0 4px; }
+            .ko .hint { font-size: 10px; text-align: center; color: #333; }
+            .ko .lbl { white-space: nowrap; padding-right: 6px; vertical-align: top !important; padding-top: 8px !important; }
+            .ko table.f { width: 100%; border-collapse: collapse; }
+            .ko table.f td { vertical-align: top; padding-top: 6px; }
+        </style>
+    </template>
+
+    <!-- ===================== КО-1: приход + отрывной расид ===================== -->
+    <template id="cash_receipt_body">
+        <t t-set="org" t-value="(o.project_id.seller_name_tj if L['lang'] == 'tj' else False) or (o.project_id.company_id or res_company).name"/>
+        <t t-set="cur" t-value="o._cur_label(L['lang'])"/>
+        <t t-set="d" t-value="o.date"/>
+        <t t-set="month" t-value="(L['months'])[d.month - 1]"/>
+        <div class="page ko">
+            <t t-call="construction_finance.cash_style"/>
+            <table style="width: 100%;"><tr>
+                <!-- Ордер -->
+                <td style="width: 63%; vertical-align: top; padding-right: 14px;">
+                    <table class="f"><tr>
+                        <td><div class="line" t-esc="org"/><div class="hint" t-esc="L['org_hint']"/></td>
+                        <td style="width: 26%; text-align: right; vertical-align: top;" t-esc="L['form']"/>
+                    </tr></table>
+                    <table style="width: 100%; margin-top: 14px;"><tr>
+                        <td style="font-weight: bold; font-size: 15px;"><t t-esc="L['title']"/> <t t-esc="o.name"/></td>
+                        <td style="width: 34%;">
+                            <table class="g"><tr><td t-esc="L['day']"/><td t-esc="L['month']"/><td t-esc="L['year']"/></tr>
+                                <tr><td t-esc="'%02d' % d.day"/><td t-esc="month"/><td t-esc="d.year"/></tr></table>
+                        </td>
+                    </tr></table>
+                    <table class="g" style="margin-top: 12px;">
+                        <tr><td style="width: 12%;" t-esc="L['c1']"/><td t-esc="L['c2']"/><td t-esc="L['c3']"/>
+                            <td style="width: 20%;" t-esc="L['c4']"/><td t-esc="L['c5']"/></tr>
+                        <tr style="height: 26px;"><td/><td/><td/>
+                            <td style="font-weight: bold;"><t t-esc="o._money(o.amount)"/> <t t-esc="L['cur_short'][o.pay_currency]"/></td><td/></tr>
+                    </table>
+                    <table class="f" style="margin-top: 8px;">
+                        <tr><td class="lbl" style="width: 1%;" t-esc="L['from_who']"/><td><div class="line"><b t-esc="o.partner_id.name"/></div></td></tr>
+                        <tr><td class="lbl" t-esc="L['basis']"/><td><div class="line" t-esc="o.basis"/></td></tr>
+                        <tr><td class="lbl" t-esc="L['sum']"/><td><div class="line"><t t-esc="o._words(L['lang'])"/></div>
+                            <div class="hint" t-esc="L['in_words']"/></td></tr>
+                        <tr t-if="o.pay_currency == 'tjs'"><td class="lbl" t-esc="L['rate']"/><td><div class="line">
+                            <t t-esc="o._money(o.exchange_rate)"/> (= $ <t t-esc="o._money(o.amount_usd)"/>)</div></td></tr>
+                        <tr><td class="lbl" t-esc="L['attach']"/><td><div class="line" t-esc="o.attachment or ''"/></td></tr>
+                    </table>
+                    <table class="f" style="margin-top: 18px;">
+                        <tr><td class="lbl" style="width: 1%;" t-esc="L['chief']"/><td><div class="line" t-esc="o.project_id.chief_accountant or ''"/></td></tr>
+                        <tr><td class="lbl" t-esc="L['cashier']"/><td><div class="line" t-esc="o.project_id.cashier_name or o.user_id.name"/></td></tr>
+                    </table>
+                </td>
+                <!-- линия отреза -->
+                <td style="width: 3%; border-left: 1px dashed #000; text-align: center; vertical-align: top;">
+                    <div style="font-size: 9px; line-height: 11px; padding-top: 30px;"><t t-foreach="L['cut'].replace(' ', '')" t-as="ch"><t t-esc="ch"/><br/></t></div>
+                </td>
+                <!-- Расид / Квитанция -->
+                <td style="width: 34%; vertical-align: top; padding-left: 10px;">
+                    <div class="line" t-esc="org"/><div class="hint" t-esc="L['org_hint']"/>
+                    <div style="text-align: center; font-weight: bold; font-size: 15px; letter-spacing: 3px; margin-top: 12px;" t-esc="L['receipt']"/>
+                    <div style="text-align: center;"><t t-esc="L['to_order']"/> <b t-esc="o.name"/></div>
+                    <table class="f" style="margin-top: 8px;">
+                        <tr><td class="lbl" style="width: 1%;" t-esc="L['from_who']"/><td><div class="line"><b t-esc="o.partner_id.name"/></div></td></tr>
+                        <tr><td class="lbl" t-esc="L['basis']"/><td><div class="line" t-esc="o.basis"/></td></tr>
+                    </table>
+                    <table class="g" style="margin-top: 8px;">
+                        <tr><td t-esc="L['sum']"/><td t-esc="L['rate']"/><td>USD</td></tr>
+                        <tr style="font-weight: bold;"><td><t t-esc="o._money(o.amount)"/> <t t-esc="L['cur_short'][o.pay_currency]"/></td>
+                            <td t-esc="o._money(o.exchange_rate)"/><td t-esc="o._money(o.amount_usd)"/></tr>
+                    </table>
+                    <div class="line" style="margin-top: 8px;" t-esc="o._words(L['lang'])"/>
+                    <div class="hint" t-esc="L['in_words']"/>
+                    <div style="margin-top: 8px;"><t t-esc="'%02d' % d.day"/> <t t-esc="month"/> <t t-esc="d.year"/></div>
+                    <div style="margin-top: 6px;" t-esc="L['stamp']"/>
+                    <table class="f" style="margin-top: 8px;">
+                        <tr><td class="lbl" style="width: 1%;" t-esc="L['chief']"/><td><div class="line"/></td></tr>
+                        <tr><td class="lbl" t-esc="L['cashier']"/><td><div class="line"/></td></tr>
+                    </table>
+                </td>
+            </tr></table>
+        </div>
+    </template>
+
+    <template id="report_cash_receipt_tj">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-set="L" t-value="{'lang': 'tj', 'org_hint': '(корхона, ташкилот)', 'form': 'Шакли № КО-1',
+                    'title': 'ОРДЕРИ ДАРОМАДИ ХАЗИНАВӢ №', 'day': 'Рӯз', 'month': 'Моҳ', 'year': 'Сол',
+                    'months': ['январи', 'феврали', 'марти', 'апрели', 'майи', 'июни', 'июли', 'августи', 'сентябри', 'октябри', 'ноябри', 'декабри'],
+                    'c1': '№ таб.', 'c2': 'Ҳисоботи муросилотӣ, ҳисоби иловагӣ', 'c3': 'Рамзи ҳисобии таҳлилӣ',
+                    'c4': 'Маблағ', 'c5': 'Рамзи таъиноти мақсаднок', 'cur_short': {'tjs': 'сом.', 'usd': 'долл.'},
+                    'from_who': 'Қабул карда шуд аз', 'basis': 'Асос', 'sum': 'Маблағ', 'in_words': '(бо хат нависед)',
+                    'rate': 'Қурб', 'attach': 'Замима', 'chief': 'Сармуҳосиб (муҳосиби калон)', 'cashier': 'Хазинадор (гирифт)',
+                    'cut': 'х а т т и   б у р и ш', 'receipt': 'Р А С И Д', 'to_order': 'Ба ордери даромади хазинавии №',
+                    'stamp': 'Ҷ.М.'}"/>
+                <t t-call="web.basic_layout"><t t-call="construction_finance.cash_receipt_body"/></t>
+            </t>
+        </t>
+    </template>
+
+    <template id="report_cash_receipt_ru">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-set="L" t-value="{'lang': 'ru', 'org_hint': '(организация)', 'form': 'Форма № КО-1',
+                    'title': 'ПРИХОДНЫЙ КАССОВЫЙ ОРДЕР №', 'day': 'День', 'month': 'Месяц', 'year': 'Год',
+                    'months': ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'],
+                    'c1': '№ п/п', 'c2': 'Корреспондирующий счёт, субсчёт', 'c3': 'Код аналитического учёта',
+                    'c4': 'Сумма', 'c5': 'Код целевого назначения', 'cur_short': {'tjs': 'сом.', 'usd': 'долл.'},
+                    'from_who': 'Принято от', 'basis': 'Основание', 'sum': 'Сумма', 'in_words': '(прописью)',
+                    'rate': 'Курс', 'attach': 'Приложение', 'chief': 'Главный бухгалтер', 'cashier': 'Получил кассир',
+                    'cut': 'л и н и я   о т р е з а', 'receipt': 'КВИТАНЦИЯ', 'to_order': 'к приходному кассовому ордеру №',
+                    'stamp': 'М.П.'}"/>
+                <t t-call="web.basic_layout"><t t-call="construction_finance.cash_receipt_body"/></t>
+            </t>
+        </t>
+    </template>
+
+    <!-- ===================== Расход: содирнома / КО-2 ===================== -->
+    <template id="cash_expense_body">
+        <t t-set="org" t-value="(o.project_id.seller_name_tj if L['lang'] == 'tj' else False) or (o.project_id.company_id or res_company).name"/>
+        <t t-set="d" t-value="o.date"/>
+        <t t-set="month" t-value="(L['months'])[d.month - 1]"/>
+        <div class="page ko" style="width: 100%;">
+            <t t-call="construction_finance.cash_style"/>
+            <table class="f"><tr>
+                <td><div class="line" t-esc="org"/><div class="hint" t-esc="L['org_hint']"/></td>
+                <td style="width: 26%; text-align: right; vertical-align: top;" t-esc="L['form']"/>
+            </tr></table>
+            <table style="width: 100%; margin-top: 14px;"><tr>
+                <td style="font-weight: bold; font-size: 15px;"><t t-esc="L['title']"/> <t t-esc="o.name"/></td>
+                <td style="width: 34%;">
+                    <table class="g"><tr><td t-esc="L['day']"/><td t-esc="L['month']"/><td t-esc="L['year']"/></tr>
+                        <tr><td t-esc="'%02d' % d.day"/><td t-esc="month"/><td t-esc="d.year"/></tr></table>
+                </td>
+            </tr></table>
+            <table class="g" style="margin-top: 12px;">
+                <tr><td style="width: 10%;" t-esc="L['c1']"/><td t-esc="L['c2']"/><td t-esc="L['c3']"/>
+                    <td style="width: 20%;" t-esc="L['c4']"/><td t-esc="L['c5']"/></tr>
+                <tr style="height: 26px;"><td/><td/><td/>
+                    <td style="font-weight: bold;"><t t-esc="o._money(o.amount)"/> <t t-esc="L['cur_short'][o.pay_currency]"/></td><td/></tr>
+            </table>
+            <table class="f" style="margin-top: 8px;">
+                <tr><td class="lbl" style="width: 1%;" t-esc="L['to_who']"/><td><div class="line"><b t-esc="o.recipient"/></div>
+                    <div class="hint" t-esc="L['name_hint']"/></td></tr>
+                <tr><td class="lbl" t-esc="L['basis']"/><td><div class="line" t-esc="o.basis"/></td></tr>
+                <tr><td class="lbl" t-esc="L['sum']"/><td><div class="line" t-esc="o._words(L['lang'])"/>
+                    <div class="hint" t-esc="L['in_words']"/></td></tr>
+                <tr><td class="lbl" t-esc="L['attach']"/><td><div class="line" t-esc="o.attachment or ''"/></td></tr>
+            </table>
+            <table class="f" style="margin-top: 16px;"><tr>
+                <td class="lbl" style="width: 1%;" t-esc="L['head']"/><td style="width: 35%;"><div class="line" t-esc="o.project_id.director_short or ''"/></td>
+                <td class="lbl" style="width: 1%; padding-left: 20px;" t-esc="L['chief']"/><td><div class="line" t-esc="o.project_id.chief_accountant or ''"/></td>
+            </tr></table>
+            <table class="f" style="margin-top: 12px;">
+                <tr><td class="lbl" style="width: 1%;" t-esc="L['got']"/><td><div class="line" t-esc="o._words(L['lang'])"/>
+                    <div class="hint" t-esc="L['in_words']"/></td></tr>
+            </table>
+            <table class="f" style="margin-top: 6px;"><tr>
+                <td style="width: 40%;"><t t-esc="'%02d' % d.day"/> <t t-esc="month"/> <t t-esc="d.year"/></td>
+                <td class="lbl" style="width: 1%;" t-esc="L['sign']"/><td><div class="line"/></td>
+            </tr></table>
+            <table class="f" style="margin-top: 8px;">
+                <tr><td class="lbl" style="width: 1%;" t-esc="L['doc']"/><td><div class="line" t-esc="o.id_document or ''"/>
+                    <div class="hint" t-esc="L['doc_hint']"/></td></tr>
+                <tr><td class="lbl" t-esc="L['issued']"/><td><div class="line" t-esc="o.project_id.cashier_name or o.user_id.name"/></td></tr>
+            </table>
+        </div>
+    </template>
+
+    <template id="report_cash_expense_tj">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-set="L" t-value="{'lang': 'tj', 'org_hint': '(корхона, ташкилот)', 'form': 'Шакли № КО-2',
+                    'title': 'СОДИРНОМАИ ХАЗИНАВӢ №', 'day': 'Рӯз', 'month': 'Моҳ', 'year': 'Сол',
+                    'months': ['январи', 'феврали', 'марти', 'апрели', 'майи', 'июни', 'июли', 'августи', 'сентябри', 'октябри', 'ноябри', 'декабри'],
+                    'c1': '№ б/т', 'c2': 'Суратҳисоби корреспондентӣ, субсчет', 'c3': 'Рамзи ҳисобии таҳлилӣ',
+                    'c4': 'Маблағ', 'c5': 'Рамзи таъиноти мақсаднок', 'cur_short': {'tjs': 'сом.', 'usd': 'долл.'},
+                    'to_who': 'Дода шуд ба', 'name_hint': 'ному насаб', 'basis': 'Асос', 'sum': 'Маблағ',
+                    'in_words': '(бо хат нависед)', 'attach': 'Замима', 'head': 'Роҳбар', 'chief': 'Сармуҳосиб',
+                    'got': 'Қабул кард', 'sign': 'Имзо', 'doc': 'Ҳуҷҷат',
+                    'doc_hint': 'ном, рақам, ҷой ва санаи гирифтани ҳуҷҷат', 'issued': 'Содир кард: хазинадор'}"/>
+                <t t-call="web.basic_layout"><t t-call="construction_finance.cash_expense_body"/></t>
+            </t>
+        </t>
+    </template>
+
+    <template id="report_cash_expense_ru">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-set="L" t-value="{'lang': 'ru', 'org_hint': '(организация)', 'form': 'Форма № КО-2',
+                    'title': 'РАСХОДНЫЙ КАССОВЫЙ ОРДЕР №', 'day': 'День', 'month': 'Месяц', 'year': 'Год',
+                    'months': ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'],
+                    'c1': '№ п/п', 'c2': 'Корреспондирующий счёт, субсчёт', 'c3': 'Код аналитического учёта',
+                    'c4': 'Сумма', 'c5': 'Код целевого назначения', 'cur_short': {'tjs': 'сом.', 'usd': 'долл.'},
+                    'to_who': 'Выдать', 'name_hint': 'фамилия, имя, отчество', 'basis': 'Основание', 'sum': 'Сумма',
+                    'in_words': '(прописью)', 'attach': 'Приложение', 'head': 'Руководитель', 'chief': 'Главный бухгалтер',
+                    'got': 'Получил', 'sign': 'Подпись', 'doc': 'По',
+                    'doc_hint': 'наименование, номер, дата и место выдачи документа', 'issued': 'Выдал кассир'}"/>
+                <t t-call="web.basic_layout"><t t-call="construction_finance.cash_expense_body"/></t>
+            </t>
+        </t>
+    </template>
+
+    <template id="report_cash_book">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page" style="font-size: 12px;"><t t-out="o.book_html"/></div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

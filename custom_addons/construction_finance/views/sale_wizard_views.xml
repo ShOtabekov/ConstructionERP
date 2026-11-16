@@ -35,6 +35,14 @@
                                    placeholder="или введите нового клиента"/>
                             <field name="new_partner_phone" invisible="partner_id"
                                    placeholder="+992 ..."/>
+                            <label for="passport_series" string="Паспорт"/>
+                            <div class="o_row">
+                                <field name="passport_series" placeholder="серия" style="max-width: 70px;"/>
+                                <field name="passport_number" placeholder="номер"/>
+                            </div>
+                            <field name="passport_issued_by" placeholder="ШВКД ш. Хуҷанд"/>
+                            <field name="passport_issue_date"/>
+                            <field name="residence" placeholder="ш. Хуҷанд, ..."/>
                             <field name="contract_date"/>
                         </group>
                     </group>

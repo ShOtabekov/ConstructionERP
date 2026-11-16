@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="seq_construction_cash_receipt" model="ir.sequence">
+            <field name="name">Приходный кассовый ордер</field>
+            <field name="code">construction.cash.receipt</field>
+            <field name="padding">1</field>
+        </record>
+        <record id="seq_construction_cash_expense" model="ir.sequence">
+            <field name="name">Расходный кассовый ордер</field>
+            <field name="code">construction.cash.expense</field>
+            <field name="padding">1</field>
+        </record>
+    </data>
+    <function model="construction.project" name="_fill_print_defaults"/>
+</odoo>

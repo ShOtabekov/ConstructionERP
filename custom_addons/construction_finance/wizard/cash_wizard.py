@@ -190,6 +190,17 @@ class ConstructionCashWizard(models.TransientModel):
         tjs = self.env.ref("base.TJS")
         if not tjs.active:
             tjs.sudo().active = True
+        receipt = self.env["construction.cash.receipt"].create({
+            "date": self.payment_date,
+            "partner_id": self.plan_id.partner_id.id,
+            "contract_id": self.plan_id.contract_id.id,
+            "method_id": self.method_id.id,
+            "pay_currency": self.pay_currency,
+            "amount": self.amount,
+            "exchange_rate": self.exchange_rate if self.pay_currency == "tjs" else (
+                self.plan_id.project_id.usd_tjs_rate or 0.0),
+            "attachment": self.reference or False,
+        })
         payments = Payment
         for line, take in alloc:
             if self.pay_currency == "usd":
@@ -205,16 +216,18 @@ class ConstructionCashWizard(models.TransientModel):
                 "method_id": self.method_id.id,
                 "reference": self.reference,
                 "user_id": self.env.uid,
+                "receipt_id": receipt.id,
             })
             payments |= Payment.create(vals)
         payments.action_post()
 
+        receipt._compute_basis()
+
         return {
             "type": "ir.actions.act_window",
-            "name": _("Принятые платежи"),
-            "res_model": "construction.payment",
-            "view_mode": "list,form",
-            "views": [(False, "list"), (False, "form")],
-            "domain": [("id", "in", payments.ids)],
+            "name": _("Приходный ордер"),
+            "res_model": "construction.cash.receipt",
+            "view_mode": "form",
+            "res_id": receipt.id,
             "target": "current",
         }

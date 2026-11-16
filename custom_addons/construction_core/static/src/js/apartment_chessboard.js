@@ -47,9 +47,11 @@ export class ApartmentChessboard extends Component {
             planMode: "unit",
             cardLoading: false,
             busy: false,
+            gallery: [],
+            galleryIndex: -1,
         });
 
-        onWillStart(() => this.loadApartments());
+        onWillStart(() => Promise.all([this.loadApartments(), this.loadGallery()]));
     }
 
     // ------------------------------------------------------------------
@@ -84,6 +86,36 @@ export class ApartmentChessboard extends Component {
         } finally {
             this.state.loading = false;
         }
+    }
+
+    async loadGallery() {
+        try {
+            const project = this.state.project ? Number(this.state.project) : false;
+            this.state.gallery = await this.orm.call("construction.project", "get_gallery", [project]);
+        } catch {
+            this.state.gallery = [];
+        }
+    }
+
+    openGallery(index = 0) {
+        if (this.state.gallery.length) {
+            this.state.galleryIndex = index;
+        }
+    }
+
+    closeGallery() {
+        this.state.galleryIndex = -1;
+    }
+
+    stepGallery(delta) {
+        const n = this.state.gallery.length;
+        this.state.galleryIndex = (this.state.galleryIndex + delta + n) % n;
+    }
+
+    onGalleryKey(ev) {
+        if (ev.key === "ArrowRight") this.stepGallery(1);
+        else if (ev.key === "ArrowLeft") this.stepGallery(-1);
+        else if (ev.key === "Escape") this.closeGallery();
     }
 
     async loadCard(id) {
@@ -235,6 +267,7 @@ export class ApartmentChessboard extends Component {
     onProjectChange(event) {
         this.state.project = event.target.value;
         this.state.building = "";
+        this.loadGallery();
     }
 
     onSearchInput(event) {

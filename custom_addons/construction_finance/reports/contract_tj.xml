@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="paperformat_construction_doc" model="report.paperformat">
+        <field name="name">Строительство: документ A4</field>
+        <field name="format">A4</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">15</field>
+        <field name="margin_bottom">15</field>
+        <field name="margin_left">20</field>
+        <field name="margin_right">12</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">0</field>
+        <field name="dpi">96</field>
+    </record>
+
+    <record id="action_report_contract_tj" model="ir.actions.report">
+        <field name="name">Шартнома (тоҷикӣ)</field>
+        <field name="model">construction.contract</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">construction_finance.report_contract_tj</field>
+        <field name="report_file">construction_finance.report_contract_tj</field>
+        <field name="print_report_name">'Шартнома %s' % (object.number_print)</field>
+        <field name="paperformat_id" ref="paperformat_construction_doc"/>
+        <field name="binding_model_id" ref="construction_sales.model_construction_contract"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <record id="action_report_schedule_tj" model="ir.actions.report">
+        <field name="name">Замимаи 1 — нақшаи пардохт (тоҷикӣ)</field>
+        <field name="model">construction.contract</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">construction_finance.report_schedule_tj</field>
+        <field name="report_file">construction_finance.report_schedule_tj</field>
+        <field name="print_report_name">'Замима 1 %s' % (object.number_print)</field>
+        <field name="paperformat_id" ref="paperformat_construction_doc"/>
+        <field name="binding_model_id" ref="construction_sales.model_construction_contract"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <record id="action_report_schedule_ru" model="ir.actions.report">
+        <field name="name">Приложение 1 — график платежей (рус.)</field>
+        <field name="model">construction.contract</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">construction_finance.report_schedule_ru</field>
+        <field name="report_file">construction_finance.report_schedule_ru</field>
+        <field name="print_report_name">'Приложение 1 %s' % (object.number_print)</field>
+        <field name="paperformat_id" ref="paperformat_construction_doc"/>
+        <field name="binding_model_id" ref="construction_sales.model_construction_contract"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <!-- ===================== Шартнома ===================== -->
+    <template id="report_contract_tj">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-set="apt" t-value="o.apartment_id"/>
+                <t t-set="pr" t-value="o.project_id"/>
+                <t t-set="p" t-value="o.partner_id"/>
+                <t t-set="blank" t-value="'____________'"/>
+                <t t-set="block" t-value="(apt.unit_code or '').split('-')[0]"/>
+                <t t-call="web.basic_layout">
+                    <div class="page" style="font-family: 'Times New Roman', serif; font-size: 13.5px; line-height: 1.4; text-align: justify;">
+                        <style>.page p { margin: 0 0 5px; }</style>
+                        <div style="text-align: center; font-weight: bold; font-size: 15px;">
+                            ШАРТНОМАИ<br/>ИШТИРОКИ ҲИССАГӢ ДАР СОХТМОН № <t t-esc="o.number_print"/>
+                        </div>
+                        <table style="width: 100%; margin: 10px 0 12px;"><tr>
+                            <td>аз <t t-esc="o._tj_date(o.contract_date)"/></td>
+                            <td style="text-align: right;" t-esc="pr.contract_city_tj or 'ш. Хуҷанд'"/>
+                        </tr></table>
+
+                        <p style="text-indent: 30px;"><b t-esc="pr.seller_name_tj or (pr.company_id or res_company).name"/>,
+                            дар шахсияти роҳбар <t t-esc="pr.director_name or blank"/>, ки дар асоси оиннома амал
+                            менамояд, минбаъд «Ширкати сохтмонӣ» номида мешавад, аз як тараф ва шаҳрванди
+                            Ҷумҳурии Тоҷикистон <b t-esc="p.name"/>, дорандаи шиносномаи силсилаи
+                            <t t-esc="p.passport_series or '____'"/> <t t-esc="p.passport_number or blank"/>,
+                            ки аз тарафи <t t-esc="p.passport_issued_by or blank"/> аз санаи
+                            <t t-esc="p.passport_issue_date and p.passport_issue_date.strftime('%d.%m.%Y') or blank"/> дода шудааст,
+                            истиқоматкунандаи <t t-esc="p.residence or '________________________'"/>, минбаъд «Ҳиссагузор»
+                            номида мешавад, аз тарафи дигар, дар оянда «Тарафҳо» номбурда мешаванд, дар асоси
+                            қонунгузории амалкунанда ва дигар санадҳои меъёрии ҳуқуқии Ҷумҳурии Тоҷикистон,
+                            инчунин дар асоси <t t-esc="pr.permit_text_tj or blank"/> шартномаи мазкурро доир ба
+                            масъалаҳои зерин ба имзо расониданд.</p>
+
+                        <p style="text-align: center; font-weight: bold; margin-top: 10px;">1. МАТЛАБИ ШАРТНОМА</p>
+                        <p>1.1. Дар асоси Шартномаи мазкур Тарафҳо дар назди худ мақсад гузоштанд, ки бо муттаҳид
+                            намудани саҳмҳои худ бинои истиқоматии бисёрошёна воқеъ дар суроғаи
+                            <t t-esc="pr.object_address_tj or blank"/> (минбаъд «Иншоот») созанд.</p>
+                        <p>1.2. Мувофиқи иродаи Тарафҳо, «Ширкати сохтмонӣ» ӯҳдадор мешавад, ки сохтмони Иншоотро ба
+                            анҷом расонад ва «Ҳиссагузор» бошад ӯҳдадор мешавад дар ҳаҷми ҳиссаи худ, ки дар банди 1.3.
+                            Шартномаи мазкур муқаррар карда шудааст, дар маблағгузории сохтмони Иншоот иштирок намояд.
+                            «Ҳиссагузор» баъди ба анҷом расидани сохтмони Иншоот ҳуқуқи талаб намудан аз «Ширкати
+                            сохтмонӣ» барасмиятдарории ба номи «Ҳиссагузор» ҳуқуқи моликият ба
+                            <t t-if="apt.unit_type == 'shop'">бинои ғайриистиқоматӣ (мағоза)</t>
+                            <t t-else="">хонаи истиқоматии <t t-esc="apt.rooms"/>-ҳуҷрагӣ</t>
+                            бо масоҳати умумии <b><t t-esc="o._money(apt.area_total)"/> м²</b>, ки дар ошёнаи
+                            <t t-esc="apt.floor_id.number"/> (<t t-esc="o._tj_int_words(apt.floor_id.number)"/>)-и
+                            блоки <t t-esc="block"/>, ҳуҷраи <t t-esc="apt.number"/> воқеъ мебошад, ба даст меорад.</p>
+                        <table class="table table-sm table-bordered" style="width: 100%; text-align: center; margin: 6px 0 10px; font-size: 13px;">
+                            <tr style="font-weight: bold;"><td>Блок</td><td>Рақами даромадгоҳ</td><td>Рақами ошёна</td>
+                                <td>Рақами квартира</td><td>Масоҳати умумӣ</td></tr>
+                            <tr><td t-esc="block"/>
+                                <td t-esc="''.join(c for c in (apt.entrance_id.name or '1') if c.isdigit()) or '1'"/>
+                                <td t-esc="apt.floor_id.number"/>
+                                <td><t t-esc="apt.number"/> (<t t-esc="apt.unit_code"/>)</td>
+                                <td><t t-esc="o._money(apt.area_total)"/> м²</td></tr>
+                        </table>
+                        <p>1.3. Маблағи ҳиссаи «Ҳиссагузор» дар ҳаҷми <b><t t-esc="o._money(o.price_usd)"/></b>
+                            (<t t-esc="o._tj_money_words(o.price_usd)"/>) доллари ИМА, аз ҳисоби
+                            <b><t t-esc="o._money(o.contract_price_per_sqm)"/></b>
+                            (<t t-esc="o._tj_money_words(o.contract_price_per_sqm)"/>) доллари ИМА барои 1 м² масоҳати
+                            умумӣ муайян карда мешавад. Дар ҳолати кам ё зиёд будани масоҳати воқеии хона баъди ба анҷом
+                            расидани сохтмон аз масоҳате, ки дар банди 1.2. Шартномаи мазкур нишон дода шудааст, арзиши
+                            ҳиссаи «Ҳиссагузор» дар доираи чунин фарқият тағйир дода мешавад ва маблағи фарқият
+                            мутаносибан пардохт ё баргардонида мешавад.</p>
+                        <p>1.4. Санаи ба итмом расидани корҳои сохтмонӣ-васлкунии Иншоот ва ба истифода додани он
+                            <t t-esc="pr.completion_text_tj or blank"/> мебошад. Мӯҳлати ба итмом расидани сохтмони
+                            Иншоот мумкин аст на зиёда аз 6 моҳ дароз карда шавад.</p>
+
+                        <p style="text-align: center; font-weight: bold; margin-top: 10px;">2. ТАРТИБИ ГУЗОШТАНИ ҲИССА</p>
+                        <p>2.1. Маблағи ҳиссае, ки дар банди 1.3. Шартномаи мазкур муайян карда шудааст, қатъӣ мебошад
+                            ва аз ҷониби Тарафҳо тағйир дода намешавад.</p>
+                        <p>2.2. Ҳиссаи «Ҳиссагузор» пас аз имзо намудани Шартномаи мазкур тибқи нақшаи пардохти ҳисса
+                            (Замимаи 1) пардохт карда мешавад. Пардохти ҳисса бо асъори миллӣ аз рӯи қурби фурӯши
+                            доллари ИМА дар рӯзи пардохти ҳисса анҷом дода мешавад.</p>
+                        <p>2.3. Дар ҳолатҳое, ки дар бандҳои 1.3. ва 5.4. Шартномаи мазкур қайд карда шудаанд,
+                            «Ширкати сохтмонӣ» ӯҳдадор мешавад маблағи ҳиссаи аз ҷониби «Ҳиссагузор» пардохтшударо бо
+                            доллари ИМА ҳисоб намуда, аз рӯи қурби фурӯши доллари ИМА дар рӯзи баргардонидани
+                            маблағҳои пардохтшуда бо асъори миллӣ ба «Ҳиссагузор» баргардонад.</p>
+                        <p>2.4. Пардохти хароҷот вобаста ба барасмиятдарории нотариалӣ ва бақайдгирии давлатии хонае,
+                            ки дар банди 1.2. Шартномаи мазкур ифода ёфтааст, аз ҳисоби «Ҳиссагузор» анҷом дода мешавад.</p>
+
+                        <p style="text-align: center; font-weight: bold; margin-top: 10px;">3. ӮҲДАДОРИИ ТАРАФҲО</p>
+                        <p><b>3.1. Ӯҳдадориҳои «Ширкати сохтмонӣ»</b></p>
+                        <p>3.1.1. «Ширкати сохтмонӣ» ӯҳдадор мешавад дар муддати 1 моҳ пас аз ба истифода қабул намудани
+                            Иншоот мувофиқи қонунгузории амалкунанда ҳамаи ҳуҷҷатҳои лозимаи ҳуқуқиро тайёр намуда,
+                            ҳуқуқи моликиятро ба хонае, ки дар банди 1.2. Шартномаи мазкур нишон дода шудааст, ба номи
+                            «Ҳиссагузор» аз ҳисоби маблағҳои «Ҳиссагузор» барасмият дарорад.</p>
+                        <p>3.1.2. Корҳои сохтмонӣ пас аз ба анҷом расонидани корҳои зерин ба охир расида ҳисобида
+                            мешаванд: оро додани намои бино тибқи лоиҳа, пурра таъмир намудани даромади бино, ба охир
+                            расонидани печҳои зинапоя ва майдончаи зинапоя, гузоштани лифт, чароғон кардани майдонча ва
+                            печҳои зинапоя, гузоштани дарҳо ба даромади бино ва хонаҳо, гузоштани тирезаҳо, андоваи
+                            деворҳо, росткунии (стяжка) фарши хонаҳо, таъмин намудани Иншоот бо об ва барқ, ободонии
+                            гирду атрофи Иншоот.</p>
+                        <p><b>3.2. Ӯҳдадориҳои «Ҳиссагузор»</b></p>
+                        <p>3.2.1. «Ҳиссагузор» ӯҳдадор мешавад маблағи ҳиссаро, ки дар банди 1.3. нишон дода шудааст,
+                            қисман ва дар мӯҳлати дар банди 2.2. муайяншуда пардохт намояд.</p>
+                        <p>3.2.2. «Ҳиссагузор» дар сурати мавҷуд будани розигии хаттии «Ширкати сохтмонӣ» сохти дохилии
+                            хонаро танҳо бо риояи меъёрҳои сохтмонӣ дигар карда метавонад.</p>
+                        <p>3.2.3. «Ҳиссагузор» ҳуқуқ дорад то ба истифода додани бино танҳо мувофиқи ҳиссаи худ, ки дар
+                            банди 1.2. нишон дода шудааст, бо шахси сеюм барои гузашт намудани ҳиссааш шартнома бандад.</p>
+
+                        <p style="text-align: center; font-weight: bold; margin-top: 10px;">4. ТАРТИБИ БА ШАХСИ СЕЮМ ГУЗАШТАНИ САҲМИ «ҲИССАГУЗОР»</p>
+                        <p>4.1. Ҳангоми аз ҷониби «Ҳиссагузор» ба шахси сеюм гузашт намудани ҳиссааш аз рӯи банди 3.2.3.
+                            Шартномаи мазкур, дар ин хусус шартномаи иловагӣ ба ҳамин шартнома баста мешавад.</p>
+                        <p>4.2. Шахси сеюм ҳамаи ҳуқуқ ва ӯҳдадориҳои «Ҳиссагузор»-ро аз рӯи Шартномаи мазкур қабул
+                            мекунад. Гузариши ҳуқуқу ӯҳдадориҳои «Ҳиссагузор» ба шахси сеюм бо бастани шартномаи иловагӣ
+                            барасмият дароварда мешавад.</p>
+
+                        <p style="text-align: center; font-weight: bold; margin-top: 10px;">5. МАСЪУЛИЯТИ ТАРАФҲО</p>
+                        <p>5.1. «Ҳиссагузор» барои ба таври дахлдор пардохт накардани маблағи ҳисса масъулият бар дӯш дорад.</p>
+                        <p>5.2. «Ширкати сохтмонӣ» барои ба таври дахлдор иҷро накардани ӯҳдадориҳои худ, ки дар Шартномаи
+                            мазкур муқаррар карда шудаанд, ва бо сифати дахлдор иҷро накардани корҳои сохтмонию васлкунӣ
+                            масъулият бар дӯш дорад.</p>
+                        <p>5.3. Шартномаи мазкур метавонад бо розигии Тарафҳо ё яктарафа бекор карда шавад. Талабот дар
+                            бораи бекор кардани Шартномаи мазкур бояд дар шакли хаттӣ пешниҳод гардад.</p>
+                        <p>5.4. Дар ҳолати аз ҷониби «Ҳиссагузор» зиёда аз 2 моҳ пардохт накардани маблағи ҳиссааш тибқи
+                            банди 2.2. Шартномаи мазкур «Ширкати сохтмонӣ» метавонад Шартномаи мазкурро яктарафа бекор
+                            кунад. Дар ин ҳолат маблағҳои аз ҷониби «Ҳиссагузор» пардохтшуда дар ҳамон вақт баргардонида
+                            мешаванд, ки «Ширкати сохтмонӣ» хонаи мазкурро ба шахси дигар фурӯшад ва маблағашро қабул кунад.</p>
+
+                        <p style="text-align: center; font-weight: bold; margin-top: 10px;">6. ФОРС-МАЖОР</p>
+                        <p>6.1. Тарафҳо барои номуносиб ба иҷро расонидани шартнома зимни ба миён омадани ақаллан яке аз
+                            монеаҳои рафънопазир, ки дар зери он офати табиӣ, бетартибиҳои оммавӣ ва ё дигар ҳолатҳои
+                            ғайричашмдошт фаҳмида мешавад, аз ҷавобгарӣ озод карда мешаванд.</p>
+
+                        <p style="text-align: center; font-weight: bold; margin-top: 10px;">7. МУҚАРРАРОТИ ХОТИМАВӢ</p>
+                        <p>7.1. Тамоми баҳс ва нофаҳмиҳое, ки дар вақти амали Шартномаи мазкур байни Тарафҳо ба миён
+                            меоянд, бо роҳи гуфтушунид ҳал карда мешаванд. Зимни ба танзим надаровардани баҳс, он ба
+                            тариқи судӣ дар асоси қонунгузории Ҷумҳурии Тоҷикистон ҳал карда мешавад.</p>
+                        <p>7.2. Тамоми тағйироту иловаҳо ба Шартномаи мазкур дар шакли хаттӣ ба расмият дароварда мешаванд.</p>
+                        <p>7.3. Шартномаи мазкур баъд аз имзои он қувваи ҳуқуқӣ пайдо намуда, то иҷрои пурра ва дахлдори
+                            ӯҳдадориҳо аз ҷониби Тарафҳо амал менамояд.</p>
+                        <p>7.4. Шартномаи мазкур дар ду нусха тартиб дода шуда, ба имзо расонида мешавад, ки қувваи
+                            якхелаи ҳуқуқӣ доранд: нусхаи якум ба «Ҳиссагузор» дода мешавад, нусхаи дуюм дар
+                            <t t-esc="pr.seller_name_tj or (pr.company_id or res_company).name"/> нигоҳ дошта мешавад. Мазмун ва мафҳуми
+                            Шартномаи мазкур ба Тарафҳо фаҳмо мебошад ва ба мақсади онҳо мувофиқат менамояд.</p>
+
+                        <div style="page-break-inside: avoid;">
+                            <p style="text-align: center; font-weight: bold; margin-top: 10px;">8. СУРОҒА, МАЪЛУМОТ ВА ИМЗОИ ТАРАФҲО</p>
+                            <table style="width: 100%; font-size: 13px; vertical-align: top;"><tr>
+                                <td style="width: 50%; vertical-align: top; padding-right: 12px;">
+                                    <b>«Ширкати сохтмонӣ»</b><br/>
+                                    <t t-esc="pr.seller_name_tj or (pr.company_id or res_company).name"/><br/>
+                                    Суроғаи ҳуқуқӣ: <t t-esc="pr.seller_address_tj or ''"/><br/>
+                                    <t t-if="(pr.company_id or res_company).phone">Тел.: <t t-esc="(pr.company_id or res_company).phone"/><br/></t>
+                                    <br/>Роҳбар: <t t-esc="pr.director_short or ''"/><br/>
+                                    <br/>____________________ (имзо)<br/>Ҷ.М.
+                                </td>
+                                <td style="width: 50%; vertical-align: top;">
+                                    <b>«Ҳиссагузор»</b><br/>
+                                    <t t-esc="p.name"/><br/>
+                                    Шиноснома: <t t-esc="p.passport_series or ''"/> <t t-esc="p.passport_number or '__________'"/><br/>
+                                    Суроға: <t t-esc="p.residence or '______________________'"/><br/>
+                                    <t t-if="p.phone">Тел.: <t t-esc="p.phone"/><br/></t>
+                                    <br/><br/>____________________ (имзо)
+                                </td>
+                            </tr></table>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <!-- ===================== Замима 1 / Приложение 1 ===================== -->
+    <template id="schedule_body">
+        <t t-set="s" t-value="o._print_schedule()"/>
+        <t t-set="apt" t-value="o.apartment_id"/>
+        <t t-set="pr" t-value="o.project_id"/>
+        <div class="page" style="font-family: 'Times New Roman', serif; font-size: 13px;">
+            <div style="text-align: right; text-decoration: underline;">
+                <t t-esc="L['app']"/> <t t-esc="o.number_print"/>
+                <t t-esc="L['from']"/> <t t-esc="o.contract_date.strftime('%d.%m.%Y')"/> <t t-esc="L['y']"/>
+            </div>
+            <p style="margin: 14px 0 2px;"><t t-esc="L['client']"/>: <b t-esc="o.partner_id.name"/>
+                &#160;&#160;&#160;<b t-esc="apt.unit_code"/></p>
+            <p style="margin: 0 0 8px;"><t t-esc="L['phone']"/>: <t t-esc="o.partner_id.phone or ''"/></p>
+            <t t-set="usd" t-value="L['usd']"/>
+            <table style="width: 100%; border-collapse: collapse; font-size: 13px;" class="sched">
+                <style>.sched td { border: 1px solid #000; padding: 2px 6px; } .sched .r { text-align: right; } .sched .b td { font-weight: bold; }</style>
+                <tr class="b"><td style="width: 7%; text-align: center;">1</td><td style="width: 45%;" t-esc="L['area']"/>
+                    <td class="r" t-esc="o._money(apt.area_total)"/><td/><td style="width: 8%;"/></tr>
+                <tr class="b"><td style="text-align: center;">2</td><td t-esc="L['price']"/>
+                    <td class="r" t-esc="o._money(o.contract_price_per_sqm)"/>
+                    <td class="r"><t t-if="s['rows']"><t t-esc="len(s['rows'])"/> <t t-esc="L['months']"/></t></td>
+                    <td t-esc="usd"/></tr>
+                <tr class="b"><td style="text-align: center;">3</td><td t-esc="L['total']"/>
+                    <td class="r" t-esc="o._money(o.price_usd)"/><td/><td t-esc="usd"/></tr>
+                <tr class="b"><td style="text-align: center;">4</td><td t-esc="L['deposit']"/>
+                    <td/><td class="r" t-esc="o._money(s['deposit'])"/><td t-esc="usd"/></tr>
+                <tr class="b"><td style="text-align: center;">5</td><td t-esc="L['next']"/>
+                    <td class="r" t-esc="o._money(s['monthly'])"/><td class="r" t-esc="o._money(s['rest'])"/><td t-esc="usd"/></tr>
+                <tr t-foreach="s['rows']" t-as="r">
+                    <td class="r" t-esc="r['n']"/>
+                    <td style="text-align: center;" t-esc="r['date'].strftime('%d.%m.%Y')"/>
+                    <td class="r" t-esc="o._money(r['amount'])"/>
+                    <td class="r" t-esc="o._money(r['acc'])"/>
+                    <td t-esc="usd"/>
+                </tr>
+            </table>
+            <p style="margin-top: 12px;" t-esc="L['note']"/>
+            <table style="width: 100%; margin-top: 26px;"><tr>
+                <td style="width: 50%;"><b t-esc="pr.director_short or ''"/> ______________</td>
+                <td style="width: 50%;"><b t-esc="o._short_name(o.partner_id.name)"/> ______________</td>
+            </tr></table>
+        </div>
+    </template>
+
+    <template id="report_schedule_tj">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-set="L" t-value="{
+                    'app': 'Замимаи 1 ба шартномаи №', 'from': 'аз', 'y': 'с.',
+                    'client': 'Ному насаби мизоҷ', 'phone': '№ тел.',
+                    'area': 'Масоҳати ҳуҷраи аз Иморатсоз гиранда, м²', 'price': 'Нарх барои 1 м. мураббаъ',
+                    'months': 'моҳ', 'total': 'Ҳамаги маблағ', 'deposit': 'Пардохти аввала',
+                    'next': 'Пардохтҳои минбаъда', 'usd': 'долл',
+                    'note': 'Эзоҳ: Пардохти маблағ бо асъори миллӣ аз рӯи қурби фурӯши доллари ИМА дар рӯзи пардохт ҳисоб карда мешавад.'}"/>
+                <t t-call="web.basic_layout"><t t-call="construction_finance.schedule_body"/></t>
+            </t>
+        </t>
+    </template>
+
+    <template id="report_schedule_ru">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-set="L" t-value="{
+                    'app': 'Приложение 1 к договору №', 'from': 'от', 'y': 'г.',
+                    'client': 'Ф.И.О. клиента', 'phone': 'Тел.',
+                    'area': 'Площадь помещения, м²', 'price': 'Цена за 1 м²',
+                    'months': 'мес.', 'total': 'Общая сумма', 'deposit': 'Первоначальный взнос',
+                    'next': 'Последующие платежи', 'usd': 'долл',
+                    'note': 'Примечание: оплата в национальной валюте производится по курсу продажи доллара США на день платежа.'}"/>
+                <t t-call="web.basic_layout"><t t-call="construction_finance.schedule_body"/></t>
+            </t>
+        </t>
+    </template>
+</odoo>

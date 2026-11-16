@@ -14,6 +14,10 @@
                         <span class="o_stat o_state_sold"><b t-esc="stats.sold"/> продано</span>
                         <span t-if="stats.blocked" class="o_stat o_state_blocked"><b t-esc="stats.blocked"/> блок</span>
                     </div>
+                    <button t-if="state.gallery.length" class="btn btn-outline-secondary btn-sm o_gallery_btn ms-auto"
+                            t-on-click="() => this.openGallery(0)">
+                        <i class="fa fa-picture-o me-1"/> Фото ЖК (<t t-esc="state.gallery.length"/>)
+                    </button>
                 </div>
 
                 <!-- Filters -->
@@ -196,6 +200,23 @@
                     </div>
                 </t>
             </aside>
+
+            <!-- Gallery -->
+            <div t-if="state.galleryIndex >= 0" class="o_chess_gallery" tabindex="0"
+                 t-on-keydown="onGalleryKey" t-on-click.self="closeGallery">
+                <t t-set="img" t-value="state.gallery[state.galleryIndex]"/>
+                <button class="o_gal_close" t-on-click="closeGallery" title="Закрыть">×</button>
+                <button class="o_gal_nav o_gal_prev" t-on-click="() => this.stepGallery(-1)">‹</button>
+                <img class="o_gal_img" t-att-src="img.url" t-att-alt="img.name"/>
+                <button class="o_gal_nav o_gal_next" t-on-click="() => this.stepGallery(1)">›</button>
+                <div class="o_gal_strip">
+                    <t t-foreach="state.gallery" t-as="g" t-key="g.id">
+                        <img t-att-src="g.thumb" t-att-class="{ active: g_index === state.galleryIndex }"
+                             t-on-click="() => this.openGallery(g_index)"/>
+                    </t>
+                </div>
+                <div class="o_gal_counter"><t t-esc="state.galleryIndex + 1"/> / <t t-esc="state.gallery.length"/></div>
+            </div>
         </div>
     </t>
 </templates>

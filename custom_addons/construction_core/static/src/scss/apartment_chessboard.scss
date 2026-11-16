@@ -345,3 +345,25 @@ $chess-card-width: 420px;
         }
     }
 }
+
+// ---------- Gallery (3D renders) ----------
+.o_apartment_chessboard {
+    .o_chess_header { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+    .o_gallery_btn { white-space: nowrap; }
+}
+.o_chess_gallery {
+    position: fixed; inset: 0; z-index: 1060; background: rgba(10, 14, 22, 0.92);
+    display: flex; align-items: center; justify-content: center; outline: none;
+    .o_gal_img { max-width: 86vw; max-height: 74vh; border-radius: 8px; box-shadow: 0 10px 40px rgba(0,0,0,.5); }
+    .o_gal_close { position: absolute; top: 14px; right: 22px; font-size: 38px; line-height: 1;
+        color: #fff; background: none; border: 0; }
+    .o_gal_nav { position: absolute; top: 45%; font-size: 64px; color: #fff; background: none; border: 0;
+        padding: 0 18px; opacity: .8; &:hover { opacity: 1; } }
+    .o_gal_prev { left: 10px; }
+    .o_gal_next { right: 10px; }
+    .o_gal_strip { position: absolute; bottom: 18px; left: 0; right: 0; display: flex; gap: 6px;
+        justify-content: center; overflow-x: auto; padding: 0 20px;
+        img { height: 54px; border-radius: 4px; opacity: .55; cursor: pointer; border: 2px solid transparent;
+            &.active { opacity: 1; border-color: #fff; } } }
+    .o_gal_counter { position: absolute; top: 20px; left: 24px; color: #fff; font-size: 15px; }
+}
