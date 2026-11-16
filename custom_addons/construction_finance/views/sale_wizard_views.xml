@@ -18,7 +18,7 @@
                                    invisible="not list_price_usd"/>
                             <field name="list_price_usd" readonly="1"
                                    invisible="not list_price_usd"/>
-                            <field name="deal_price_per_sqm" class="fw-bold"/>
+                            <field name="deal_price_per_sqm" class="fw-bold" digits="[16, 2]"/>
                             <field name="price_usd" class="fw-bold"/>
                             <field name="discount_usd" readonly="1"
                                    invisible="not discount_usd"
