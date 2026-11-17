@@ -133,6 +133,7 @@ without_demo = all
         try { Invoke-WebRequest $url -UseBasicParsing -TimeoutSec 5 | Out-Null; break } catch { Start-Sleep 3 }
     }
     Start-Process $url
+    Remove-Item (Join-Path $App "setup\*.exe") -Force -ErrorAction SilentlyContinue
     Write-Host ""
     Write-Host "Готово. Логин: admin, пароль — тот, что вы ввели." -ForegroundColor Green
     Stop-Transcript | Out-Null

@@ -46,8 +46,8 @@ Source: "{#Stage}\backup.ps1";        DestDir: "{app}\tools"; Flags: ignoreversi
 Source: "{#Stage}\restore.ps1";       DestDir: "{app}\tools"; Flags: ignoreversion
 Source: "{#Stage}\uninstall.ps1";     DestDir: "{app}\tools"; Flags: ignoreversion
 Source: "{#Stage}\README-клиенту.txt"; DestDir: "{app}"; Flags: ignoreversion isreadme
-Source: "{#Stage}\postgresql-setup.exe"; DestDir: "{app}\setup"; Flags: ignoreversion deleteafterinstall
-Source: "{#Stage}\wkhtmltox-setup.exe";  DestDir: "{app}\setup"; Flags: ignoreversion deleteafterinstall
+Source: "{#Stage}\postgresql-setup.exe"; DestDir: "{app}\setup"; Flags: ignoreversion
+Source: "{#Stage}\wkhtmltox-setup.exe";  DestDir: "{app}\setup"; Flags: ignoreversion
 
 [Dirs]
 Name: "{app}\data"

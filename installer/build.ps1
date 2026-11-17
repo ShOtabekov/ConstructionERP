@@ -26,9 +26,16 @@ $Items = @(
   @{ Name = "python-$PY_VER.nupkg";      Url = "https://www.nuget.org/api/v2/package/python/$PY_VER" },
   @{ Name = $PG_FILE;                    Url = "https://get.enterprisedb.com/postgresql/postgresql-16.9-1-windows-x64.exe" },
   @{ Name = "wkhtmltox-0.12.6-1-win64.exe"; Url = "https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6-1/wkhtmltox-0.12.6-1.msvc2015-win64.exe" },
-  @{ Name = "WinSW-x64.exe";             Url = "https://github.com/winsw/winsw/releases/download/v2.12.0/WinSW-x64.exe" },
-  @{ Name = "innosetup-6.exe";           Url = "https://jrsoftware.org/download.php/is.exe" }
+  @{ Name = "WinSW-x64.exe";             Url = "https://github.com/winsw/winsw/releases/download/v2.12.0/WinSW-x64.exe" }
 )
+$Iscc = "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe"
+if (-not (Test-Path $Iscc)) {
+    # несколько адресов: сайт jrsoftware иногда не отдаёт файл скриптам
+    $Items += @{ Name = "innosetup-6.exe"; Url = @(
+        "https://files.jrsoftware.org/is/6/innosetup-6.4.3.exe",
+        "https://github.com/jrsoftware/issrc/releases/download/is-6_4_3/innosetup-6.4.3.exe",
+        "https://jrsoftware.org/download.php/is.exe") }
+}
 
 function Step($t) { Write-Host ""; Write-Host "==> $t" -ForegroundColor Cyan }
 
@@ -37,10 +44,16 @@ foreach ($i in $Items) {
     $dst = Join-Path $Dl $i.Name
     if (Test-Path $dst) { Write-Host "  есть: $($i.Name)"; continue }
     Write-Host "  качаю: $($i.Name)"
-    try { Invoke-WebRequest -Uri $i.Url -OutFile $dst -UseBasicParsing }
-    catch {
+    $ok = $false
+    foreach ($u in @($i.Url)) {
+        try {
+            Invoke-WebRequest -Uri $u -OutFile $dst -UseBasicParsing -UserAgent "Mozilla/5.0 (Windows NT 10.0; Win64; x64)" -MaximumRedirection 10
+            if ((Get-Item $dst).Length -gt 100KB) { $ok = $true; break }
+        } catch { }
         Remove-Item $dst -ErrorAction SilentlyContinue
-        throw "Не удалось скачать $($i.Name) ($($i.Url)). Скачайте вручную и положите в $Dl с этим именем."
+    }
+    if (-not $ok) {
+        throw "Не удалось скачать $($i.Name). Скачайте вручную ($(@($i.Url)[-1])) и положите в $Dl с именем $($i.Name)."
     }
 }
 
@@ -75,7 +88,6 @@ Copy-Item (Join-Path $Dl "WinSW-x64.exe") (Join-Path $Stage "StroyERP-service.ex
 Copy-Item (Join-Path $Here "files\*") $Stage -Recurse -Force
 
 Step "Inno Setup"
-$Iscc = "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe"
 if (-not (Test-Path $Iscc)) {
     Start-Process (Join-Path $Dl "innosetup-6.exe") -ArgumentList "/VERYSILENT /SUPPRESSMSGBOXES /NORESTART" -Wait
 }
