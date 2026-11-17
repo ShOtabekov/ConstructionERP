@@ -57,19 +57,26 @@ foreach ($i in $Items) {
     }
 }
 
+# Дальше запускаются внешние программы (python, pip, ISCC): их предупреждения в stderr
+# не должны останавливать сборку — ошибки проверяем по коду возврата.
+$ErrorActionPreference = "Continue"
+
 Step "Python $PY_VER + библиотеки Odoo"
 $PyDir = Join-Path $Stage "python"
 if (-not (Test-Path "$PyDir\python.exe")) {
     $tmp = Join-Path $env:TEMP "stroyerp_py"
     Remove-Item $tmp -Recurse -Force -ErrorAction SilentlyContinue
-    Expand-Archive -Path (Join-Path $Dl "python-$PY_VER.nupkg") -DestinationPath $tmp -Force
+    $zip = Join-Path $env:TEMP "stroyerp_python.zip"      # .nupkg — это zip, но Expand-Archive хочет расширение .zip
+    Copy-Item (Join-Path $Dl "python-$PY_VER.nupkg") $zip -Force
+    Expand-Archive -Path $zip -DestinationPath $tmp -Force
+    Remove-Item $zip -Force
     Copy-Item "$tmp\tools" $PyDir -Recurse
     & "$PyDir\python.exe" -m ensurepip --upgrade | Out-Null
 }
 & "$PyDir\python.exe" -m pip install --upgrade pip wheel setuptools --no-warn-script-location -q
+if ($LASTEXITCODE -ne 0) { throw "Не удалось обновить pip" }
 & "$PyDir\python.exe" -m pip install -r (Join-Path $OdooSrc "requirements.txt") --no-warn-script-location -q
 if ($LASTEXITCODE -ne 0) { throw "pip install завершился с ошибкой" }
-& "$PyDir\python.exe" -c "import odoo" 2>$null  # (проверка ниже, после копирования Odoo)
 
 Step "Odoo 19 и модули"
 $OdooDst = Join-Path $Stage "odoo"
