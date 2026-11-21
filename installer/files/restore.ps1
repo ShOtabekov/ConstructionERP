@@ -22,6 +22,10 @@ try {
     $f.Add((New-Object System.Net.Http.StringContent($master)), "master_pwd")
     $f.Add((New-Object System.Net.Http.StringContent($db)), "name")
     $client.PostAsync("http://127.0.0.1:$port/web/database/drop", $f).Result | Out-Null
+    # Odoo на Windows не всегда удаляет папку файлов; тогда восстановленные файлы
+    # попадают во вложенную папку filestore и фото/планировки не открываются.
+    $Store = Join-Path $App "data\filestore\$db"
+    if (Test-Path $Store) { Remove-Item $Store -Recurse -Force -ErrorAction SilentlyContinue }
     $f = New-Object System.Net.Http.MultipartFormDataContent
     $f.Add((New-Object System.Net.Http.StringContent($master)), "master_pwd")
     $f.Add((New-Object System.Net.Http.StringContent($db)), "name")
@@ -29,6 +33,11 @@ try {
     $bytes = New-Object System.Net.Http.ByteArrayContent(,[IO.File]::ReadAllBytes($dlg.FileName))
     $f.Add($bytes, "backup_file", [IO.Path]::GetFileName($dlg.FileName))
     $client.PostAsync("http://127.0.0.1:$port/web/database/restore", $f).Result | Out-Null
+    $Nested = Join-Path $Store "filestore"
+    if (Test-Path $Nested) {
+        robocopy $Nested $Store /E /MOVE /NFL /NDL /NJH /NJS | Out-Null
+        Remove-Item $Nested -Recurse -Force -ErrorAction SilentlyContinue
+    }
     [System.Windows.Forms.MessageBox]::Show("Готово. Данные восстановлены.", "Восстановление") | Out-Null
 }
 catch { [System.Windows.Forms.MessageBox]::Show("Ошибка: $($_.Exception.Message)", "Восстановление") | Out-Null }
