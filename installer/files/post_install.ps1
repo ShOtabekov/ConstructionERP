@@ -18,10 +18,36 @@ $Db      = "stroyerp"
 $env:PYTHONUTF8 = "1"
 $env:PYTHONIOENCODING = "utf-8"
 
+function Test-PortBusy([int]$port) {
+    [bool](Get-NetTCPConnection -State Listen -LocalPort $port -ErrorAction SilentlyContinue)
+}
+function Get-FreePort([int]$start) {
+    for ($cand = $start; $cand -lt $start + 50; $cand++) { if (-not (Test-PortBusy $cand)) { return $cand } }
+    throw "Нет свободного порта начиная с $start"
+}
+function Get-ConfValue([string]$key) {
+    if (-not (Test-Path $Conf)) { return $null }
+    $line = Get-Content $Conf | Where-Object { $_ -match "^\s*$key\s*=" } | Select-Object -First 1
+    if ($line) { return ($line -split "=", 2)[1].Trim() }
+    return $null
+}
+
 try {
+    # Порты: другие программы на компьютере могут уже занимать 5433 / 8069
+    $pgInstalled = [bool](Get-Service $PgSvc -ErrorAction SilentlyContinue)
+    $odooInstalled = [bool](Get-Service StroyERP -ErrorAction SilentlyContinue)
+    $oldPg = Get-ConfValue "db_port"; $oldHttp = Get-ConfValue "http_port"
+    if ($pgInstalled -and $oldPg) { $P.pg_port = [int]$oldPg }
+    elseif (Test-PortBusy ([int]$P.pg_port)) { $P.pg_port = Get-FreePort ([int]$P.pg_port + 1) }
+    if ($odooInstalled -and $oldHttp) { $P.http_port = [int]$oldHttp }
+    elseif (Test-PortBusy ([int]$P.http_port)) { $P.http_port = Get-FreePort ([int]$P.http_port + 1) }
+    Write-Host "Порт базы: $($P.pg_port), порт программы: $($P.http_port)"
+    $UrlFile = Join-Path $App "Строительная ERP.url"
+    [IO.File]::WriteAllText($UrlFile, "[InternetShortcut]`r`nURL=http://127.0.0.1:$($P.http_port)/odoo`r`nIconFile=$App\stroyerp.ico`r`nIconIndex=0`r`n", (New-Object Text.UTF8Encoding($false)))
+
     # ------------------------------------------------------------------ 1
     Step 1 "PostgreSQL (2–5 минут)"
-    if (-not (Get-Service $PgSvc -ErrorAction SilentlyContinue)) {
+    if (-not $pgInstalled) {
         $pgArgs = @(
             "--mode", "unattended", "--unattendedmodeui", "none",
             "--prefix", "`"$PgDir`"", "--datadir", "`"$PgData`"",
