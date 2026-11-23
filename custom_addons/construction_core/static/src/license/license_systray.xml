@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="construction_core.LicenseSystray">
+        <div t-if="visible" class="o_construction_license d-flex align-items-center">
+            <button t-att-class="'badge border-0 mx-1 ' + cls" style="font-size:13px;padding:6px 10px"
+                    t-on-click="open" t-esc="label"/>
+        </div>
+    </t>
+</templates>
