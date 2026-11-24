@@ -130,7 +130,7 @@ class ConstructionSaleWizard(models.TransientModel):
         for wiz in self:
             reservation = wiz.reservation_id.sudo()
             apt = wiz.apartment_id
-            if reservation:
+            if reservation and reservation.price_usd:
                 wiz.list_price_usd = reservation.price_usd
             elif apt.unit_type == "shop" and apt.area_total and wiz.area_total:
                 wiz.list_price_usd = round(

@@ -338,11 +338,7 @@ class ConstructionReservation(models.Model):
                     _("This apartment already has a confirmed contract.")
                 )
 
-            if apartment.total_price_usd <= 0:
-                raise UserError(
-                    _("Apartment USD price must be greater than zero.")
-                )
-
+            # Цены в прайсе может не быть — цена вводится при продаже.
             if apartment.usd_tjs_rate <= 0:
                 raise UserError(
                     _("A valid USD/TJS exchange rate is required.")
