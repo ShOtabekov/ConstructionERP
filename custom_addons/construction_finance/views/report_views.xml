@@ -338,7 +338,7 @@
                             <tr><td style="width: 30%;">Продавец</td><td><t t-esc="company.name"/></td></tr>
                             <tr><td>Покупатель</td><td><t t-esc="o.partner_id.name"/>
                                 <t t-if="o.partner_id.phone">, тел. <t t-esc="o.partner_id.phone"/></t></td></tr>
-                            <tr><td>Объект</td><td><t t-esc="o.apartment_id.name"/>, <t t-esc="o.building_id.name"/>,
+                            <tr><td>Объект</td><td><t t-esc="o.apartment_id.name"/>,
                                 <t t-esc="o.project_id.name"/>, <t t-esc="fmt(o.area_total)"/> м²</td></tr>
                             <tr><td>Цена договора</td><td><b><t t-esc="fmt(o.price_usd)"/> USD</b></td></tr>
                         </table>

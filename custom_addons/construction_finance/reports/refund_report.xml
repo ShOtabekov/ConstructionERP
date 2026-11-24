@@ -29,7 +29,7 @@
                         <p><b t-esc="company.name"/> («Продавец») и <b t-esc="o.partner_id.name"/>
                             («Покупатель») договорились о следующем:</p>
                         <p>1. Расторгнуть договор купли-продажи № <t t-esc="c.name"/> в отношении объекта:
-                            <t t-esc="o.apartment_id.name"/>, <t t-esc="o.apartment_id.building_id.name"/>,
+                            <t t-esc="o.apartment_id.name"/>,
                             <t t-esc="o.project_id.name"/>, площадь <t t-esc="fmt(o.apartment_id.area_total)"/> м²,
                             с <t t-esc="o.date.strftime('%d.%m.%Y')"/>.</p>
                         <p>2. На дату расторжения Покупатель внёс <b><t t-esc="fmt(o.paid_usd)"/> USD</b>.</p>

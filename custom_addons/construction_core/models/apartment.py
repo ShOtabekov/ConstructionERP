@@ -8,6 +8,7 @@ class ConstructionApartment(models.Model):
     _name = "construction.apartment"
     _description = "Construction Apartment"
     _order = "floor_id, number"
+    _rec_names_search = ["name", "number"]
 
     _apartment_number_unique = models.Constraint(
         "UNIQUE(floor_id, number)",
@@ -184,20 +185,24 @@ class ConstructionApartment(models.Model):
 
     active = fields.Boolean(default=True)
 
-    @api.depends("number", "floor_id.number", "unit_type")
+    @api.depends("number", "floor_id.number", "unit_type", "building_id.name")
     def _compute_name(self):
+        """«Блок А 03 этаж квартира 03» / «Блок А 01 этаж магазин 02»."""
         for record in self:
-            floor_number = (
-                record.floor_id.number
-                if record.floor_id
-                else ""
-            )
-            prefix = "Маг." if record.unit_type == "shop" else "Кв."
-            record.name = (
-                f"{prefix} {record.number}, {floor_number} этаж"
-                if record.number
-                else False
-            )
+            if not record.number:
+                record.name = False
+                continue
+            floor = record.floor_id.number or 0
+            digits = "".join(ch for ch in record.number if ch.isdigit())
+            fl = str(floor)
+            if floor and digits.startswith(fl) and len(digits) > len(fl):
+                pos = "%02d" % int(digits[len(fl):])
+            else:
+                pos = record.number
+            kind = "магазин" if record.unit_type == "shop" else "квартира"
+            parts = [record.building_id.name or "", "%02d этаж" % floor if floor else "",
+                     "%s %s" % (kind, pos)]
+            record.name = " ".join(p for p in parts if p)
 
     def _plan_data(self):
         """Floor plan image URL and marker position, or None."""

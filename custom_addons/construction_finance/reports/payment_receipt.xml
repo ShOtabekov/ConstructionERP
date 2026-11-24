@@ -29,7 +29,6 @@
                                     <t t-esc="o.contract_id.contract_date.strftime('%d.%m.%Y')"/></td></tr>
                             <tr><td>Помещение</td>
                                 <td><span t-field="o.contract_id.apartment_id.name"/>,
-                                    <span t-field="o.contract_id.building_id.name"/>,
                                     <span t-field="o.project_id.name"/></td></tr>
                             <tr><td>Назначение</td><td><span t-field="o.schedule_id.name"/></td></tr>
                             <tr><td>Способ оплаты</td><td><span t-field="o.method_id.name"/></td></tr>
