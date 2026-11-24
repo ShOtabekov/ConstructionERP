@@ -25,7 +25,7 @@
                                 <td t-esc="o.payment_date.strftime('%d.%m.%Y')"/></tr>
                             <tr><td>Принято от</td><td><span t-field="o.partner_id.name"/></td></tr>
                             <tr><td>Договор</td>
-                                <td><span t-field="o.contract_id.name"/> от
+                                <td>№ <span t-esc="o.contract_id.number_print"/> от
                                     <t t-esc="o.contract_id.contract_date.strftime('%d.%m.%Y')"/></td></tr>
                             <tr><td>Помещение</td>
                                 <td><span t-field="o.contract_id.apartment_id.name"/>,

@@ -1,7 +1,8 @@
 """Поля и помощники для печатных форм (таджикский и русский варианты)."""
 import re
 
-from odoo import api, fields, models
+from odoo import _, api, fields, models
+from odoo.exceptions import ValidationError
 
 from ..tools import tj_amount_words, tj_number_words
 
@@ -102,12 +103,31 @@ class ConstructionApartment(models.Model):
 class ConstructionContract(models.Model):
     _inherit = "construction.contract"
 
+    name = fields.Char(readonly=False)
     number_print = fields.Char(string="№ для печати", compute="_compute_number_print")
 
     def _compute_number_print(self):
+        """Автономер CON/2026/00094 печатается как 94, ручной номер — как введён."""
         for contract in self:
-            m = re.search(r"(\d+)\s*$", contract.name or "")
-            contract.number_print = str(int(m.group(1))) if m else (contract.name or "")
+            name = contract.name or ""
+            m = re.fullmatch(r"CON/\d{4}/0*(\d+)", name)
+            contract.number_print = m.group(1) if m else name
+
+    @api.model
+    def _check_number_free(self, number, exclude=None):
+        domain = [("name", "=", number)]
+        if exclude:
+            domain.append(("id", "not in", exclude.ids))
+        other = self.sudo().with_context(active_test=False).search(domain, limit=1)
+        if other:
+            raise ValidationError(_("Договор с номером %s уже есть (%s).")
+                                  % (number, other.partner_id.display_name or ""))
+
+    @api.constrains("name")
+    def _check_unique_name(self):
+        for contract in self:
+            if contract.name and contract.name != _("New"):
+                self._check_number_free(contract.name, exclude=contract)
 
     # helpers for QWeb
     def _tj_words(self, amount, currency="USD"):

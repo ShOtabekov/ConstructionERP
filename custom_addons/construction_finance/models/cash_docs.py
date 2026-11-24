@@ -74,7 +74,7 @@ class ConstructionCashReceipt(models.Model):
     _description = "Приходный кассовый ордер"
     _order = "date desc, id desc"
 
-    name = fields.Char(string="№ ордера", readonly=True, copy=False, default="/")
+    name = fields.Char(string="№ квитанции", copy=False, default="/", tracking=True)
     date = fields.Date(string="Дата", required=True, default=fields.Date.context_today)
     partner_id = fields.Many2one("res.partner", string="Принято от", required=True)
     contract_id = fields.Many2one("construction.contract", string="Договор")
@@ -92,6 +92,20 @@ class ConstructionCashReceipt(models.Model):
             if vals.get("name", "/") == "/":
                 vals["name"] = self.env["ir.sequence"].next_by_code("construction.cash.receipt") or "/"
         return super().create(vals_list)
+
+    @api.model
+    def _check_number_free(self, number, exclude=None):
+        domain = [("name", "=", number)]
+        if exclude:
+            domain.append(("id", "not in", exclude.ids))
+        if self.sudo().search_count(domain, limit=1):
+            raise ValidationError(_("Квитанция с номером %s уже есть.") % number)
+
+    @api.constrains("name")
+    def _check_unique_name(self):
+        for rec in self:
+            if rec.name and rec.name != "/":
+                self._check_number_free(rec.name, exclude=rec)
 
     def _compute_basis(self):
         """«Пардохти ҳисса моҳи 10 Д-05-07 (94)» по разнесённым платежам."""

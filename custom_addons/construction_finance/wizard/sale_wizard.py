@@ -48,7 +48,12 @@ class ConstructionSaleWizard(models.TransientModel):
     currency_usd_id = fields.Many2one(
         "res.currency", default=lambda self: self.env.ref("base.USD"),
     )
-    area_total = fields.Float(related="apartment_id.area_total", string="Площадь (м²)")
+    unit_type = fields.Selection(related="apartment_id.unit_type")
+    area_total = fields.Float(
+        string="Площадь (м²)", compute="_compute_area_total", store=True, readonly=False,
+        digits=(16, 2), help="Для магазина площадь можно изменить при оформлении.")
+    contract_number = fields.Char(
+        string="№ договора", help="Номер договора вручную. Пусто — номер присвоится автоматически.")
     list_price_per_sqm = fields.Float(
         string="Цена за м² по прайсу", digits=(16, 2), compute="_compute_list_price",
     )
@@ -115,15 +120,24 @@ class ConstructionSaleWizard(models.TransientModel):
         if self.reservation_id and not self.partner_id:
             self.partner_id = self.reservation_id.partner_id
 
-    @api.depends("apartment_id", "reservation_id")
+    @api.depends("apartment_id")
+    def _compute_area_total(self):
+        for wiz in self:
+            wiz.area_total = wiz.apartment_id.area_total
+
+    @api.depends("apartment_id", "reservation_id", "area_total")
     def _compute_list_price(self):
         for wiz in self:
             reservation = wiz.reservation_id.sudo()
+            apt = wiz.apartment_id
             if reservation:
                 wiz.list_price_usd = reservation.price_usd
+            elif apt.unit_type == "shop" and apt.area_total and wiz.area_total:
+                wiz.list_price_usd = round(
+                    apt.total_price_usd / apt.area_total * wiz.area_total, 2)
             else:
-                wiz.list_price_usd = wiz.apartment_id.total_price_usd
-            area = wiz.apartment_id.area_total
+                wiz.list_price_usd = apt.total_price_usd
+            area = wiz.area_total or apt.area_total
             wiz.list_price_per_sqm = wiz.list_price_usd / area if area else 0.0
 
     @api.depends("list_price_usd", "price_usd")
@@ -148,6 +162,11 @@ class ConstructionSaleWizard(models.TransientModel):
             reservation.exchange_rate if reservation
             else self.apartment_id.usd_tjs_rate
         )
+
+    @api.onchange("area_total")
+    def _onchange_area_total(self):
+        if self.area_total and self.deal_price_per_sqm:
+            self.price_usd = round(self.deal_price_per_sqm * self.area_total, 2)
 
     @api.onchange("deal_price_per_sqm")
     def _onchange_deal_price_per_sqm(self):
@@ -281,6 +300,19 @@ class ConstructionSaleWizard(models.TransientModel):
         Contract._check_sales_user()
 
         apartment = self.apartment_id
+        number = (self.contract_number or "").strip()
+        if number:
+            Contract._check_number_free(number)
+        area_note = False
+        if apartment.unit_type == "shop":
+            if self.area_total <= 0:
+                raise ValidationError(_("Укажите площадь магазина."))
+            if abs(self.area_total - apartment.area_total) > 0.001:
+                area_note = _("Площадь магазина изменена при продаже: %(old)s → %(new)s м²",
+                              old=apartment.area_total, new=self.area_total)
+                apartment.sudo().write({"area_total": self.area_total})
+        elif apartment.area_total and abs(self.area_total - apartment.area_total) > 0.001:
+            raise ValidationError(_("Площадь можно менять только у магазинов."))
         partner = self._get_partner()
 
         if apartment.state == "reserved":
@@ -294,6 +326,8 @@ class ConstructionSaleWizard(models.TransientModel):
                 ) % reservation.partner_id.display_name)
             reservation.sudo(False).action_create_contract()
             contract = Contract.search([("reservation_id", "=", reservation.id)], limit=1)
+            if number:
+                contract.sudo().write({"name": number})
             contract.write({
                 "contract_date": self.contract_date,
                 "notes": self.notes,
@@ -301,18 +335,20 @@ class ConstructionSaleWizard(models.TransientModel):
                 "exchange_rate": self.exchange_rate,
             })
         elif apartment.state == "free":
-            contract = Contract.create({
+            contract = Contract.create(dict({"name": number} if number else {}, **{
                 "partner_id": partner.id,
                 "apartment_id": apartment.id,
                 "contract_date": self.contract_date,
                 "notes": self.notes,
                 "price_usd": self.price_usd,
                 "exchange_rate": self.exchange_rate,
-            })
+            }))
         else:
             raise UserError(_("Это помещение уже продано или заблокировано."))
 
         contract.action_confirm()
+        if area_note:
+            contract.message_post(body=area_note)
         if self.list_price_usd:
             contract.sudo().write({"list_price_usd": self.list_price_usd})
         if self.list_price_usd and abs(self.list_price_usd - self.price_usd) > 0.009:

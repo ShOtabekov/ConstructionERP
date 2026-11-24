@@ -57,7 +57,10 @@ class ConstructionCashWizard(models.TransientModel):
         "construction.payment.method", string="Способ оплаты", required=True,
         default=lambda self: self.env["construction.payment.method"].search([], limit=1),
     )
-    reference = fields.Char(string="№ квитанции / банка")
+    receipt_number = fields.Char(
+        string="№ квитанции", help="Номер квитанции вручную (как в прежней системе). "
+                                   "Пусто — номер присвоится автоматически.")
+    reference = fields.Char(string="№ документа банка")
     allocation_preview = fields.Html(
         string="Распределение", compute="_compute_allocation", sanitize=False,
     )
@@ -185,12 +188,18 @@ class ConstructionCashWizard(models.TransientModel):
                 debt="{:,.2f}".format(self.plan_id.balance_usd).replace(",", " "),
             ))
 
+        number = (self.receipt_number or "").strip()
+        Receipt = self.env["construction.cash.receipt"]
+        if number:
+            Receipt._check_number_free(number)
+
         Payment = self.env["construction.payment"]
         usd = self.env.ref("base.USD")
         tjs = self.env.ref("base.TJS")
         if not tjs.active:
             tjs.sudo().active = True
-        receipt = self.env["construction.cash.receipt"].create({
+        receipt = Receipt.create({
+            "name": number or "/",
             "date": self.payment_date,
             "partner_id": self.plan_id.partner_id.id,
             "contract_id": self.plan_id.contract_id.id,

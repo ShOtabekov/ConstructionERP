@@ -29,6 +29,8 @@
                                    required="pay_currency == 'tjs'"/>
                             <field name="amount_usd" invisible="pay_currency == 'usd'"/>
                             <field name="method_id"/>
+                            <field name="receipt_number" class="fw-bold"
+                                   placeholder="пусто — номер присвоится автоматически"/>
                             <field name="reference"/>
                         </group>
                     </group>

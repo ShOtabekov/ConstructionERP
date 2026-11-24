@@ -13,7 +13,9 @@
                             <field name="reservation_id" readonly="1"
                                    invisible="not reservation_id"/>
                             <field name="currency_usd_id" invisible="1"/>
-                            <field name="area_total" readonly="1"/>
+                            <field name="unit_type" invisible="1"/>
+                            <field name="area_total" readonly="unit_type != 'shop'"
+                                   class="fw-bold" decoration-info="unit_type == 'shop'"/>
                             <field name="list_price_per_sqm" readonly="1"
                                    invisible="not list_price_usd"/>
                             <field name="list_price_usd" readonly="1"
@@ -43,6 +45,8 @@
                             <field name="passport_issued_by" placeholder="ШВКД ш. Хуҷанд"/>
                             <field name="passport_issue_date"/>
                             <field name="residence" placeholder="ш. Хуҷанд, ..."/>
+                            <field name="contract_number" class="fw-bold"
+                                   placeholder="пусто — номер присвоится автоматически"/>
                             <field name="contract_date"/>
                         </group>
                     </group>
