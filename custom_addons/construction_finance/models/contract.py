@@ -42,9 +42,18 @@ class ConstructionContract(models.Model):
     # Report fields
     unit_type = fields.Selection(related="apartment_id.unit_type", store=True, string="Тип")
     rooms = fields.Integer(related="apartment_id.rooms", store=True, string="Комнат")
-    area_total = fields.Float(
-        related="apartment_id.area_total", store=True, string="Площадь (м²)",
+    area_contract = fields.Float(
+        string="Площадь по договору (м²)", digits=(16, 2),
+        help="Если в договоре площадь отличается от плана (старые договоры). Пусто — по плану.",
     )
+    area_total = fields.Float(
+        string="Площадь (м²)", compute="_compute_area_total", store=True,
+    )
+
+    @api.depends("area_contract", "apartment_id.area_total")
+    def _compute_area_total(self):
+        for contract in self:
+            contract.area_total = contract.area_contract or contract.apartment_id.area_total
     contract_price_per_sqm = fields.Monetary(
         string="Цена за м² (сделка)", currency_field="currency_usd_id",
         compute="_compute_report_prices", store=True, aggregator="avg",

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_dossier_import_form" model="ir.ui.view">
+        <field name="name">construction.dossier.import.form</field>
+        <field name="model">construction.dossier.import</field>
+        <field name="arch" type="xml">
+            <form string="Импорт договоров из досье">
+                <sheet>
+                    <div class="alert alert-info" role="alert">
+                        Файл Excel в формате «Досье»: №, Сана, Ному насаб, паспорт (силсила, кем и когда выдан),
+                        Ҷои истиқомат, Блок, Этаж, Хуҷра, м², нарх, миқдор. Сначала «Проверить», затем «Импортировать».
+                        Оплаты не переносятся.
+                    </div>
+                    <group>
+                        <field name="project_id"/>
+                        <field name="file" filename="file_name"/>
+                        <field name="file_name" invisible="1"/>
+                        <field name="ready_count" invisible="1"/>
+                        <field name="done" invisible="1"/>
+                    </group>
+                    <field name="preview_html" nolabel="1"/>
+                </sheet>
+                <footer>
+                    <button name="action_check" type="object" string="Проверить" class="btn-secondary"
+                            invisible="not file"/>
+                    <button name="action_import" type="object" string="Импортировать" class="btn-primary"
+                            invisible="ready_count == 0 or done"
+                            confirm="Договоры будут созданы, квартиры станут «Продана». Продолжить?"/>
+                    <button string="Закрыть" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_dossier_import" model="ir.actions.act_window">
+        <field name="name">Импорт договоров из досье</field>
+        <field name="res_model">construction.dossier.import</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="menu_dossier_import" name="Импорт договоров из Excel"
+              parent="construction_sales.menu_construction_sales"
+              action="action_dossier_import" sequence="90"
+              groups="base.group_system,construction_finance.group_finance_user"/>
+</odoo>

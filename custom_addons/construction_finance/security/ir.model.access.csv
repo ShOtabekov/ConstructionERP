@@ -35,3 +35,4 @@ access_construction_cash_expense_user,construction.cash.expense user,model_const
 access_construction_cash_expense_system,construction.cash.expense system,model_construction_cash_expense,base.group_system,1,1,1,1
 access_construction_cash_book_user,construction.cash.book user,model_construction_cash_book,group_finance_user,1,1,1,1
 access_construction_cash_book_system,construction.cash.book system,model_construction_cash_book,base.group_system,1,1,1,1
+access_construction_dossier_import,construction.dossier.import,model_construction_dossier_import,base.group_user,1,1,1,0

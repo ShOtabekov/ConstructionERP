@@ -43,7 +43,7 @@
                             по адресу: <t t-esc="project.location"/></t> (далее — «Объект»).</p>
                         <p>1.2. Характеристики Объекта:
                             <t t-if="apt.unit_type != 'shop'">количество комнат — <b t-esc="apt.rooms"/>, </t>
-                            общая площадь — <b t-esc="fmt(apt.area_total)"/> м²<t t-if="apt.area_living">,
+                            общая площадь — <b t-esc="fmt(o.area_total)"/> м²<t t-if="apt.area_living">,
                             жилая площадь — <t t-esc="fmt(apt.area_living)"/> м²</t>.</p>
 
                         <h6 class="mt-3">2. ЦЕНА ДОГОВОРА</h6>

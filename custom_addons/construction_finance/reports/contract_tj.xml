@@ -93,7 +93,7 @@
                             сохтмонӣ» барасмиятдарории ба номи «Ҳиссагузор» ҳуқуқи моликият ба
                             <t t-if="apt.unit_type == 'shop'">бинои ғайриистиқоматӣ (мағоза)</t>
                             <t t-else="">хонаи истиқоматии <t t-esc="apt.rooms"/>-ҳуҷрагӣ</t>
-                            бо масоҳати умумии <b><t t-esc="o._money(apt.area_total)"/> м²</b>, ки дар ошёнаи
+                            бо масоҳати умумии <b><t t-esc="o._money(o.area_total)"/> м²</b>, ки дар ошёнаи
                             <t t-esc="apt.floor_id.number"/> (<t t-esc="o._tj_int_words(apt.floor_id.number)"/>)-и
                             блоки <t t-esc="block"/>, ҳуҷраи <t t-esc="apt.number"/> воқеъ мебошад, ба даст меорад.</p>
                         <table class="table table-sm table-bordered" style="width: 100%; text-align: center; margin: 6px 0 10px; font-size: 13px;">
@@ -103,7 +103,7 @@
                                 <td t-esc="''.join(c for c in (apt.entrance_id.name or '1') if c.isdigit()) or '1'"/>
                                 <td t-esc="apt.floor_id.number"/>
                                 <td><t t-esc="apt.number"/> (<t t-esc="apt.unit_code"/>)</td>
-                                <td><t t-esc="o._money(apt.area_total)"/> м²</td></tr>
+                                <td><t t-esc="o._money(o.area_total)"/> м²</td></tr>
                         </table>
                         <p>1.3. Маблағи ҳиссаи «Ҳиссагузор» дар ҳаҷми <b><t t-esc="o._money(o.price_usd)"/></b>
                             (<t t-esc="o._tj_money_words(o.price_usd)"/>) доллари ИМА, аз ҳисоби
@@ -230,7 +230,7 @@
             <table style="width: 100%; border-collapse: collapse; font-size: 13px;" class="sched">
                 <style>.sched td { border: 1px solid #000; padding: 2px 6px; } .sched .r { text-align: right; } .sched .b td { font-weight: bold; }</style>
                 <tr class="b"><td style="width: 7%; text-align: center;">1</td><td style="width: 45%;" t-esc="L['area']"/>
-                    <td class="r" t-esc="o._money(apt.area_total)"/><td/><td style="width: 8%;"/></tr>
+                    <td class="r" t-esc="o._money(o.area_total)"/><td/><td style="width: 8%;"/></tr>
                 <tr class="b"><td style="text-align: center;">2</td><td t-esc="L['price']"/>
                     <td class="r" t-esc="o._money(o.contract_price_per_sqm)"/>
                     <td class="r"><t t-if="s['rows']"><t t-esc="len(s['rows'])"/> <t t-esc="L['months']"/></t></td>
