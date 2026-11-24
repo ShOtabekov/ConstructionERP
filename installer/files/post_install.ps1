@@ -41,6 +41,16 @@ try {
     elseif (Test-PortBusy ([int]$P.pg_port)) { $P.pg_port = Get-FreePort ([int]$P.pg_port + 1) }
     if ($odooInstalled -and $oldHttp) { $P.http_port = [int]$oldHttp }
     elseif (Test-PortBusy ([int]$P.http_port)) { $P.http_port = Get-FreePort ([int]$P.http_port + 1) }
+    # Повторная установка (обновление) поверх рабочей программы: пароли берём из старого odoo.conf
+    $Upgrade = $pgInstalled -and (Test-Path $Conf) -and (Get-ConfValue "db_password")
+    if ($Upgrade) {
+        $P.db_password = Get-ConfValue "db_password"
+        $P.master_password = Get-ConfValue "admin_passwd"
+        Write-Host "Обновление установленной программы: данные и пароли сохраняются."
+        Stop-Service StroyERP -ErrorAction SilentlyContinue
+    } elseif ($pgInstalled) {
+        throw "Найдена старая база без файла настроек. Удалите программу (Пуск -> StroyERP -> удаление) и установите заново."
+    }
     Write-Host "Порт базы: $($P.pg_port), порт программы: $($P.http_port)"
     $UrlFile = Join-Path $App "Строительная ERP.url"
     [IO.File]::WriteAllText($UrlFile, "[InternetShortcut]`r`nURL=http://127.0.0.1:$($P.http_port)/odoo`r`nIconFile=$App\stroyerp.ico`r`nIconIndex=0`r`n", (New-Object Text.UTF8Encoding($false)))
@@ -61,10 +71,11 @@ try {
         if ($pr.ExitCode -ne 0) { throw "Установка PostgreSQL завершилась с кодом $($pr.ExitCode)" }
     }
     Start-Service $PgSvc -ErrorAction SilentlyContinue
-    $env:PGPASSWORD = $P.pg_super_password
+    if ($Upgrade) { $env:PGPASSWORD = $P.db_password; $PgUser = "stroyerp" }
+    else { $env:PGPASSWORD = $P.pg_super_password; $PgUser = "postgres" }
     $Psql = Join-Path $PgDir "bin\psql.exe"
     for ($i = 0; $i -lt 30; $i++) {
-        & $Psql -h 127.0.0.1 -p $P.pg_port -U postgres -d postgres -tAc "select 1" 2>$null | Out-Null
+        & $Psql -h 127.0.0.1 -p $P.pg_port -U $PgUser -d postgres -tAc "select 1" 2>$null | Out-Null
         if ($LASTEXITCODE -eq 0) { break }
         Start-Sleep 2
     }
@@ -73,9 +84,11 @@ try {
     # ------------------------------------------------------------------ 2
     Step 2 "Пользователь базы данных"
     $pw = $P.db_password
+    if (-not $Upgrade) {
     & $Psql -h 127.0.0.1 -p $P.pg_port -U postgres -d postgres -v ON_ERROR_STOP=1 -c `
         "DO `$`$BEGIN IF NOT EXISTS (SELECT FROM pg_roles WHERE rolname='stroyerp') THEN CREATE ROLE stroyerp LOGIN CREATEDB PASSWORD '$pw'; ELSE ALTER ROLE stroyerp PASSWORD '$pw'; END IF; END`$`$;"
     if ($LASTEXITCODE -ne 0) { throw "Не удалось создать пользователя базы" }
+    }
     Remove-Item Env:PGPASSWORD
 
     # ------------------------------------------------------------------ 3
@@ -121,11 +134,15 @@ without_demo = all
         & $Py $OdooBin -c $Conf -d $Db -u construction_core,construction_sales,construction_finance --stop-after-init
     }
     Remove-Item Env:PGPASSWORD -ErrorAction SilentlyContinue
-    $env:ERP_COMPANY = $P.company
-    $env:ERP_ADMIN_PASSWORD = $P.admin_password
-    Get-Content -Raw -Encoding UTF8 (Join-Path $App "tools\init_company.py") | & $Py $OdooBin shell -c $Conf -d $Db --no-http
-    if ($LASTEXITCODE -ne 0) { throw "Не удалось записать данные компании" }
-    Remove-Item Env:ERP_ADMIN_PASSWORD
+    if ($exists -ne "1") {
+        # Новая база: название компании и пароль admin из окна установки.
+        # При обновлении не трогаем — у клиента свои данные и пароли.
+        $env:ERP_COMPANY = $P.company
+        $env:ERP_ADMIN_PASSWORD = $P.admin_password
+        Get-Content -Raw -Encoding UTF8 (Join-Path $App "tools\init_company.py") | & $Py $OdooBin shell -c $Conf -d $Db --no-http
+        if ($LASTEXITCODE -ne 0) { throw "Не удалось записать данные компании" }
+        Remove-Item Env:ERP_ADMIN_PASSWORD
+    }
 
     # ------------------------------------------------------------------ 6
     Step 6 "Служба Windows"
@@ -163,7 +180,8 @@ without_demo = all
     Start-Process $url
     Remove-Item (Join-Path $App "setup\*.exe") -Force -ErrorAction SilentlyContinue
     Write-Host ""
-    Write-Host "Готово. Логин: admin, пароль — тот, что вы ввели." -ForegroundColor Green
+    if ($Upgrade) { Write-Host "Готово. Программа обновлена, данные и пароли прежние." -ForegroundColor Green }
+    else { Write-Host "Готово. Логин: admin, пароль — тот, что вы ввели." -ForegroundColor Green }
     Stop-Transcript | Out-Null
     exit 0
 }
