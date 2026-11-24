@@ -1,6 +1,6 @@
 {
     "name": "Construction Core",
-    "version": "19.0.1.10.0",
+    "version": "19.0.1.11.0",
     "category": "Construction",
     "summary": "Construction projects and real estate management",
     "author": "Construction ERP",

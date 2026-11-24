@@ -2,4 +2,6 @@
 <odoo>
     <!-- Квартиры ЖК Rahmoniyon по списку застройщика (блок Д — 8 квартир на этаже) -->
     <function model="construction.building" name="_sync_rahmoniyon_layouts"/>
+    <!-- Новые картинки планов («План типового этажа» от 03.07.2026) -->
+    <function model="construction.building" name="_refresh_rahmoniyon_plans"/>
 </odoo>

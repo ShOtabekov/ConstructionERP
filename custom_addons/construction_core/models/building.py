@@ -58,6 +58,34 @@ class ConstructionBuilding(models.Model):
                         layout.plan_image = base64.b64encode(image.read())
         return True
 
+    @api.model
+    def _refresh_rahmoniyon_plans(self):
+        """Заменить картинки планов этажей и квартир Rahmoniyon новой версией
+        (площади не трогаются). Выполняется один раз на каждую версию планов."""
+        from ..wizard.rahmoniyon_preset import (
+            RAHMONIYON_BLOCKS, RAHMONIYON_PLANS_VERSION, unit_image_path)
+        ICP = self.env["ir.config_parameter"].sudo()
+        if ICP.get_param("construction_core.rahmoniyon_plans") == RAHMONIYON_PLANS_VERSION:
+            return True
+
+        def read_img(path):
+            with file_open(path, "rb") as f:
+                return base64.b64encode(f.read())
+
+        for key, data in RAHMONIYON_BLOCKS.items():
+            for building in self.with_context(active_test=False).search([("code", "=", data["code"])]):
+                if not building.project_id.name or "rahmoniyon" not in building.project_id.name.lower():
+                    continue
+                building.floor_plan_image = read_img(data["image"])
+                layouts = building.layout_ids.sorted("sequence")
+                if len(layouts) != len(data["units"]):
+                    continue
+                for i, (layout, (_r, _a, x, y)) in enumerate(zip(layouts, data["units"]), 1):
+                    layout.write({"plan_x": x, "plan_y": y,
+                                  "plan_image": read_img(unit_image_path(key, i))})
+        ICP.set_param("construction_core.rahmoniyon_plans", RAHMONIYON_PLANS_VERSION)
+        return True
+
     # ------------------------------------------------------------------
     # 19.0.1.9.0: квартиры ЖК Rahmoniyon по списку застройщика
     # ------------------------------------------------------------------
