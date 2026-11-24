@@ -13,9 +13,39 @@ TERMS = [("Бессрочно", None), ("1 год", "1г"), ("6 месяцев",
          ("1 месяц", "1м"), ("До даты…", "date")]
 
 
+def _fix_clipboard_keys(root):
+    """Ctrl+C/V/X/A при русской раскладке (Tk их не понимает) и меню по правой кнопке."""
+    codes = {86: "<<Paste>>", 67: "<<Copy>>", 88: "<<Cut>>", 65: "<<SelectAll>>"}
+
+    def on_ctrl(event):
+        ev = codes.get(event.keycode)
+        if ev and event.keysym.lower() not in ("v", "c", "x", "a"):
+            if ev == "<<SelectAll>>" and isinstance(event.widget, (tk.Entry, ttk.Entry)):
+                event.widget.select_range(0, "end")
+            else:
+                event.widget.event_generate(ev)
+            return "break"
+
+    menu = tk.Menu(root, tearoff=0)
+
+    def popup(event):
+        w = event.widget
+        menu.delete(0, "end")
+        menu.add_command(label="Вставить", command=lambda: w.event_generate("<<Paste>>"))
+        menu.add_command(label="Копировать", command=lambda: w.event_generate("<<Copy>>"))
+        menu.add_command(label="Вырезать", command=lambda: w.event_generate("<<Cut>>"))
+        w.focus_set()
+        menu.tk_popup(event.x_root, event.y_root)
+
+    for cls in ("TEntry", "Entry", "Text"):
+        root.bind_class(cls, "<Control-KeyPress>", on_ctrl, add="+")
+        root.bind_class(cls, "<Button-3>", popup, add="+")
+
+
 class App(tk.Tk):
     def __init__(self):
         super().__init__()
+        _fix_clipboard_keys(self)
         self.title("Строительная ERP — выдача лицензий (Actually_team)")
         self.geometry("900x620")
         self.minsize(760, 520)
@@ -32,8 +62,10 @@ class App(tk.Tk):
 
         ttk.Label(f, text="Код компьютера клиента").grid(row=0, column=0, sticky="w")
         self.code = tk.StringVar()
-        ttk.Entry(f, textvariable=self.code, font=("Consolas", 14), width=18).grid(
-            row=1, column=0, sticky="w", pady=(0, 10))
+        cf = ttk.Frame(f)
+        cf.grid(row=1, column=0, sticky="w", pady=(0, 10))
+        ttk.Entry(cf, textvariable=self.code, font=("Consolas", 14), width=18).pack(side="left")
+        ttk.Button(cf, text="Вставить", command=self.paste_code).pack(side="left", padx=(6, 0))
         ttk.Label(f, text="Компания").grid(row=0, column=1, sticky="w", padx=(16, 0))
         self.company = tk.StringVar()
         ttk.Entry(f, textvariable=self.company, font=("Segoe UI", 12), width=40).grid(
@@ -74,6 +106,14 @@ class App(tk.Tk):
         f.rowconfigure(8, weight=1)
         self.keys = {}
         self.reload()
+
+    def paste_code(self):
+        try:
+            text = self.clipboard_get()
+        except tk.TclError:
+            text = ""
+        m = re.search(r"[A-Za-z2-7]{4}-[A-Za-z2-7]{4}-[A-Za-z2-7]{4}", text)
+        self.code.set((m.group(0) if m else text.strip()).upper())
 
     def _term_changed(self):
         self.date_entry.configure(state="normal" if self.term.get() == "До даты…" else "disabled")
