@@ -6,4 +6,12 @@
                     t-on-click="open" t-esc="label"/>
         </div>
     </t>
+    <t t-name="construction_core.UpdateSystray">
+        <div t-if="state.info.available" class="d-flex align-items-center">
+            <button class="badge border-0 mx-1 bg-success" style="font-size:13px;padding:6px 10px"
+                    t-on-click="open">
+                <i class="fa fa-download me-1"/>Обновление <t t-esc="state.info.available"/>
+            </button>
+        </div>
+    </t>
 </templates>

@@ -45,6 +45,9 @@ Source: "{#Stage}\init_company.py";   DestDir: "{app}\tools"; Flags: ignoreversi
 Source: "{#Stage}\backup.ps1";        DestDir: "{app}\tools"; Flags: ignoreversion
 Source: "{#Stage}\restore.ps1";       DestDir: "{app}\tools"; Flags: ignoreversion
 Source: "{#Stage}\uninstall.ps1";     DestDir: "{app}\tools"; Flags: ignoreversion
+Source: "{#Stage}\update.ps1";        DestDir: "{app}\tools"; Flags: ignoreversion
+Source: "{#Stage}\verify_update.py";  DestDir: "{app}\tools"; Flags: ignoreversion
+Source: "{#Stage}\VERSION";           DestDir: "{app}"; Flags: ignoreversion
 Source: "{#Stage}\README-клиенту.txt"; DestDir: "{app}"; Flags: ignoreversion isreadme
 Source: "{#Stage}\postgresql-setup.exe"; DestDir: "{app}\setup"; Flags: ignoreversion
 Source: "{#Stage}\wkhtmltox-setup.exe";  DestDir: "{app}\setup"; Flags: ignoreversion
@@ -53,6 +56,7 @@ Source: "{#Stage}\wkhtmltox-setup.exe";  DestDir: "{app}\setup"; Flags: ignoreve
 Name: "{app}\data"
 Name: "{app}\logs"
 Name: "{app}\backups"
+Name: "{app}\updates"
 
 [INI]
 Filename: "{app}\Строительная ERP.url"; Section: "InternetShortcut"; Key: "URL"; String: "http://127.0.0.1:{#HttpPort}/odoo"
@@ -62,6 +66,7 @@ Name: "{autodesktop}\{#AppName}"; Filename: "{app}\Строительная ERP.
 Name: "{group}\{#AppName}"; Filename: "{app}\Строительная ERP.url"; IconFilename: "{app}\stroyerp.ico"
 Name: "{group}\Сделать резервную копию"; Filename: "powershell.exe"; Parameters: "-NoProfile -ExecutionPolicy Bypass -File ""{app}\tools\backup.ps1"" -Pause"; WorkingDir: "{app}"
 Name: "{group}\Восстановить из копии"; Filename: "powershell.exe"; Parameters: "-NoProfile -ExecutionPolicy Bypass -File ""{app}\tools\restore.ps1"""; WorkingDir: "{app}"
+Name: "{group}\Обновить из файла"; Filename: "powershell.exe"; Parameters: "-NoProfile -ExecutionPolicy Bypass -File ""{app}\tools\update.ps1"" -Pick"; WorkingDir: "{app}"
 Name: "{group}\Папка с копиями"; Filename: "{app}\backups"
 Name: "{group}\Удалить {#AppName}"; Filename: "{uninstallexe}"
 

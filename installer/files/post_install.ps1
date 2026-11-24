@@ -154,6 +154,8 @@ without_demo = all
     Step 7 "Ежедневная резервная копия и запуск"
     $bk = "powershell.exe -NoProfile -ExecutionPolicy Bypass -File `"$App\tools\backup.ps1`""
     schtasks /Create /F /TN "StroyERP-backup" /SC DAILY /ST 19:00 /RU SYSTEM /TR $bk | Out-Null
+    $up = "powershell.exe -NoProfile -ExecutionPolicy Bypass -File `"$App\tools\update.ps1`""
+    schtasks /Create /F /TN "StroyERP-update" /SC ONCE /SD 01/01/2020 /ST 00:00 /RU SYSTEM /RL HIGHEST /TR $up | Out-Null
     $url = "http://127.0.0.1:$($P.http_port)/web/login"
     for ($i = 0; $i -lt 60; $i++) {
         try { Invoke-WebRequest $url -UseBasicParsing -TimeoutSec 5 | Out-Null; break } catch { Start-Sleep 3 }

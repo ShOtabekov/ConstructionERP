@@ -27,3 +27,4 @@ access_construction_project_image_user,construction.project.image user,model_con
 access_construction_project_image_admin,construction.project.image admin,model_construction_project_image,group_construction_admin,1,1,1,1
 access_construction_project_image_system,construction.project.image system,model_construction_project_image,base.group_system,1,1,1,1
 access_construction_license_wizard_user,construction.license.wizard user,model_construction_license_wizard,base.group_user,1,1,1,0
+access_construction_update_wizard_admin,construction.update.wizard admin,model_construction_update_wizard,base.group_system,1,1,1,0

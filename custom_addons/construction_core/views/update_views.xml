@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_update_wizard_form" model="ir.ui.view">
+        <field name="name">construction.update.wizard.form</field>
+        <field name="model">construction.update.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Обновление программы">
+                <sheet>
+                    <div class="oe_title"><h1>Обновление «Строительной ERP»</h1></div>
+                    <field name="can_install" invisible="1"/>
+                    <field name="info_html" nolabel="1"/>
+                    <div class="d-flex gap-2 my-3">
+                        <button name="action_check" type="object" string="Проверить обновления"
+                                class="btn-secondary" icon="fa-refresh"/>
+                        <button name="action_install_online" type="object" string="Скачать и установить"
+                                class="btn-primary" icon="fa-download" invisible="not can_install"
+                                confirm="Программа будет недоступна 3–5 минут. Перед обновлением делается резервная копия. Продолжить?"/>
+                    </div>
+                    <separator string="Без интернета — из файла"/>
+                    <div class="text-muted mb-2">
+                        Файл StroyERP-update-....zip можно получить у разработчика (Actually_team, +992 92 609 80 04)
+                        и принести на флешке.
+                    </div>
+                    <group>
+                        <field name="package" filename="package_name"/>
+                        <field name="package_name" invisible="1"/>
+                    </group>
+                    <button name="action_install_file" type="object" string="Установить из файла"
+                            class="btn-secondary" icon="fa-upload" invisible="not package"
+                            confirm="Программа будет недоступна 3–5 минут. Перед обновлением делается резервная копия. Продолжить?"/>
+                </sheet>
+                <footer>
+                    <button string="Закрыть" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_update_wizard" model="ir.actions.act_window">
+        <field name="name">Обновление программы</field>
+        <field name="res_model">construction.update.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="menu_update" name="Обновление программы" parent="menu_construction_root"
+              action="action_update_wizard" sequence="998" groups="base.group_system"/>
+
+    <record id="ir_cron_update_check" model="ir.cron">
+        <field name="name">Строительная ERP: проверка обновлений</field>
+        <field name="model_id" ref="model_construction_update"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_check()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+    </record>
+</odoo>

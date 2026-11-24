@@ -45,3 +45,27 @@ export class LicenseSystray extends Component {
 }
 
 registry.category("systray").add("construction_core.license", { Component: LicenseSystray }, { sequence: 1 });
+
+export class UpdateSystray extends Component {
+    static template = "construction_core.UpdateSystray";
+    static props = {};
+
+    setup() {
+        this.orm = useService("orm");
+        this.action = useService("action");
+        this.state = useState({ info: {} });
+        onWillStart(async () => {
+            try {
+                this.state.info = await this.orm.call("construction.update", "get_info", []);
+            } catch {
+                this.state.info = {};
+            }
+        });
+    }
+
+    open() {
+        this.action.doAction("construction_core.action_update_wizard");
+    }
+}
+
+registry.category("systray").add("construction_core.update", { Component: UpdateSystray }, { sequence: 2 });

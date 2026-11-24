@@ -1,6 +1,6 @@
 {
     "name": "Construction Core",
-    "version": "19.0.1.11.0",
+    "version": "19.0.1.12.0",
     "category": "Construction",
     "summary": "Construction projects and real estate management",
     "author": "Construction ERP",
@@ -20,6 +20,7 @@
         "data/rahmoniyon_unit_plans.xml",
         "data/rahmoniyon_renders.xml",
         "views/license_views.xml",
+        "views/update_views.xml",
     ],
     "assets": {
         "web.assets_backend": [

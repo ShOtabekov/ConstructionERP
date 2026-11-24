@@ -7,3 +7,4 @@ from . import apartment
 from . import project_image
 from . import ir_ui_menu
 from . import license
+from . import update

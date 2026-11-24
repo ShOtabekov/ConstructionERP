@@ -8,9 +8,11 @@
 param(
     [string]$OdooSrc   = (Resolve-Path "$PSScriptRoot\..\odoo").Path,
     [string]$AddonsSrc = (Resolve-Path "$PSScriptRoot\..\custom_addons").Path,
-    [string]$Version   = "1.0"
+    [string]$Version   = (Get-Content "$PSScriptRoot\VERSION" -ErrorAction SilentlyContinue | Select-Object -First 1)
 )
 $ErrorActionPreference = "Stop"
+if (-not $Version) { $Version = "1.0" }
+$Version = $Version.Trim()
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 $ProgressPreference = "SilentlyContinue"
 
@@ -93,6 +95,7 @@ Copy-Item (Join-Path $Dl $PG_FILE) (Join-Path $Stage "postgresql-setup.exe") -Fo
 Copy-Item (Join-Path $Dl "wkhtmltox-0.12.6-1-win64.exe") (Join-Path $Stage "wkhtmltox-setup.exe") -Force
 Copy-Item (Join-Path $Dl "WinSW-x64.exe") (Join-Path $Stage "StroyERP-service.exe") -Force
 Copy-Item (Join-Path $Here "files\*") $Stage -Recurse -Force
+[IO.File]::WriteAllText((Join-Path $Stage "VERSION"), $Version, (New-Object Text.UTF8Encoding($false)))
 
 Step "Inno Setup"
 if (-not (Test-Path $Iscc)) {
