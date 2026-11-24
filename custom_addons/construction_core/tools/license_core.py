@@ -130,8 +130,8 @@ def compute_status(env):
             until = datetime.date.fromisoformat(p["e"]) if p.get("e") else None
             res["company"] = p.get("c", "")
             if until is None or until >= now:
-                res.update(state="licensed", until=until and until.isoformat(),
-                           days_left=until and (until - now).days,
+                res.update(state="licensed", until=until.isoformat() if until else False,
+                           days_left=(until - now).days if until else False,
                            message=("Лицензия бессрочная" if until is None
                                     else "Лицензия действует до %s" % until.strftime("%d.%m.%Y")))
                 return res

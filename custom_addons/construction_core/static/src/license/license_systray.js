@@ -24,7 +24,7 @@ export class LicenseSystray extends Component {
     get visible() {
         const st = this.state.st;
         if (!st) return false;
-        if (st.state === "licensed") return st.days_left !== false && st.days_left <= 30;
+        if (st.state === "licensed") return typeof st.days_left === "number" && st.days_left <= 30;
         return true;
     }
 
