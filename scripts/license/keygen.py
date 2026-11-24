@@ -39,7 +39,21 @@ def write_pubfile(pub_b64):
                 'PUBLIC_KEY = "%s"\n' % pub_b64)
 
 
+def current_pubkey():
+    try:
+        with open(PUBFILE, encoding="utf-8") as f:
+            m = re.search(r'PUBLIC_KEY\s*=\s*"([^"]+)"', f.read())
+            return m.group(1) if m else ""
+    except OSError:
+        return ""
+
+
 def init():
+    if current_pubkey():
+        print("В проекте уже есть открытый ключ — пара ключей создана раньше.")
+        print("НЕ создаю новую: иначе все выданные ключи и обновления перестанут работать.")
+        print("На этом компьютере просто положите private_key.txt с флешки в", KEYS_DIR)
+        return
     if os.path.exists(PRIVATE):
         print("Ключи уже созданы:", PRIVATE)
         print("Повторно не создаю — иначе старые лицензии перестанут работать.")
@@ -59,8 +73,9 @@ def init():
 
 def load_key():
     if not os.path.exists(PRIVATE):
-        sys.exit("Нет секретного ключа. Сначала: python keygen.py init "
-                 "(или положите private_key.txt в %s)" % KEYS_DIR)
+        sys.exit("На этом компьютере нет секретного ключа.\n\n"
+                 "Скопируйте файл private_key.txt с флешки (или с рабочего ПК) в папку:\n%s\n\n"
+                 "Новую пару ключей НЕ создавайте — старые ключи перестанут работать." % KEYS_DIR)
     with open(PRIVATE) as f:
         return Ed25519PrivateKey.from_private_bytes(b64d(f.read().strip()))
 
