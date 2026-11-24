@@ -138,9 +138,9 @@
                     <div t-attf-class="o_card_status o_state_#{card.state}">
                         <i class="o_dot"/> <t t-esc="card.state_label"/>
                     </div>
-                    <h3 class="o_card_title"><t t-esc="card.unit_type === 'shop' ? 'Магазин' : 'Кв.'"/> <t t-esc="card.number"/></h3>
+                    <h3 class="o_card_title"><t t-esc="card.name"/></h3>
                     <div class="text-muted mb-3">
-                        <t t-esc="card.building"/> · <t t-esc="card.floor"/> этаж
+                        № <t t-esc="card.number"/>
                         <t t-if="card.entrance"> · <t t-esc="card.entrance"/></t>
                     </div>
 
