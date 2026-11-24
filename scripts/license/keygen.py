@@ -87,10 +87,39 @@ def parse_until(s):
     raise ValueError("Не понял срок: " + s)
 
 
+CODE_RE = r"[A-Z2-7]{4}-[A-Z2-7]{4}-[A-Z2-7]{4}"
+
+
+def make_key(sk, code, company, until):
+    """Ключ для клиента. until — date или None (бессрочно)."""
+    payload = {"v": 1, "m": code, "c": company,
+               "e": until.isoformat() if until else None,
+               "i": datetime.date.today().isoformat()}
+    body = b64e(json.dumps(payload, ensure_ascii=False, separators=(",", ":")).encode())
+    return body + "." + b64e(sk.sign(body.encode())), payload
+
+
+def save_issued(payload, key):
+    os.makedirs(KEYS_DIR, exist_ok=True)
+    new = not os.path.exists(ISSUED)
+    with open(ISSUED, "a", newline="", encoding="utf-8-sig") as f:
+        w = csv.writer(f, delimiter=";")
+        if new:
+            w.writerow(["Дата", "Компания", "Код компьютера", "Срок", "Ключ"])
+        w.writerow([payload["i"], payload["c"], payload["m"], payload["e"] or "бессрочно", key])
+
+
+def read_issued():
+    if not os.path.exists(ISSUED):
+        return []
+    with open(ISSUED, encoding="utf-8-sig") as f:
+        return list(csv.reader(f, delimiter=";"))[1:]
+
+
 def issue():
     sk = load_key()
     code = input("Код компьютера клиента (XXXX-XXXX-XXXX): ").strip().upper()
-    if not re.fullmatch(r"[A-Z2-7]{4}-[A-Z2-7]{4}-[A-Z2-7]{4}", code):
+    if not re.fullmatch(CODE_RE, code):
         sys.exit("Неверный код компьютера.")
     company = input("Компания: ").strip()
     while True:
@@ -100,20 +129,11 @@ def issue():
             break
         except ValueError as e:
             print(e)
-    payload = {"v": 1, "m": code, "c": company,
-               "e": until.isoformat() if until else None,
-               "i": datetime.date.today().isoformat()}
-    body = b64e(json.dumps(payload, ensure_ascii=False, separators=(",", ":")).encode())
-    key = body + "." + b64e(sk.sign(body.encode()))
+    key, payload = make_key(sk, code, company, until)
     print("\n=== КЛЮЧ ДЛЯ КЛИЕНТА (скопируйте целиком) ===\n")
     print(key)
     print("\nСрок:", until.strftime("%d.%m.%Y") if until else "бессрочно")
-    new = not os.path.exists(ISSUED)
-    with open(ISSUED, "a", newline="", encoding="utf-8-sig") as f:
-        w = csv.writer(f, delimiter=";")
-        if new:
-            w.writerow(["Дата", "Компания", "Код компьютера", "Срок", "Ключ"])
-        w.writerow([payload["i"], company, code, payload["e"] or "бессрочно", key])
+    save_issued(payload, key)
     print("Записано в", ISSUED)
 
 
