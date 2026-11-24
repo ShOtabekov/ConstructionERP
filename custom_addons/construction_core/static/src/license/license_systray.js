@@ -66,6 +66,12 @@ export class UpdateSystray extends Component {
     open() {
         this.action.doAction("construction_core.action_update_wizard");
     }
+
+    async openWhatsNew() {
+        await this.orm.call("construction.update", "mark_seen", []);
+        this.state.info = { ...this.state.info, whats_new: false };
+        this.open();
+    }
 }
 
 registry.category("systray").add("construction_core.update", { Component: UpdateSystray }, { sequence: 2 });

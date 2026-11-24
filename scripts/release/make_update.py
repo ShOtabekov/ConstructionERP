@@ -86,7 +86,9 @@ def build():
     with open(VERSION_FILE, encoding="utf-8-sig") as f:
         version = f.read().strip()
     print("Версия:", version, "(installer\\VERSION — увеличьте перед выпуском)")
-    notes = ask("Что нового (одной строкой, можно пусто): ")
+    print("Что нового — пункты через точку с запятой, например:")
+    print("  Импорт договоров из Excel; Кнопки печати в договоре; Бронь без цены")
+    notes = "\n".join("• " + p.strip() for p in ask("> ").split(";") if p.strip())
     payload = payload_zip()
     sha = hashlib.sha256(payload).hexdigest()
     date = datetime.date.today().strftime("%d.%m.%Y")

@@ -12,6 +12,15 @@ _logger = logging.getLogger(__name__)
 P = "construction_core.update_"
 
 
+def can_update(env):
+    """Обновлять может администратор или директор (у клиента директор — единственный пользователь)."""
+    user = env.user
+    if user.has_group("base.group_system"):
+        return True
+    director = env.ref("construction_finance.group_construction_director", raise_if_not_found=False)
+    return bool(director and director in user.all_group_ids)
+
+
 class ConstructionUpdate(models.AbstractModel):
     _name = "construction.update"
     _description = "Обновления Строительной ERP"
@@ -41,17 +50,29 @@ class ConstructionUpdate(models.AbstractModel):
 
     @api.model
     def get_info(self):
-        """Для плашки в шапке: только администратору и только если есть новая версия."""
-        if not self.env.user.has_group("base.group_system"):
-            return {}
+        """Для плашек в шапке: «Обновление X» и «Что нового» (один раз после обновления)."""
+        res = {}
         cur = upd.current_version()
-        raw = self.env["ir.config_parameter"].sudo().get_param(P + "latest")
-        if not (cur and raw):
-            return {}
-        latest = json.loads(raw)
-        if upd.vtuple(latest.get("version")) > upd.vtuple(cur):
-            return {"current": cur, "available": latest.get("version")}
-        return {}
+        if not cur:
+            return res
+        ICP = self.env["ir.config_parameter"].sudo()
+        installed = upd.installed_notes()
+        seen = ICP.get_param(P + "seen_%s" % self.env.uid)
+        if installed.get("version") == cur and seen != cur:
+            res["whats_new"] = cur
+        if can_update(self.env):
+            raw = ICP.get_param(P + "latest")
+            latest = json.loads(raw) if raw else {}
+            if latest and upd.vtuple(latest.get("version")) > upd.vtuple(cur):
+                res.update(current=cur, available=latest.get("version"))
+        return res
+
+    @api.model
+    def mark_seen(self):
+        cur = upd.current_version()
+        if cur:
+            self.env["ir.config_parameter"].sudo().set_param(P + "seen_%s" % self.env.uid, cur)
+        return True
 
 
 class ConstructionUpdateWizard(models.TransientModel):
@@ -68,6 +89,7 @@ class ConstructionUpdateWizard(models.TransientModel):
         raw = self.env["ir.config_parameter"].sudo().get_param(P + "latest")
         latest = json.loads(raw) if raw else {}
         status = upd.last_status()
+        installed = upd.installed_notes()
         html = Markup("")
         if not cur:
             html += Markup("<p>Режим разработки: обновления работают только в установленной программе.</p>")
@@ -83,6 +105,13 @@ class ConstructionUpdateWizard(models.TransientModel):
                     html += Markup('<div style="white-space:pre-line;border-left:3px solid #ccc;padding-left:8px">%s</div>') % latest["notes"]
             elif latest:
                 html += Markup("<p>У вас последняя версия.</p>")
+            if installed.get("version") == cur and installed.get("notes"):
+                html += Markup('<div class="alert alert-success" style="white-space:pre-line">'
+                               '<b>Что нового в версии %s:</b>\n%s</div>') % (cur, installed["notes"])
+            if not can_update(self.env):
+                can = False
+                if newer:
+                    html += Markup('<p class="text-muted">Установить обновление может директор или администратор.</p>')
             if status:
                 color = "#198754" if status.get("state") == "ok" else "#dc3545"
                 html += Markup('<p style="color:%s">Последнее обновление (%s): %s</p>') % (
@@ -121,8 +150,8 @@ class ConstructionUpdateWizard(models.TransientModel):
         }
 
     def action_install_online(self):
-        if not self.env.user.has_group("base.group_system"):
-            raise UserError(self.env._("Обновлять программу может только администратор."))
+        if not can_update(self.env):
+            raise UserError(self.env._("Обновлять программу может директор или администратор."))
         raw = self.env["ir.config_parameter"].sudo().get_param(P + "latest")
         latest = json.loads(raw) if raw else {}
         if not latest.get("url"):
@@ -134,8 +163,8 @@ class ConstructionUpdateWizard(models.TransientModel):
         return self._install(path)
 
     def action_install_file(self):
-        if not self.env.user.has_group("base.group_system"):
-            raise UserError(self.env._("Обновлять программу может только администратор."))
+        if not can_update(self.env):
+            raise UserError(self.env._("Обновлять программу может директор или администратор."))
         if not upd.app_root():
             raise UserError(self.env._("Обновления работают только в установленной программе."))
         if not self.package:

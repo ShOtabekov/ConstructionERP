@@ -77,6 +77,7 @@ if ($LASTEXITCODE -ne 0) {
 
 # 4. Готово
 [IO.File]::WriteAllText((Join-Path $App "VERSION"), $ver, (New-Object Text.UTF8Encoding($false)))
+Copy-Item (Join-Path $work "update.json") (Join-Path $Upd "installed.json") -Force -ErrorAction SilentlyContinue
 Start-Service StroyERP
 Remove-Item $work -Recurse -Force -ErrorAction SilentlyContinue
 Get-ChildItem (Join-Path $App "backups") -Directory -Filter "addons_*" | Sort-Object LastWriteTime -Descending |

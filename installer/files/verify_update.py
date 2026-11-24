@@ -26,6 +26,8 @@ def main(package, addons, out):
         sys.exit("Подпись не совпадает — это не официальное обновление")
     with zipfile.ZipFile(io.BytesIO(payload)) as z:
         z.extractall(out)
+    with open(os.path.join(out, "update.json"), "w", encoding="utf-8") as f:
+        json.dump({k: meta.get(k) for k in ("version", "notes", "date")}, f, ensure_ascii=False)
     print(meta["version"])
 
 

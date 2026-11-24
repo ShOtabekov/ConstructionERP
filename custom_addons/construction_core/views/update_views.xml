@@ -44,7 +44,7 @@
     </record>
 
     <menuitem id="menu_update" name="Обновление программы" parent="menu_construction_root"
-              action="action_update_wizard" sequence="998" groups="base.group_system"/>
+              action="action_update_wizard" sequence="998" groups="base.group_user"/>
 
     <record id="ir_cron_update_check" model="ir.cron">
         <field name="name">Строительная ERP: проверка обновлений</field>

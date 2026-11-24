@@ -114,3 +114,16 @@ def last_status():
             return json.load(f)
     except Exception:
         return {}
+
+
+def installed_notes():
+    """Описание установленной версии (updates\\installed.json, пишет update.ps1)."""
+    root = app_root()
+    path = root and os.path.join(root, "updates", "installed.json")
+    if not path or not os.path.exists(path):
+        return {}
+    try:
+        with open(path, encoding="utf-8-sig") as f:
+            return json.load(f)
+    except Exception:
+        return {}
