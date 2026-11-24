@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Печать договора и графика — видимыми кнопками, а не только через ⚙ -->
+    <record id="view_contract_form_print_buttons" model="ir.ui.view">
+        <field name="name">construction.contract.form.print.buttons</field>
+        <field name="model">construction.contract</field>
+        <field name="inherit_id" ref="construction_sales.view_construction_contract_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button name="%(construction_finance.action_report_contract_tj)d" type="action"
+                        string="Шартнома" icon="fa-print" class="btn-secondary"
+                        invisible="state == 'draft'"/>
+                <button name="%(construction_finance.action_report_schedule_tj)d" type="action"
+                        string="Замимаи 1" icon="fa-print" class="btn-secondary"
+                        invisible="state == 'draft'"/>
+                <button name="%(construction_finance.action_report_schedule_ru)d" type="action"
+                        string="График (рус.)" icon="fa-print" class="btn-secondary"
+                        invisible="state == 'draft'"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
