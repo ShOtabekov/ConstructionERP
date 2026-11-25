@@ -90,6 +90,7 @@ class App(tk.Tk):
         bf = ttk.Frame(f)
         bf.grid(row=6, column=0, columnspan=2, sticky="w", pady=(6, 12))
         ttk.Button(bf, text="Копировать ключ", command=self.copy).pack(side="left")
+        ttk.Button(bf, text="Сохранить в файл…", command=self.save_file).pack(side="left", padx=(6, 0))
         self.info = ttk.Label(bf, text="", foreground="#198754")
         self.info.pack(side="left", padx=12)
 
@@ -155,6 +156,24 @@ class App(tk.Tk):
             self.clipboard_clear()
             self.clipboard_append(key)
             self.info.configure(text="Ключ скопирован — вставьте его в Telegram/WhatsApp клиенту.")
+
+    def save_file(self):
+        from tkinter import filedialog
+        key = self.result.get("1.0", "end").strip()
+        if not key:
+            messagebox.showinfo("Файл лицензии", "Сначала создайте ключ или выберите его в таблице.")
+            return
+        name = re.sub(r"[^\w\-]+", "_", self.company.get().strip() or "license", flags=re.U)[:40]
+        path = filedialog.asksaveasfilename(
+            title="Сохранить файл лицензии", defaultextension=".lic",
+            initialfile="StroyERP-%s.lic" % name, filetypes=[("Лицензия Строительной ERP", "*.lic")])
+        if not path:
+            return
+        with open(path, "w", encoding="utf-8") as f:
+            f.write("Лицензия «Строительная ERP» — Actually_team, +992 92 609 80 04\n")
+            f.write("Откройте в программе: Строительная ERP -> Лицензия -> выберите этот файл -> Активировать\n\n")
+            f.write(key + "\n")
+        self.info.configure(text="Файл сохранён: " + path)
 
     def copy_row(self, _event):
         sel = self.tree.selection()

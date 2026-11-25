@@ -48,6 +48,8 @@ class ConstructionLicenseWizard(models.TransientModel):
     status_html = fields.Html("Состояние", compute="_compute_info", sanitize=False)
     machine_code = fields.Char("Код компьютера", compute="_compute_info")
     license_key = fields.Text("Лицензионный ключ")
+    license_file = fields.Binary("Файл лицензии (.lic)", attachment=False)
+    license_file_name = fields.Char()
 
     def _compute_info(self):
         st = lic.get_status(self.env, fresh=True)
@@ -63,8 +65,17 @@ class ConstructionLicenseWizard(models.TransientModel):
     def action_activate(self):
         self.ensure_one()
         key = "".join((self.license_key or "").split())
+        if not key and self.license_file:
+            import base64
+            try:
+                text = base64.b64decode(self.license_file).decode("utf-8-sig")
+            except Exception:
+                raise UserError(self.env._("Не удалось прочитать файл лицензии."))
+            # в файле могут быть строки-пояснения; ключ — самая длинная строка с точкой
+            lines = [l.strip() for l in text.splitlines() if "." in l and " " not in l.strip()]
+            key = max(lines, key=len) if lines else ""
         if not key:
-            raise UserError(self.env._("Вставьте ключ, полученный от разработчика."))
+            raise UserError(self.env._("Вставьте ключ или выберите файл лицензии, полученный от разработчика."))
         try:
             lic.decode_key(key)
         except ValueError as e:

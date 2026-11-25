@@ -13,11 +13,14 @@
                     </group>
                     <div class="alert alert-info" role="alert">
                         1. Отправьте разработчику <b>код компьютера</b> (кнопка копирования справа от кода).<br/>
-                        2. Вставьте полученный ключ ниже и нажмите «Активировать».<br/>
+                        2. Вставьте полученный ключ ниже <b>или</b> выберите файл лицензии (.lic) и нажмите «Активировать».<br/>
+                        Чтобы продлить или сменить лицензию, сделайте то же самое с новым ключом.<br/>
                         Разработчик: Actually_team, Telegram / WhatsApp +992 92 609 80 04
                     </div>
                     <group>
                         <field name="license_key" placeholder="Вставьте ключ сюда" rows="4"/>
+                        <field name="license_file" filename="license_file_name"/>
+                        <field name="license_file_name" invisible="1"/>
                     </group>
                 </sheet>
                 <footer>
