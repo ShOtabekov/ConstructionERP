@@ -9,7 +9,7 @@ set URL=http://127.0.0.1:%PORT%
 rem Дома, где установлена StroyERP (8069 занят): backup_db.bat 8070
 set /p MASTER=Мастер-пароль Odoo (admin_passwd): 
 
-set D=%date:~-4%-%date:~3,2%-%date:~0,2%
+for /f %%i in ('powershell -NoProfile -Command "Get-Date -Format yyyy-MM-dd_HHmm"') do set D=%%i
 set OUT=%USERPROFILE%\Desktop\erp_%DB%_%D%.zip
 echo Делаю копию базы %DB% ...
 curl -s -X POST -F "master_pwd=%MASTER%" -F "name=%DB%" -F "backup_format=zip" -o "%OUT%" %URL%/web/database/backup

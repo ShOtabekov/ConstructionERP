@@ -7,7 +7,7 @@
 Площадь магазинов возвращается к 100 м².
 
 Запуск (Odoo остановлен, СНАЧАЛА СДЕЛАЙТЕ КОПИЮ БАЗЫ):
-  Get-Content -Raw -Encoding UTF8 scripts\\clean_sales_data.py | .venv\\Scripts\\python.exe odoo\\odoo-bin shell -c config\\odoo.conf -d construction_erp_new --no-http
+  scripts\\clean_sales_data.bat   (спросит подтверждение)
 """
 from odoo import models
 
