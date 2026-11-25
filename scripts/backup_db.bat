@@ -3,7 +3,10 @@ chcp 65001 >nul
 rem === Вечером перед уходом: копия базы + отправка кода в GitHub ===
 rem Odoo должен быть запущен.
 set DB=construction_erp_new
-set URL=http://127.0.0.1:8069
+set PORT=%1
+if "%PORT%"=="" set PORT=8069
+set URL=http://127.0.0.1:%PORT%
+rem Дома, где установлена StroyERP (8069 занят): backup_db.bat 8070
 set /p MASTER=Мастер-пароль Odoo (admin_passwd): 
 
 set D=%date:~-4%-%date:~3,2%-%date:~0,2%
@@ -11,7 +14,8 @@ set OUT=%USERPROFILE%\Desktop\erp_%DB%_%D%.zip
 echo Делаю копию базы %DB% ...
 curl -s -X POST -F "master_pwd=%MASTER%" -F "name=%DB%" -F "backup_format=zip" -o "%OUT%" %URL%/web/database/backup
 for %%A in ("%OUT%") do if %%~zA LSS 100000 (
-  echo ОШИБКА: копия не создана. Проверьте имя базы, пароль и что Odoo запущен.
+  echo ОШИБКА: копия не создана. Проверьте пароль и что Odoo запущен на порту %PORT%.
+  echo Если Odoo запущен с --http-port=8070, запускайте: scripts\backup_db.bat 8070
   del "%OUT%" 2>nul
   pause & exit /b 1
 )
