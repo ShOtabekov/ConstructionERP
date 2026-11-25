@@ -8,11 +8,14 @@
                 <sheet>
                     <div class="alert alert-info" role="alert">
                         Файл Excel в формате «Досье»: №, Сана, Ному насаб, паспорт (силсила, кем и когда выдан),
-                        Ҷои истиқомат, Блок, Этаж, Хуҷра, м², нарх, миқдор. Сначала «Проверить», затем «Импортировать».
-                        Оплаты не переносятся.
+                        Ҷои истиқомат, Блок, Этаж, Хуҷра, м², нарх, миқдор. Сначала «Проверить», затем «Импортировать».<br/>
+                        <b>Как бронь</b>: квартиры бронируются на клиентов, договор, график и оплаты оформляет финдиректор
+                        кнопкой «Продать» — № и дата договора, цена и площадь подставятся из досье.
                     </div>
                     <group>
                         <field name="project_id"/>
+                        <field name="mode" widget="radio"/>
+                        <field name="reserve_days" invisible="mode != 'reservation'"/>
                         <field name="file" filename="file_name"/>
                         <field name="file_name" invisible="1"/>
                         <field name="ready_count" invisible="1"/>
@@ -26,6 +29,9 @@
                     <button name="action_import" type="object" string="Импортировать" class="btn-primary"
                             invisible="ready_count == 0 or done"
                             confirm="Договоры будут созданы, квартиры станут «Продана». Продолжить?"/>
+                    <button name="action_undo_contracts" type="object" string="Отменить ранее перенесённые договоры"
+                            class="btn-link text-danger"
+                            confirm="Договоры, перенесённые из досье (без оплат и графиков), будут удалены, квартиры станут свободными. Продолжить?"/>
                     <button string="Закрыть" special="cancel"/>
                 </footer>
             </form>
@@ -43,4 +49,20 @@
               parent="construction_sales.menu_construction_sales"
               action="action_dossier_import" sequence="90"
               groups="base.group_system,construction_finance.group_finance_user"/>
+
+    <record id="view_reservation_form_dossier" model="ir.ui.view">
+        <field name="name">construction.reservation.form.dossier</field>
+        <field name="model">construction.reservation</field>
+        <field name="inherit_id" ref="construction_sales.view_construction_reservation_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='notes']" position="before">
+                <group string="Из досье" invisible="not dossier_contract_no">
+                    <field name="dossier_contract_no" readonly="1"/>
+                    <field name="dossier_date" readonly="1"/>
+                    <field name="dossier_price_per_sqm" readonly="1"/>
+                    <field name="dossier_area" readonly="1"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
 </odoo>

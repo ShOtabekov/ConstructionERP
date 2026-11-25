@@ -115,7 +115,7 @@ class ConstructionContract(models.Model):
 
     @api.model
     def _check_number_free(self, number, exclude=None):
-        domain = [("name", "=", number)]
+        domain = [("name", "=", number), ("state", "!=", "cancelled")]
         if exclude:
             domain.append(("id", "not in", exclude.ids))
         other = self.sudo().with_context(active_test=False).search(domain, limit=1)

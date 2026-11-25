@@ -11,3 +11,4 @@ from . import project
 from . import refund
 from . import print_docs
 from . import cash_docs
+from . import reservation_dossier

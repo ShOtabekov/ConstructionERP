@@ -2,8 +2,10 @@
 
 Колонки (как в досье застройщика): №, Сана, Ному насаб, Силсила (серия и номер паспорта),
 Аз тарафи ... дода шуд, Сана д/ш, Ҷои истиқомат, Блок, Этаж, Хуҷра, М. мур-ба, нарх, Миқдор.
-Договор получает номер из колонки №, сумму и цену за м² — как в досье (площадь по договору).
-Оплаты не заносятся. Строки с ошибками пропускаются и показываются списком.
+Режим «Бронь» (по умолчанию): квартиры бронируются на клиента, а договор, график и оплаты
+оформляет финдиректор кнопкой «Продать» — № и дата договора, цена и площадь из досье
+подставятся сами. Режим «Договор»: договор создаётся сразу.
+Строки с ошибками пропускаются и показываются списком.
 """
 import base64
 import datetime
@@ -43,6 +45,11 @@ class ConstructionDossierImport(models.TransientModel):
 
     project_id = fields.Many2one("construction.project", string="Проект", required=True,
                                  default=lambda self: self.env["construction.project"].search([], limit=1))
+    mode = fields.Selection(
+        [("reservation", "Как бронь — договор оформит финдиректор"),
+         ("contract", "Сразу договор")],
+        string="Как перенести", default="reservation", required=True)
+    reserve_days = fields.Integer("Бронь на (дней)", default=365)
     file = fields.Binary("Файл Excel (.xlsx)", attachment=False)
     file_name = fields.Char()
     preview_html = fields.Html("Проверка", sanitize=False, readonly=True)
@@ -105,6 +112,10 @@ class ConstructionDossierImport(models.TransientModel):
                     seen[key] = item["no"]
                     if apt.state == "sold":
                         item["errors"].append("уже продана в системе")
+                    elif apt.state == "reserved":
+                        item["errors"].append("уже забронирована в системе")
+                    elif apt.state == "blocked":
+                        item["errors"].append("заблокирована в системе")
                     try:
                         area = float(area or 0)
                         amount = float(amount or 0)
@@ -125,8 +136,11 @@ class ConstructionDossierImport(models.TransientModel):
                     if ppm > 2000:
                         item["errors"].append("цена %s за м² — проверьте" % ppm)
                     item.update(area=area, ppm=ppm, amount=amount)
-            if Contract.sudo().search_count([("name", "=", item["no"])], limit=1):
+            if Contract.sudo().search_count([("name", "=", item["no"]), ("state", "!=", "cancelled")], limit=1):
                 item["errors"].append("договор №%s уже есть" % item["no"])
+            elif self.env["construction.reservation"].sudo().search_count([
+                    ("dossier_contract_no", "=", item["no"]), ("state", "=", "reserved")], limit=1):
+                item["errors"].append("бронь по договору №%s уже есть" % item["no"])
             ser = _clean(passport).replace(" ", "")
             m = re.match(r"^([^\d]*)(\d+)$", ser)
             item["passport"] = {
@@ -195,12 +209,17 @@ class ConstructionDossierImport(models.TransientModel):
             raise UserError(self.env._("Нет строк для импорта — нажмите «Проверить» и посмотрите ошибки."))
         Contract = self.env["construction.contract"]
         rate = self.project_id.usd_tjs_rate or 0.0
-        cache, created = {}, Contract
+        cache = {}
+        created = self.env["construction.reservation"] if self.mode == "reservation" else Contract
         for item in items:
             apt = item["apt"]
-            if item.get("shop_area") and abs(item["shop_area"] - apt.area_total) > 0.001:
+            if (self.mode == "contract" and item.get("shop_area")
+                    and abs(item["shop_area"] - apt.area_total) > 0.001):
                 apt.sudo().write({"area_total": item["shop_area"]})
             partner = self._partner(item, cache)
+            if self.mode == "reservation":
+                created |= self._make_reservation(item, apt, partner)
+                continue
             contract = Contract.create({
                 "name": item["no"],
                 "partner_id": partner.id,
@@ -215,10 +234,63 @@ class ConstructionDossierImport(models.TransientModel):
             contract.sudo().write({"list_price_usd": item["amount"]})
             created |= contract
         html, _n = self._render(self._analyze())
-        self.write({
-            "done": True, "ready_count": 0,
-            "preview_html": Markup('<p class="text-success"><b>Перенесено договоров: %s.</b> '
-                                   'Квартиры отмечены как проданные. Оплаты по ним внесите отдельно.</p>')
-                            % len(created) + html,
+        if self.mode == "reservation":
+            msg = Markup('<p class="text-success"><b>Забронировано квартир: %s.</b> Дальше финдиректор: '
+                         'шахматка → квартира → «Продать» (№ договора, дата и цена подставятся из досье), '
+                         'затем «Платёжный план» и оплаты.</p>') % len(created)
+        else:
+            msg = Markup('<p class="text-success"><b>Перенесено договоров: %s.</b> '
+                         'Квартиры отмечены как проданные. Оплаты по ним внесите отдельно.</p>') % len(created)
+        self.write({"done": True, "ready_count": 0, "preview_html": msg + html})
+        return self._reopen()
+
+    def _make_reservation(self, item, apt, partner):
+        Reservation = self.env["construction.reservation"]
+        now = fields.Datetime.now()
+        res = Reservation.create({
+            "partner_id": partner.id,
+            "apartment_id": apt.id,
+            "date_start": now,
+            "date_end": now + datetime.timedelta(days=max(self.reserve_days, 1)),
+            "notes": "Из досье: договор №%s от %s, %s м² × %s = %s $ (строка %s)" % (
+                item["no"], item["date"].strftime("%d.%m.%Y"), item["area"], item["ppm"],
+                item["amount"], item["line"]),
+            "dossier_contract_no": item["no"],
+            "dossier_date": item["date"],
+            "dossier_price_per_sqm": item["ppm"],
+            "dossier_area": item["area"],
         })
+        res.action_confirm()
+        rate = res.exchange_rate or self.project_id.usd_tjs_rate or 0.0
+        res._write_workflow({"price_usd": item["amount"], "price_tjs": round(item["amount"] * rate, 2)})
+        return res
+
+    # ------------------------------------------------------------------
+    def _imported_contracts(self):
+        return self.env["construction.contract"].sudo().search([
+            ("notes", "=like", "Перенесён из досье%"), ("state", "=", "confirmed")])
+
+    def action_undo_contracts(self):
+        """Вернуть договоры, перенесённые из досье, обратно в свободные квартиры
+        (только те, где ещё нет оплат и графика)."""
+        self.ensure_one()
+        if not (self.env.user.has_group("base.group_system")
+                or self.env.user.has_group("construction_finance.group_construction_director")):
+            raise UserError(self.env._("Только директор или администратор."))
+        Payment = self.env["construction.payment"].sudo()
+        Plan = self.env["construction.payment.plan"].sudo()
+        removed, kept = 0, []
+        for c in self._imported_contracts():
+            if Payment.search_count([("contract_id", "=", c.id)], limit=1) or \
+                    Plan.search_count([("contract_id", "=", c.id), ("state", "!=", "cancelled")], limit=1):
+                kept.append(c.name)
+                continue
+            c.sudo().action_cancel()
+            models.Model.unlink(c.sudo())
+            removed += 1
+        msg = Markup('<p class="text-success"><b>Отменено перенесённых договоров: %s.</b> '
+                     'Квартиры снова свободны — теперь можно перенести досье как бронь.</p>') % removed
+        if kept:
+            msg += Markup('<p class="text-warning">Оставлены (уже есть оплаты или график): №%s</p>') % ", №".join(kept)
+        self.write({"preview_html": msg, "done": False, "ready_count": 0})
         return self._reopen()

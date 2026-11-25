@@ -120,10 +120,14 @@ class ConstructionSaleWizard(models.TransientModel):
         if self.reservation_id and not self.partner_id:
             self.partner_id = self.reservation_id.partner_id
 
-    @api.depends("apartment_id")
+    @api.depends("apartment_id", "reservation_id")
     def _compute_area_total(self):
         for wiz in self:
-            wiz.area_total = wiz.apartment_id.area_total
+            res = wiz.reservation_id.sudo()
+            if wiz.apartment_id.unit_type == "shop" and res.dossier_area:
+                wiz.area_total = res.dossier_area
+            else:
+                wiz.area_total = wiz.apartment_id.area_total
 
     @api.depends("apartment_id", "reservation_id", "area_total")
     def _compute_list_price(self):
@@ -137,7 +141,7 @@ class ConstructionSaleWizard(models.TransientModel):
                     apt.total_price_usd / apt.area_total * wiz.area_total, 2)
             else:
                 wiz.list_price_usd = apt.total_price_usd
-            area = wiz.area_total or apt.area_total
+            area = wiz._pricing_area() or apt.area_total
             wiz.list_price_per_sqm = wiz.list_price_usd / area if area else 0.0
 
     @api.depends("list_price_usd", "price_usd")
@@ -162,21 +166,40 @@ class ConstructionSaleWizard(models.TransientModel):
             reservation.exchange_rate if reservation
             else self.apartment_id.usd_tjs_rate
         )
+        # Бронь из досье: подставить № и дату договора и цену, как в досье
+        if reservation.dossier_price_per_sqm:
+            self.deal_price_per_sqm = reservation.dossier_price_per_sqm
+        if reservation.price_usd:
+            self.price_usd = reservation.price_usd
+        if reservation.dossier_contract_no and not self.contract_number:
+            self.contract_number = reservation.dossier_contract_no
+        if reservation.dossier_date:
+            self.contract_date = reservation.dossier_date
+
+    def _pricing_area(self):
+        """Площадь для расчёта цены: по договору из досье (старые 99,1 / 75,4), иначе текущая."""
+        res = self.reservation_id.sudo()
+        if res.dossier_area and self.apartment_id.unit_type != "shop":
+            return res.dossier_area
+        return self.area_total
 
     @api.onchange("area_total")
     def _onchange_area_total(self):
-        if self.area_total and self.deal_price_per_sqm:
-            self.price_usd = round(self.deal_price_per_sqm * self.area_total, 2)
+        area = self._pricing_area()
+        if area and self.deal_price_per_sqm:
+            self.price_usd = round(self.deal_price_per_sqm * area, 2)
 
     @api.onchange("deal_price_per_sqm")
     def _onchange_deal_price_per_sqm(self):
-        if self.area_total:
-            self.price_usd = round(self.deal_price_per_sqm * self.area_total, 2)
+        area = self._pricing_area()
+        if area:
+            self.price_usd = round(self.deal_price_per_sqm * area, 2)
 
     @api.onchange("price_usd")
     def _onchange_price_usd(self):
-        if self.area_total:
-            per_sqm = self.price_usd / self.area_total
+        area = self._pricing_area()
+        if area:
+            per_sqm = self.price_usd / area
             if abs(per_sqm - self.deal_price_per_sqm) > 0.000001:
                 self.deal_price_per_sqm = per_sqm
 
@@ -347,6 +370,10 @@ class ConstructionSaleWizard(models.TransientModel):
             raise UserError(_("Это помещение уже продано или заблокировано."))
 
         contract.action_confirm()
+        res_d = self.reservation_id.sudo()
+        if (res_d.dossier_area and apartment.unit_type != "shop"
+                and abs(res_d.dossier_area - apartment.area_total) > 0.05):
+            contract.sudo().write({"area_contract": res_d.dossier_area})
         if area_note:
             contract.message_post(body=area_note)
         if self.list_price_usd:
